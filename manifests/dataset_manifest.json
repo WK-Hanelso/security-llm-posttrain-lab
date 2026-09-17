@@ -1,0 +1,116 @@
+{
+  "created_at": "2026-09-17T11:46:53.085943+00:00",
+  "git_commit": "2b4b31401e3e969e48c1966a36702e364167b5d0",
+  "dataset_snapshot": "2026-09-17",
+  "data_config_sha256": "a19414acb0574fdbdf6a02a13f9a103e239ef869ca6428ad3e78b8a9bacac3d0",
+  "prompt_template_sha256": "62bfc76e7e98d479185db793fbd02c9b9e968753c22e44120ee90d78d77ef99c",
+  "labels": [
+    "CWE-79",
+    "CWE-89",
+    "CWE-787",
+    "CWE-352",
+    "CWE-125",
+    "CWE-862",
+    "CWE-416",
+    "CWE-22",
+    "CWE-20",
+    "CWE-78",
+    "CWE-476",
+    "CWE-120",
+    "CWE-434",
+    "CWE-200",
+    "CWE-284"
+  ],
+  "files": {
+    "train": {
+      "path": "data/sft/train.jsonl",
+      "rows": 12000,
+      "sha256": "1887fbb32b6af37f12e325656d799570c3474dc390dcca31477b7bf8a7d9f734"
+    },
+    "val": {
+      "path": "data/sft/val.jsonl",
+      "rows": 1000,
+      "sha256": "7a734694916187e54942fc57b77ec0a0532fabb752d46e97b2dc6390ccbde95c"
+    },
+    "test": {
+      "path": "data/sft/test.jsonl",
+      "rows": 24975,
+      "sha256": "bb7c6952067ff5fc1cb8bcd210e673edae2b2bd8b136ccc356adeac7cb3b5801"
+    }
+  },
+  "counts": {
+    "train": 12000,
+    "val": 1000,
+    "test": 24975
+  },
+  "population_counts": {
+    "train": 65272,
+    "val": 21151,
+    "test": 24975
+  },
+  "class_distribution": {
+    "train": {
+      "CWE-20": 499,
+      "CWE-22": 599,
+      "CWE-78": 465,
+      "CWE-862": 614,
+      "CWE-79": 3479,
+      "CWE-89": 1424,
+      "CWE-120": 413,
+      "CWE-476": 415,
+      "CWE-284": 255,
+      "CWE-416": 574,
+      "CWE-125": 619,
+      "CWE-787": 1091,
+      "CWE-200": 385,
+      "CWE-352": 750,
+      "CWE-434": 418
+    },
+    "val": {
+      "CWE-284": 43,
+      "CWE-79": 323,
+      "CWE-89": 92,
+      "CWE-787": 32,
+      "CWE-434": 31,
+      "CWE-352": 82,
+      "CWE-476": 56,
+      "CWE-862": 115,
+      "CWE-78": 31,
+      "CWE-416": 49,
+      "CWE-125": 35,
+      "CWE-22": 50,
+      "CWE-120": 22,
+      "CWE-20": 17,
+      "CWE-200": 22
+    },
+    "test": {
+      "CWE-78": 1184,
+      "CWE-476": 802,
+      "CWE-79": 5244,
+      "CWE-125": 1277,
+      "CWE-787": 1065,
+      "CWE-20": 1087,
+      "CWE-89": 2151,
+      "CWE-416": 1932,
+      "CWE-284": 2605,
+      "CWE-200": 1056,
+      "CWE-352": 775,
+      "CWE-862": 2971,
+      "CWE-22": 1894,
+      "CWE-434": 488,
+      "CWE-120": 444
+    }
+  },
+  "sampling": {
+    "max_description_chars": 1500,
+    "train_max_samples": 12000,
+    "val_max_samples": 1000,
+    "test_max_samples": null,
+    "sampling": "natural",
+    "balanced_max_per_class": 800
+  },
+  "dedup": {
+    "train_exact_duplicates_dropped": 3427,
+    "train_overlap_with_eval_dropped": 36
+  }
+}

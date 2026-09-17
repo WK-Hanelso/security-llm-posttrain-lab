@@ -1,0 +1,47 @@
+{
+  "computed_on": "data/processed/{train,val,test}.jsonl (before sampling) and data/sft/*.jsonl (after)",
+  "train_val_cve_id_overlap": 0,
+  "train_test_cve_id_overlap": 0,
+  "train_val_exact_text_overlap": 92,
+  "train_test_exact_text_overlap": 7,
+  "val_test_exact_text_overlap": 190,
+  "train_internal_exact_duplicates": 3427,
+  "examples": {
+    "train_test_exact_text_overlap": [
+      [
+        "CVE-2023-36602",
+        "CVE-2026-40414"
+      ],
+      [
+        "CVE-2023-36603",
+        "CVE-2026-40414"
+      ],
+      [
+        "CVE-2024-22012",
+        "CVE-2026-0124"
+      ],
+      [
+        "CVE-2024-27208",
+        "CVE-2026-0124"
+      ],
+      [
+        "CVE-2024-38156",
+        "CVE-2026-45494"
+      ],
+      [
+        "CVE-2024-38221",
+        "CVE-2026-45494"
+      ],
+      [
+        "CVE-2024-54271",
+        "CVE-2026-25401"
+      ]
+    ]
+  },
+  "policy": "train records overlapping val/test by normalized-text hash were dropped before SFT build",
+  "post_build": {
+    "train_test_exact_text_overlap": 0,
+    "train_val_exact_text_overlap": 0
+  },
+  "limitations": "Exact-hash only. Pretraining-corpus contamination of the base model cannot be verified."
+}
