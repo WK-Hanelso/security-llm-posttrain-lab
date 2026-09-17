@@ -1,0 +1,41 @@
+seed: 42
+nvd:
+  base_url: https://services.nvd.nist.gov/rest/json/cves/2.0
+  start_date: "2020-01-01"
+  end_date: null
+  window_days: 119
+  results_per_page: 2000
+  sleep_seconds_without_key: 6.5
+  sleep_seconds_with_key: 0.7
+  max_retries: 6
+  raw_dir: data/raw/nvd
+filter:
+  require_english_description: true
+  exclude_rejected: true
+  placeholder_cwes: ["NVD-CWE-noinfo", "NVD-CWE-Other"]
+  single_label_only: true
+labels:
+  top_k: 15
+  min_train_samples_per_class: 200
+split:
+  train: ["2020-01-01", "2024-12-31"]
+  val: ["2025-01-01", "2025-12-31"]
+  test: ["2026-01-01", null]
+dedup:
+  drop_train_exact_duplicates: true
+  drop_train_overlap_with_eval: true
+sft:
+  max_description_chars: 1500
+  train_max_samples: 12000
+  val_max_samples: 1000
+  test_max_samples: null
+  sampling: natural
+  balanced_max_per_class: 800
+paths:
+  processed_dir: data/processed
+  sft_dir: data/sft
+  labels_file: data/processed/labels.json
+  manifest: manifests/dataset_manifest.json
+  stats: reports/dataset_stats.json
+  contamination: reports/contamination.json
+

@@ -1,0 +1,18 @@
+{
+  "resultsPerPage": 9,
+  "startIndex": 0,
+  "totalResults": 9,
+  "format": "NVD_CVE",
+  "version": "2.0",
+  "vulnerabilities": [
+    {"cve": {"id": "CVE-2024-1001", "published": "2024-01-01T00:00:00.000", "lastModified": "2024-01-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "A reflected script issue."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-79"}]}], "metrics": {"cvssMetricV31": [{"cvssData": {"baseScore": 6.1, "baseSeverity": "MEDIUM"}}]}}},
+    {"cve": {"id": "CVE-2024-1002", "published": "2024-02-01T00:00:00.000", "lastModified": "2024-02-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "Duplicate source labels."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-89"}]}, {"type": "Secondary", "description": [{"lang": "en", "value": "CWE-89"}]}]}},
+    {"cve": {"id": "CVE-2024-1003", "published": "2024-03-01T00:00:00.000", "lastModified": "2024-03-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "Two distinct weaknesses."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-79"}]}, {"type": "Secondary", "description": [{"lang": "en", "value": "CWE-89"}]}]}},
+    {"cve": {"id": "CVE-2024-1004", "published": "2024-04-01T00:00:00.000", "lastModified": "2024-04-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "Unclassified weakness."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "NVD-CWE-noinfo"}]}]}},
+    {"cve": {"id": "CVE-2024-1005", "published": "2024-05-01T00:00:00.000", "lastModified": "2024-05-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "No weakness supplied."}]}},
+    {"cve": {"id": "CVE-2024-1006", "published": "2024-06-01T00:00:00.000", "lastModified": "2024-06-02T00:00:00.000", "vulnStatus": "Rejected", "descriptions": [{"lang": "en", "value": "** REJECT ** duplicate assignment"}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-20"}]}]}},
+    {"cve": {"id": "CVE-2024-1007", "published": "2024-07-01T00:00:00.000", "lastModified": "2024-07-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "Known exploited path traversal."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-22"}]}], "cisaExploitAdd": "2024-07-10"}},
+    {"cve": {"id": "CVE-2024-1008", "published": "2024-08-01T00:00:00.000", "lastModified": "2024-08-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "fr", "value": "Description française uniquement."}], "weaknesses": [{"type": "Primary", "description": [{"lang": "en", "value": "CWE-287"}]}]}},
+    {"cve": {"id": "NOT-A-CVE", "published": "2024-09-01T00:00:00.000", "lastModified": "2024-09-02T00:00:00.000", "vulnStatus": "Analyzed", "descriptions": [{"lang": "en", "value": "Invalid identifier."}], "weaknesses": []}}
+  ]
+}

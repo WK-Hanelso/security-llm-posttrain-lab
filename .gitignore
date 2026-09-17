@@ -1,0 +1,14 @@
+.venv/
+.uv-cache/
+__pycache__/
+*.egg-info/
+*.pyc
+.pytest_cache/
+logs/
+data/*
+!data/README.md
+experiments/*/adapter/
+experiments/*/trainer/
+*.gguf
+*.safetensors
+*.bin

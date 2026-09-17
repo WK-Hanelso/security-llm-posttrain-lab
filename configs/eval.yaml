@@ -1,0 +1,19 @@
+experiment_id: exp_001_baseline
+seed: 42
+model:
+  name: Qwen/Qwen3-0.6B
+  revision: null
+  adapter_path: null
+  dtype: float16
+data:
+  file: data/sft/test.jsonl
+  labels_file: data/processed/labels.json
+  limit: null
+generation:
+  do_sample: false
+  temperature: null
+  max_new_tokens: 32
+  batch_size: 8
+  max_seq_length: 512
+output:
+  root: experiments
