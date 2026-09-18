@@ -1,6 +1,6 @@
 # Experiment Log
 
-Results are pending. Entries will be appended only after their corresponding runs complete.
+Append-only log. Entries were appended only after their corresponding runs completed.
 
 ## exp_002_sft_v1
 

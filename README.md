@@ -37,6 +37,8 @@ The training and validation views use seeded natural-distribution samples; the t
 | Validation | 2025-01-01–2025-12-31 |
 | Test | 2026-01-01–2026-09-17 |
 
+Temporal splits use the NVD `published` timestamp rather than the year embedded in the CVE identifier. An older CVE ID can therefore appear in the 2026 test split when that record was published by NVD during the test period.
+
 Exact CVE-ID and normalized-description overlap between fine-tuning splits: 0 after build. This is an exact check, not a semantic-similarity claim.
 
 ## Base model
@@ -168,6 +170,7 @@ See [claim boundaries](docs/claim-boundaries.md) for the fixed wording and compl
 - Exact normalized-description matching does not detect paraphrases.
 - Exact CVE-ID and normalized-description overlap between splits is blocked by a fail-fast guard. In addition, a sampled audit of high text-similarity train/test pairs was run to check for template reuse; this is not a formal semantic-contamination detector. Audit (`reports/near_duplicate_audit.md`, word TF-IDF 1–2-gram cosine, 300 evaluated test rows = 200 `fixed_by_sft` + 100 `both_wrong`, class-stratified, seed 42): nearest-train similarity p50 0.27 / p90 0.70 / p95 0.74 / max 1.00; 8 rows ≥ 0.80 (5 same-label, 3 different-label), 3 rows ≥ 0.90; all 8 fall in the `fixed_by_sft` sample (5 same-label = 2.5% of the 200 sampled fixes), 0 in `both_wrong`. Manual review of the top 20: 7 exact-or-near copies, 11 vendor-boilerplate-only, 2 repeated weakness phrases. These sampled counts do not establish template reuse as a material shortcut for the 8,715 `fixed_by_sft` transitions.
 - The Natural-vs-Balanced ablation was not run. It is a conditional follow-up if tail recall remains low, predictions remain concentrated, and failures continue to co-occur with class imbalance.
+- Future work: Residual errors are concentrated around semantically adjacent or generic CWE boundaries, particularly CWE-862 vs CWE-284 and generic classes such as CWE-20, CWE-120, and CWE-200. A follow-up study could evaluate hierarchical or revised label policies before changing the model architecture.
 
 ## Repository map
 

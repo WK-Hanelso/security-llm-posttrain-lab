@@ -63,6 +63,8 @@ Labels are selected using the training period only. Records with multiple distin
 The train and validation SFT views are reproducible natural-distribution samples. The test SFT view retains
 the full selected-class population.
 
+Temporal splits use the NVD `published` timestamp rather than the year embedded in the CVE identifier. An older CVE ID can therefore appear in the 2026 test split when that record was published by NVD during the test period.
+
 ## Deduplication and overlap checks
 
 Training duplicates are identified by an exact SHA-256 hash after Unicode NFKC normalization, lowercasing,
