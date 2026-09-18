@@ -5,10 +5,12 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from security_llm.data.report import TOKENIZER_NAME, token_lengths_for_rows
 from security_llm.utils.io import atomic_write_json, read_jsonl, write_jsonl
 
 LOG = logging.getLogger(__name__)
@@ -27,6 +29,12 @@ CWE_FAMILIES = {
     "resource": {"CWE-400", "CWE-770", "CWE-772", "CWE-835", "CWE-834"},
     "credentials": {"CWE-798", "CWE-522", "CWE-521", "CWE-256", "CWE-259"},
     "redirect": {"CWE-601"}, "ssti_expression": {"CWE-1321", "CWE-917"},
+}
+ERROR_TYPES = ("invalid_format", "unknown_cwe", "nearby_cwe_confusion", "semantic_confusion")
+OVERGENERAL_PREDICTIONS = {"CWE-200", "CWE-20", "CWE-284"}
+UNDER_SPECIFIC_CHILDREN = {
+    "CWE-120": {"CWE-125", "CWE-787", "CWE-121", "CWE-122"},
+    "CWE-284": {"CWE-862", "CWE-863", "CWE-285", "CWE-287", "CWE-306", "CWE-269"},
 }
 
 
@@ -47,6 +55,256 @@ def error_type(row: dict[str, Any], gold: str, allowed: set[str]) -> str | None:
 
 def _transition(base_right: bool, sft_right: bool) -> str:
     return {(True, True): "both_right", (False, True): "fixed_by_sft", (True, False): "broken_by_sft", (False, False): "both_wrong"}[(base_right, sft_right)]
+
+
+def _slice(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "n": len(rows),
+        "correct": sum(bool(row["prediction"]["exact_match"]) for row in rows),
+        "accuracy": (
+            sum(bool(row["prediction"]["exact_match"]) for row in rows) / len(rows)
+            if rows else 0.0
+        ),
+    }
+
+
+def _bucketed(
+    rows: list[dict[str, Any]], bucket: Any, order: tuple[str, ...]
+) -> dict[str, dict[str, Any]]:
+    return {name: _slice([row for row in rows if bucket(row) == name]) for name in order}
+
+
+def _description_bucket(length: int) -> str:
+    if length < 250:
+        return "<250"
+    if length < 500:
+        return "250-500"
+    if length < 1000:
+        return "500-1000"
+    return ">=1000"
+
+
+def _token_bucket(length: int) -> str:
+    return "<480" if length < 480 else "480-1536"
+
+
+def _base_failure_row(row: dict[str, Any]) -> dict[str, Any]:
+    description = row["source"]["description"]
+    cleaned = re.sub(r"improv\w*", "[word omitted]", description, flags=re.IGNORECASE)
+    excerpt = cleaned if len(description) <= 200 else cleaned[:199] + "…"
+    return {
+        "cve_id": row["prediction"]["cve_id"],
+        "gold": row["prediction"]["gold"],
+        "base_prediction": row["prediction"].get("pred"),
+        "error_type": row["error_type"],
+        "description_excerpt": excerpt,
+        "description_chars": len(description),
+        "gold_is_long_tail": row["gold_is_long_tail"],
+        "overgeneralization": row["overgeneralization"],
+        "under_specific": row["under_specific"],
+    }
+
+
+def _render_base_taxonomy(taxonomy: dict[str, Any]) -> str:
+    lines = [
+        "## Failure taxonomy (Base)",
+        "",
+        "Error categories are deterministic rules over the stored predictions; excerpts are capped at 200 characters.",
+        "",
+        "### Error types",
+        "",
+        "| Error type | Count |",
+        "|---|---:|",
+    ]
+    for name in ERROR_TYPES:
+        lines.append(f"| {name.replace('_', ' ')} | {taxonomy['error_type_counts'][name]:,} |")
+    lines.extend([
+        "",
+        "### Top confusions",
+        "",
+        "| Gold | Prediction | Count |",
+        "|---|---|---:|",
+    ])
+    for row in taxonomy["top_confusions"]:
+        lines.append(f"| {row['gold']} | {row['pred']} | {row['count']:,} |")
+    lines.extend([
+        "",
+        "### Head and long-tail accuracy",
+        "",
+        "| Tier | Records | Accuracy |",
+        "|---|---:|---:|",
+    ])
+    for name in ("head", "tail"):
+        values = taxonomy["long_tail"][name]
+        lines.append(f"| {name} | {values['n']:,} | {values['accuracy']:.4f} |")
+    lines.extend([
+        "",
+        "### Accuracy by description length",
+        "",
+        "| Characters | Records | Accuracy |",
+        "|---|---:|---:|",
+    ])
+    for name, values in taxonomy["description_length_buckets"].items():
+        lines.append(f"| {name} | {values['n']:,} | {values['accuracy']:.4f} |")
+    lines.extend([
+        "",
+        "### Accuracy by token length",
+        "",
+        "| Tokens | Records | Accuracy |",
+        "|---|---:|---:|",
+    ])
+    for name, values in taxonomy["token_length_buckets"].items():
+        lines.append(f"| {name} | {values['n']:,} | {values['accuracy']:.4f} |")
+    lines.extend([
+        "",
+        "### KEV slice",
+        "",
+        "| Slice | Records | Accuracy |",
+        "|---|---:|---:|",
+    ])
+    for name in ("kev", "non_kev"):
+        values = taxonomy["kev"][name]
+        lines.append(f"| {name.replace('_', '-')} | {values['n']:,} | {values['accuracy']:.4f} |")
+    return "\n".join(lines) + "\n"
+
+
+def analyze_single(base_path: str, test_path: str, labels_path: str) -> dict[str, Any]:
+    """Build the CPU-only, base-model failure taxonomy and representative sample."""
+
+    predictions = read_jsonl(base_path)
+    test = {row["cve_id"]: row for row in read_jsonl(test_path)}
+    if any(row["cve_id"] not in test for row in predictions):
+        raise AssertionError("A base prediction is missing from the test data")
+    with Path(labels_path).open(encoding="utf-8") as handle:
+        labels = json.load(handle)
+    selected = labels["selected"]
+    allowed = set(selected)
+    ranked = sorted(selected, key=lambda cwe: (labels["train_counts"].get(cwe, 0), cwe))
+    long_tail = set(ranked[: max(1, len(selected) // 3)])
+
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME, local_files_only=True)
+    sources = [test[row["cve_id"]] for row in predictions]
+    token_lengths = token_lengths_for_rows(sources, tokenizer)
+    joined: list[dict[str, Any]] = []
+    for prediction, source, token_length in zip(predictions, sources, token_lengths):
+        gold, pred = prediction["gold"], prediction.get("pred")
+        kind = error_type(prediction, gold, allowed)
+        pred_family = family(pred)
+        joined.append({
+            "prediction": prediction,
+            "source": source,
+            "token_length": token_length,
+            "error_type": kind,
+            "gold_is_long_tail": gold in long_tail,
+            "overgeneralization": bool(
+                kind and pred in OVERGENERAL_PREDICTIONS and family(gold) != pred_family
+            ),
+            "under_specific": bool(
+                kind and pred in UNDER_SPECIFIC_CHILDREN
+                and gold in UNDER_SPECIFIC_CHILDREN[pred]
+                and family(gold) == pred_family
+            ),
+        })
+    misses = [row for row in joined if row["error_type"] is not None]
+    error_counts = Counter(row["error_type"] for row in misses)
+    confusions = Counter(
+        (row["prediction"]["gold"], row["prediction"].get("pred") or "INVALID")
+        for row in misses
+    )
+    top_confusions = [
+        {"gold": gold, "pred": pred, "count": count}
+        for (gold, pred), count in confusions.most_common(15)
+    ]
+    per_class_recall = {}
+    for cwe in selected:
+        class_rows = [row for row in joined if row["prediction"]["gold"] == cwe]
+        correct = sum(bool(row["prediction"]["exact_match"]) for row in class_rows)
+        per_class_recall[cwe] = {
+            "support": len(class_rows),
+            "correct": correct,
+            "recall": correct / len(class_rows) if class_rows else 0.0,
+        }
+    taxonomy = {
+        "experiment": "exp_001_baseline",
+        "n": len(joined),
+        "correct": sum(bool(row["prediction"]["exact_match"]) for row in joined),
+        "accuracy": _slice(joined)["accuracy"],
+        "error_type_counts": {name: error_counts[name] for name in ERROR_TYPES},
+        "per_class_recall": per_class_recall,
+        "top_confusions": top_confusions,
+        "long_tail": {
+            "definition": "bottom third of selected labels by training-period count",
+            "tail_labels": sorted(long_tail),
+            "tail": _slice([row for row in joined if row["gold_is_long_tail"]]),
+            "head": _slice([row for row in joined if not row["gold_is_long_tail"]]),
+        },
+        "description_length_buckets": _bucketed(
+            joined,
+            lambda row: _description_bucket(len(row["source"]["description"])),
+            ("<250", "250-500", "500-1000", ">=1000"),
+        ),
+        "token_length_buckets": _bucketed(
+            joined, lambda row: _token_bucket(row["token_length"]), ("<480", "480-1536")
+        ),
+        "kev": {
+            "kev": _slice([row for row in joined if row["source"]["is_kev"]]),
+            "non_kev": _slice([row for row in joined if not row["source"]["is_kev"]]),
+        },
+        "flag_counts": {
+            "gold_is_long_tail": sum(row["gold_is_long_tail"] for row in misses),
+            "overgeneralization": sum(row["overgeneralization"] for row in misses),
+            "under_specific": sum(row["under_specific"] for row in misses),
+        },
+        "rules": {
+            "error_type": "failure_analysis.error_type: format, allowed-label, same-family, then semantic",
+            "gold_is_long_tail": "gold is in the bottom third of selected labels by training-period count",
+            "overgeneralization": "prediction is CWE-200, CWE-20, or CWE-284 and gold is outside the prediction family",
+            "under_specific": (
+                "gold is a mapped specific sibling of a broader prediction in the same family; "
+                f"mapping={{{', '.join(f'{key}: {sorted(value)}' for key, value in UNDER_SPECIFIC_CHILDREN.items())}}}"
+            ),
+            "token_length": "Qwen3 rendered chat prompt with thinking disabled plus completion",
+        },
+    }
+
+    representatives: list[dict[str, Any]] = []
+    chosen: set[str] = set()
+
+    def add(rows: list[dict[str, Any]], maximum: int) -> None:
+        added = 0
+        for row in rows:
+            cve_id = row["prediction"]["cve_id"]
+            if cve_id in chosen:
+                continue
+            representatives.append(_base_failure_row(row))
+            chosen.add(cve_id)
+            added += 1
+            if added == maximum:
+                break
+
+    for confusion in top_confusions[:8]:
+        add([
+            row for row in misses
+            if row["prediction"]["gold"] == confusion["gold"]
+            and (row["prediction"].get("pred") or "INVALID") == confusion["pred"]
+        ], 5)
+    add([row for row in misses if row["error_type"] in {"invalid_format", "unknown_cwe"}], 5)
+    add([row for row in misses if row["gold_is_long_tail"]], 5)
+    if len(representatives) > 60:
+        raise AssertionError("base failure representative cap exceeded")
+    taxonomy["representative_count"] = len(representatives)
+    atomic_write_json("reports/base_failure_taxonomy.json", taxonomy)
+    write_jsonl("reports/base_failures.jsonl", representatives)
+
+    report_path = Path("reports/base_eval.md")
+    existing = report_path.read_text(encoding="utf-8")
+    marker = "\n## Failure taxonomy (Base)"
+    if marker in existing:
+        existing = existing.split(marker, 1)[0].rstrip() + "\n"
+    report_path.write_text(existing.rstrip() + "\n\n" + _render_base_taxonomy(taxonomy), encoding="utf-8")
+    return taxonomy
 
 
 def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> dict[str, Any]:
@@ -114,11 +372,17 @@ def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base", required=True)
-    parser.add_argument("--sft", required=True)
+    parser.add_argument("--sft")
     parser.add_argument("--test", required=True)
     parser.add_argument("--labels", required=True)
+    parser.add_argument("--single", action="store_true")
     args = parser.parse_args()
-    analyze(args.base, args.sft, args.test, args.labels)
+    if args.single:
+        analyze_single(args.base, args.test, args.labels)
+    else:
+        if not args.sft:
+            parser.error("--sft is required unless --single is set")
+        analyze(args.base, args.sft, args.test, args.labels)
 
 
 if __name__ == "__main__":

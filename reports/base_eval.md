@@ -79,3 +79,66 @@ KEV is an evaluation slice only.
    CWE-78 (0.0239), and CWE-787 (0.0254); CWE-862 recall was 0.0652.
 4. CWE-200 and CWE-120 were prediction sinks: their recall was 0.9631 and 0.9130, while precision was
    0.1004 and 0.1211, respectively.
+
+## Failure taxonomy (Base)
+
+Error categories are deterministic rules over the stored predictions; excerpts are capped at 200 characters.
+
+### Error types
+
+| Error type | Count |
+|---|---:|
+| invalid format | 0 |
+| unknown cwe | 426 |
+| nearby cwe confusion | 1,828 |
+| semantic confusion | 8,601 |
+
+### Top confusions
+
+| Gold | Prediction | Count |
+|---|---|---:|
+| CWE-862 | CWE-200 | 1,976 |
+| CWE-284 | CWE-200 | 1,573 |
+| CWE-416 | CWE-434 | 724 |
+| CWE-20 | CWE-200 | 678 |
+| CWE-787 | CWE-120 | 619 |
+| CWE-79 | CWE-200 | 596 |
+| CWE-125 | CWE-120 | 519 |
+| CWE-22 | CWE-200 | 462 |
+| CWE-125 | CWE-200 | 371 |
+| CWE-416 | CWE-444 | 297 |
+| CWE-78 | CWE-200 | 269 |
+| CWE-416 | CWE-120 | 237 |
+| CWE-284 | CWE-120 | 217 |
+| CWE-476 | CWE-200 | 200 |
+| CWE-78 | CWE-89 | 188 |
+
+### Head and long-tail accuracy
+
+| Tier | Records | Accuracy |
+|---|---:|---:|
+| head | 14,121 | 0.4126 |
+| tail | 3,879 | 0.3400 |
+
+### Accuracy by description length
+
+| Characters | Records | Accuracy |
+|---|---:|---:|
+| <250 | 5,804 | 0.4049 |
+| 250-500 | 6,802 | 0.4850 |
+| 500-1000 | 4,589 | 0.2975 |
+| >=1000 | 805 | 0.1627 |
+
+### Accuracy by token length
+
+| Tokens | Records | Accuracy |
+|---|---:|---:|
+| <480 | 15,917 | 0.4279 |
+| 480-1536 | 2,083 | 0.1603 |
+
+### KEV slice
+
+| Slice | Records | Accuracy |
+|---|---:|---:|
+| kev | 35 | 0.3143 |
+| non-kev | 17,965 | 0.3971 |

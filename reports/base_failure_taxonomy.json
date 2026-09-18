@@ -1,0 +1,245 @@
+{
+  "experiment": "exp_001_baseline",
+  "n": 18000,
+  "correct": 7145,
+  "accuracy": 0.39694444444444443,
+  "error_type_counts": {
+    "invalid_format": 0,
+    "unknown_cwe": 426,
+    "nearby_cwe_confusion": 1828,
+    "semantic_confusion": 8601
+  },
+  "per_class_recall": {
+    "CWE-79": {
+      "support": 3771,
+      "correct": 3037,
+      "recall": 0.8053566693184832
+    },
+    "CWE-89": {
+      "support": 1522,
+      "correct": 1325,
+      "recall": 0.8705650459921156
+    },
+    "CWE-787": {
+      "support": 749,
+      "correct": 19,
+      "recall": 0.025367156208277702
+    },
+    "CWE-352": {
+      "support": 550,
+      "correct": 426,
+      "recall": 0.7745454545454545
+    },
+    "CWE-125": {
+      "support": 914,
+      "correct": 18,
+      "recall": 0.019693654266958426
+    },
+    "CWE-862": {
+      "support": 2161,
+      "correct": 141,
+      "recall": 0.06524757056918093
+    },
+    "CWE-416": {
+      "support": 1419,
+      "correct": 2,
+      "recall": 0.0014094432699083862
+    },
+    "CWE-22": {
+      "support": 1368,
+      "correct": 830,
+      "recall": 0.6067251461988304
+    },
+    "CWE-20": {
+      "support": 788,
+      "correct": 7,
+      "recall": 0.008883248730964468
+    },
+    "CWE-78": {
+      "support": 879,
+      "correct": 21,
+      "recall": 0.023890784982935155
+    },
+    "CWE-476": {
+      "support": 587,
+      "correct": 211,
+      "recall": 0.3594548551959114
+    },
+    "CWE-120": {
+      "support": 299,
+      "correct": 273,
+      "recall": 0.9130434782608695
+    },
+    "CWE-434": {
+      "support": 344,
+      "correct": 67,
+      "recall": 0.19476744186046513
+    },
+    "CWE-200": {
+      "support": 786,
+      "correct": 757,
+      "recall": 0.9631043256997456
+    },
+    "CWE-284": {
+      "support": 1863,
+      "correct": 11,
+      "recall": 0.005904455179817499
+    }
+  },
+  "top_confusions": [
+    {
+      "gold": "CWE-862",
+      "pred": "CWE-200",
+      "count": 1976
+    },
+    {
+      "gold": "CWE-284",
+      "pred": "CWE-200",
+      "count": 1573
+    },
+    {
+      "gold": "CWE-416",
+      "pred": "CWE-434",
+      "count": 724
+    },
+    {
+      "gold": "CWE-20",
+      "pred": "CWE-200",
+      "count": 678
+    },
+    {
+      "gold": "CWE-787",
+      "pred": "CWE-120",
+      "count": 619
+    },
+    {
+      "gold": "CWE-79",
+      "pred": "CWE-200",
+      "count": 596
+    },
+    {
+      "gold": "CWE-125",
+      "pred": "CWE-120",
+      "count": 519
+    },
+    {
+      "gold": "CWE-22",
+      "pred": "CWE-200",
+      "count": 462
+    },
+    {
+      "gold": "CWE-125",
+      "pred": "CWE-200",
+      "count": 371
+    },
+    {
+      "gold": "CWE-416",
+      "pred": "CWE-444",
+      "count": 297
+    },
+    {
+      "gold": "CWE-78",
+      "pred": "CWE-200",
+      "count": 269
+    },
+    {
+      "gold": "CWE-416",
+      "pred": "CWE-120",
+      "count": 237
+    },
+    {
+      "gold": "CWE-284",
+      "pred": "CWE-120",
+      "count": 217
+    },
+    {
+      "gold": "CWE-476",
+      "pred": "CWE-200",
+      "count": 200
+    },
+    {
+      "gold": "CWE-78",
+      "pred": "CWE-89",
+      "count": 188
+    }
+  ],
+  "long_tail": {
+    "definition": "bottom third of selected labels by training-period count",
+    "tail_labels": [
+      "CWE-120",
+      "CWE-200",
+      "CWE-284",
+      "CWE-434",
+      "CWE-476"
+    ],
+    "tail": {
+      "n": 3879,
+      "correct": 1319,
+      "accuracy": 0.340036091776231
+    },
+    "head": {
+      "n": 14121,
+      "correct": 5826,
+      "accuracy": 0.4125770129594221
+    }
+  },
+  "description_length_buckets": {
+    "<250": {
+      "n": 5804,
+      "correct": 2350,
+      "accuracy": 0.4048931771192281
+    },
+    "250-500": {
+      "n": 6802,
+      "correct": 3299,
+      "accuracy": 0.4850044104675096
+    },
+    "500-1000": {
+      "n": 4589,
+      "correct": 1365,
+      "accuracy": 0.29745042492917845
+    },
+    ">=1000": {
+      "n": 805,
+      "correct": 131,
+      "accuracy": 0.16273291925465838
+    }
+  },
+  "token_length_buckets": {
+    "<480": {
+      "n": 15917,
+      "correct": 6811,
+      "accuracy": 0.4279072689577182
+    },
+    "480-1536": {
+      "n": 2083,
+      "correct": 334,
+      "accuracy": 0.1603456553048488
+    }
+  },
+  "kev": {
+    "kev": {
+      "n": 35,
+      "correct": 11,
+      "accuracy": 0.3142857142857143
+    },
+    "non_kev": {
+      "n": 17965,
+      "correct": 7134,
+      "accuracy": 0.3971054828833844
+    }
+  },
+  "flag_counts": {
+    "gold_is_long_tail": 2560,
+    "overgeneralization": 6785,
+    "under_specific": 1138
+  },
+  "rules": {
+    "error_type": "failure_analysis.error_type: format, allowed-label, same-family, then semantic",
+    "gold_is_long_tail": "gold is in the bottom third of selected labels by training-period count",
+    "overgeneralization": "prediction is CWE-200, CWE-20, or CWE-284 and gold is outside the prediction family",
+    "under_specific": "gold is a mapped specific sibling of a broader prediction in the same family; mapping={CWE-120: ['CWE-121', 'CWE-122', 'CWE-125', 'CWE-787'], CWE-284: ['CWE-269', 'CWE-285', 'CWE-287', 'CWE-306', 'CWE-862', 'CWE-863']}",
+    "token_length": "Qwen3 rendered chat prompt with thinking disabled plus completion"
+  },
+  "representative_count": 50
+}

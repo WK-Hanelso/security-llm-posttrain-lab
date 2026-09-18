@@ -29,8 +29,22 @@ def _chunks(rows: list[dict[str, Any]], size: int) -> Iterator[list[dict[str, An
 
 
 def _select_rows(
-    rows: list[dict[str, Any]], limit: int | None, subsample_seed: int | None
+    rows: list[dict[str, Any]],
+    limit: int | None,
+    subsample_seed: int | None,
+    subset_manifest: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
+    if subset_manifest is not None:
+        by_id = {row["cve_id"]: row for row in rows}
+        row_ids = subset_manifest["row_ids"]
+        if len(row_ids) != len(set(row_ids)):
+            raise ValueError("subset manifest contains duplicate row_ids")
+        missing = [cve_id for cve_id in row_ids if cve_id not in by_id]
+        if missing:
+            raise ValueError(f"subset manifest IDs missing from data file: {missing[:5]}")
+        if subset_manifest.get("count") != len(row_ids):
+            raise ValueError("subset manifest count does not match row_ids")
+        return [by_id[cve_id] for cve_id in row_ids]
     selected = list(rows)
     if limit is None:
         return selected
@@ -61,12 +75,24 @@ def main() -> None:
     model.eval()
     rows = read_jsonl(cfg["data"]["file"])
     limit = cfg["data"].get("limit")
+    subset_manifest = None
+    subset_manifest_path = cfg["data"].get("subset_manifest")
+    if subset_manifest_path:
+        with Path(subset_manifest_path).open(encoding="utf-8") as handle:
+            subset_manifest = json.load(handle)
+        source_hash = sha256_file(cfg["data"]["file"])
+        if source_hash != subset_manifest["source_sha256"]:
+            raise ValueError(
+                f"subset source sha256 mismatch: manifest={subset_manifest['source_sha256']} "
+                f"data={source_hash}"
+            )
     rows = _select_rows(
         rows,
         int(limit) if limit is not None else None,
         int(cfg["data"]["subsample_seed"])
         if cfg["data"].get("subsample_seed") is not None
         else None,
+        subset_manifest,
     )
     with Path(cfg["data"]["labels_file"]).open(encoding="utf-8") as handle:
         labels = json.load(handle)
@@ -105,6 +131,7 @@ def main() -> None:
     metrics = {"experiment_id": cfg["experiment_id"], "limit": limit, **compute(predictions, labels["selected"]),
         "generation": generation_cfg, "throughput": {"samples_per_second": len(rows) / wall_seconds if wall_seconds else 0.0,
             "wall_seconds": wall_seconds, "peak_vram_mib": torch.cuda.max_memory_allocated() / 1024**2}}
+    metrics["subset_hash"] = subset_manifest["subset_hash"] if subset_manifest else None
     atomic_write_json(out_dir / "metrics.json", metrics)
     with Path("manifests/dataset_manifest.json").open(encoding="utf-8") as handle:
         manifest = json.load(handle)

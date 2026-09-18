@@ -4,18 +4,66 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from security_llm.config import load_config
-from security_llm.utils.io import atomic_write_json
+from security_llm.prompt import render_chat_prompt
+from security_llm.utils.io import atomic_write_json, read_jsonl
 
 SPLITS = ("train", "val", "test")
+TOKENIZER_NAME = "Qwen/Qwen3-0.6B"
 
 
 def _load(path: str | Path) -> dict[str, Any]:
     with Path(path).open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def token_lengths_for_rows(rows: list[dict[str, Any]], tokenizer: Any) -> list[int]:
+    """Tokenize rendered prompt+completion sequences in bounded CPU batches."""
+
+    lengths: list[int] = []
+    for offset in range(0, len(rows), 256):
+        batch = rows[offset : offset + 256]
+        texts = [
+            render_chat_prompt(tokenizer, row["prompt"]) + row["completion"]
+            for row in batch
+        ]
+        encoded = tokenizer(
+            texts, add_special_tokens=False, return_length=True, truncation=False
+        )
+        lengths.extend(int(value) for value in encoded["length"])
+    return lengths
+
+
+def _token_summary(lengths: list[int]) -> dict[str, int]:
+    if not lengths:
+        return {"p50": 0, "p95": 0, "p99": 0, "max": 0, "n_over_480": 0, "n_over_1536": 0}
+    return {
+        "p50": int(np.percentile(lengths, 50)),
+        "p95": int(np.percentile(lengths, 95)),
+        "p99": int(np.percentile(lengths, 99)),
+        "max": max(lengths),
+        "n_over_480": sum(value > 480 for value in lengths),
+        "n_over_1536": sum(value > 1536 for value in lengths),
+    }
+
+
+def compute_token_statistics(cfg: dict[str, Any]) -> dict[str, dict[str, int]]:
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME, local_files_only=True)
+    sft_dir = Path(cfg["paths"]["sft_dir"])
+    return {
+        split: _token_summary(
+            token_lengths_for_rows(read_jsonl(sft_dir / f"{split}.jsonl"), tokenizer)
+        )
+        for split in SPLITS
+    }
 
 
 def build_report(cfg: dict[str, Any]) -> dict[str, Any]:
@@ -33,6 +81,23 @@ def build_report(cfg: dict[str, Any]) -> dict[str, Any]:
         }
         for name in SPLITS
     }
+    population_distribution = {
+        name: dict(stats["split_class_distribution"][name]) for name in SPLITS
+    }
+    if cfg["dedup"].get("drop_val_overlap_with_test"):
+        processed_dir = Path(cfg["paths"]["processed_dir"])
+        train = read_jsonl(processed_dir / "train.jsonl")
+        val = read_jsonl(processed_dir / "val.jsonl")
+        test = read_jsonl(processed_dir / "test.jsonl")
+        excluded_hashes = {
+            row["description_norm_hash"] for row in train + test
+        }
+        kept_val = [
+            row for row in val if row["description_norm_hash"] not in excluded_hashes
+        ]
+        population_distribution["val"] = dict(
+            Counter(row["cwe_id"] for row in kept_val)
+        )
     result = {
         "raw_records": funnel["raw_cves"],
         "unique_records": funnel["unique_cves"],
@@ -44,10 +109,11 @@ def build_report(cfg: dict[str, Any]) -> dict[str, Any]:
         "selected_class_records": manifest["population_counts"],
         "sampled_counts": manifest["counts"],
         "class_distribution": {
-            "population": stats["split_class_distribution"],
+            "population": population_distribution,
             "sampled": manifest["class_distribution"],
         },
         "description_length_chars": stats["description_length_chars"],
+        "token_length": stats.get("token_length", {}),
         "duplicate_cve_count": 0,
         "duplicate_cve_count_reason": (
             "The canonical record is keyed by CVE ID and normalization keeps the last occurrence."
@@ -163,6 +229,24 @@ def render_markdown(report: dict[str, Any]) -> str:
             f"| {split} | {lengths['p50']:,} | {lengths['p90']:,} | "
             f"{lengths['p99']:,} | {lengths['max']:,} |"
         )
+    lines.extend(
+        [
+            "",
+            "## Token lengths",
+            "",
+            "Counts cover the rendered Qwen3 chat prompt plus completion, with thinking disabled.",
+            "",
+            "| Split | p50 | p95 | p99 | Maximum | Over 480 | Over 1,536 |",
+            "|---|---:|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for split in SPLITS:
+        lengths = report["token_length"][split]
+        lines.append(
+            f"| {split} | {lengths['p50']:,} | {lengths['p95']:,} | "
+            f"{lengths['p99']:,} | {lengths['max']:,} | "
+            f"{lengths['n_over_480']:,} | {lengths['n_over_1536']:,} |"
+        )
     duplicates = report["duplicate_description_count"]
     lines.extend(
         [
@@ -200,6 +284,9 @@ def render_markdown(report: dict[str, Any]) -> str:
 
 
 def write_report(cfg: dict[str, Any]) -> dict[str, Any]:
+    stats = _load(cfg["paths"]["stats"])
+    stats["token_length"] = compute_token_statistics(cfg)
+    atomic_write_json(cfg["paths"]["stats"], stats)
     report = build_report(cfg)
     atomic_write_json("reports/dataset_report.json", report)
     Path("reports/dataset_report.md").write_text(render_markdown(report), encoding="utf-8")

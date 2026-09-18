@@ -2,7 +2,7 @@
   "created_at": "2026-09-17T11:46:53.085943+00:00",
   "git_commit": "2b4b31401e3e969e48c1966a36702e364167b5d0",
   "dataset_snapshot": "2026-09-17",
-  "data_config_sha256": "a19414acb0574fdbdf6a02a13f9a103e239ef869ca6428ad3e78b8a9bacac3d0",
+  "data_config_sha256": "d211bb18ee0b51fd73b95a3353d0a2f867cf6ccbccc528a7e3281c8feba70fbf",
   "prompt_template_sha256": "62bfc76e7e98d479185db793fbd02c9b9e968753c22e44120ee90d78d77ef99c",
   "labels": [
     "CWE-79",
@@ -30,7 +30,7 @@
     "val": {
       "path": "data/sft/val.jsonl",
       "rows": 1000,
-      "sha256": "7a734694916187e54942fc57b77ec0a0532fabb752d46e97b2dc6390ccbde95c"
+      "sha256": "4a3cfc2f90a5d47ff8d8348ab17c12269f307a1133bfa72a628b90968ed5cca1"
     },
     "test": {
       "path": "data/sft/test.jsonl",
@@ -45,7 +45,7 @@
   },
   "population_counts": {
     "train": 65272,
-    "val": 21151,
+    "val": 20918,
     "test": 24975
   },
   "class_distribution": {
@@ -67,21 +67,21 @@
       "CWE-434": 418
     },
     "val": {
-      "CWE-284": 43,
-      "CWE-79": 323,
-      "CWE-89": 92,
-      "CWE-787": 32,
-      "CWE-434": 31,
-      "CWE-352": 82,
-      "CWE-476": 56,
-      "CWE-862": 115,
-      "CWE-78": 31,
-      "CWE-416": 49,
-      "CWE-125": 35,
-      "CWE-22": 50,
-      "CWE-120": 22,
-      "CWE-20": 17,
-      "CWE-200": 22
+      "CWE-416": 45,
+      "CWE-79": 353,
+      "CWE-89": 67,
+      "CWE-476": 65,
+      "CWE-862": 123,
+      "CWE-200": 34,
+      "CWE-120": 13,
+      "CWE-352": 93,
+      "CWE-20": 30,
+      "CWE-78": 24,
+      "CWE-125": 37,
+      "CWE-22": 43,
+      "CWE-284": 20,
+      "CWE-787": 25,
+      "CWE-434": 28
     },
     "test": {
       "CWE-78": 1184,
@@ -111,7 +111,8 @@
   },
   "dedup": {
     "train_exact_duplicates_dropped": 3427,
-    "train_overlap_with_eval_dropped": 36
+    "train_overlap_with_eval_dropped": 36,
+    "val_overlap_with_eval_dropped": 233
   },
   "schema_version": "1.0",
   "source": "NVD CVE API 2.0",
@@ -167,6 +168,14 @@
     "train_overlap_with_eval": "drop",
     "eval_overlap": "report_only"
   },
-  "dataset_hash": "d4abf16beb51c55804d6756e3aa4110b30b536a51827f7dce0dfe52e664b45d9",
-  "validation_count": 1000
+  "dataset_hash": "ab321617504329a0e00469637aa75a13a457d1c8cfa82db37002fb40ae83ad26",
+  "validation_count": 1000,
+  "dataset_version": "1.1",
+  "changelog": [
+    {
+      "version": "1.1",
+      "date": "2026-09-19",
+      "reason": "val rows overlapping test/train by normalized text dropped to satisfy the post-dedup invariant; train and test unchanged"
+    }
+  ]
 }

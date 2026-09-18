@@ -42,8 +42,9 @@ def compute_contamination(cfg: dict[str, Any]) -> dict[str, Any]:
         "post_build": {
             "train_test_exact_text_overlap": len(find_overlap(sft_train, sft_test, "description_norm_hash")),
             "train_val_exact_text_overlap": len(find_overlap(sft_train, sft_val, "description_norm_hash")),
+            "val_test_exact_text_overlap": len(find_overlap(sft_val, sft_test, "description_norm_hash")),
         },
-        "limitations": "Exact-hash only. Pretraining-corpus contamination of the base model cannot be verified.",
+        "limitations": "Exact-hash only. Exposure of the unadapted model weights to NVD data cannot be verified.",
     }
     atomic_write_json(cfg["paths"]["contamination"], result)
     return result

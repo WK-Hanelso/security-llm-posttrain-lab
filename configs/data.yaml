@@ -24,6 +24,7 @@ split:
 dedup:
   drop_train_exact_duplicates: true
   drop_train_overlap_with_eval: true
+  drop_val_overlap_with_test: true
 sft:
   max_description_chars: 1500
   train_max_samples: 12000
@@ -38,4 +39,3 @@ paths:
   manifest: manifests/dataset_manifest.json
   stats: reports/dataset_stats.json
   contamination: reports/contamination.json
-

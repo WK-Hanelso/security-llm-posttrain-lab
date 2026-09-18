@@ -41,7 +41,8 @@
   "policy": "train records overlapping val/test by normalized-text hash were dropped before SFT build",
   "post_build": {
     "train_test_exact_text_overlap": 0,
-    "train_val_exact_text_overlap": 0
+    "train_val_exact_text_overlap": 0,
+    "val_test_exact_text_overlap": 0
   },
-  "limitations": "Exact-hash only. Pretraining-corpus contamination of the base model cannot be verified."
+  "limitations": "Exact-hash only. Exposure of the unadapted model weights to NVD data cannot be verified."
 }

@@ -8,6 +8,7 @@ model:
 data:
   file: data/sft/test.jsonl
   labels_file: data/processed/labels.json
+  subset_manifest: reports/eval_subset_manifest.json
   limit: 18000
   subsample_seed: 42
 generation:

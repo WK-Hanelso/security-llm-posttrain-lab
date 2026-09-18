@@ -21,7 +21,7 @@ Canonical schema: `1.0`
 | Split | Selected-class population | SFT rows | Placeholder only | Multi-label | Single-label outside selected set |
 |---|---:|---:|---:|---:|---:|
 | train | 65,272 | 12,000 | 13,032 | 12,713 | 40,340 |
-| val | 21,151 | 1,000 | 1,638 | 7,455 | 16,382 |
+| val | 20,918 | 1,000 | 1,638 | 7,455 | 16,382 |
 | test | 24,975 | 24,975 | 1,197 | 9,915 | 26,674 |
 
 ## Class distribution
@@ -30,21 +30,21 @@ Tail is the bottom third of selected labels by training-period count.
 
 | CWE | Tier | Train population | Train sample | Val population | Val sample | Test population | Test sample |
 |---|---|---:|---:|---:|---:|---:|---:|
-| CWE-79 | head | 19,261 | 3,479 | 7,362 | 323 | 5,244 | 5,244 |
-| CWE-89 | head | 7,294 | 1,424 | 1,685 | 92 | 2,151 | 2,151 |
-| CWE-787 | head | 6,304 | 1,091 | 722 | 32 | 1,065 | 1,065 |
-| CWE-352 | head | 4,010 | 750 | 1,812 | 82 | 775 | 775 |
-| CWE-125 | head | 3,811 | 619 | 849 | 35 | 1,277 | 1,277 |
-| CWE-862 | head | 3,354 | 614 | 2,199 | 115 | 2,971 | 2,971 |
-| CWE-416 | head | 3,215 | 574 | 1,016 | 49 | 1,932 | 1,932 |
-| CWE-22 | head | 2,984 | 599 | 981 | 50 | 1,894 | 1,894 |
-| CWE-20 | head | 2,707 | 499 | 444 | 17 | 1,087 | 1,087 |
-| CWE-78 | head | 2,554 | 465 | 690 | 31 | 1,184 | 1,184 |
-| CWE-476 | tail | 2,191 | 415 | 1,135 | 56 | 802 | 802 |
-| CWE-120 | tail | 2,149 | 413 | 361 | 22 | 444 | 444 |
-| CWE-434 | tail | 2,061 | 418 | 558 | 31 | 488 | 488 |
-| CWE-200 | tail | 1,921 | 385 | 627 | 22 | 1,056 | 1,056 |
-| CWE-284 | tail | 1,456 | 255 | 710 | 43 | 2,605 | 2,605 |
+| CWE-79 | head | 19,261 | 3,479 | 7,347 | 353 | 5,244 | 5,244 |
+| CWE-89 | head | 7,294 | 1,424 | 1,667 | 67 | 2,151 | 2,151 |
+| CWE-787 | head | 6,304 | 1,091 | 719 | 25 | 1,065 | 1,065 |
+| CWE-352 | head | 4,010 | 750 | 1,809 | 93 | 775 | 775 |
+| CWE-125 | head | 3,811 | 619 | 830 | 37 | 1,277 | 1,277 |
+| CWE-862 | head | 3,354 | 614 | 2,192 | 123 | 2,971 | 2,971 |
+| CWE-416 | head | 3,215 | 574 | 880 | 45 | 1,932 | 1,932 |
+| CWE-22 | head | 2,984 | 599 | 980 | 43 | 1,894 | 1,894 |
+| CWE-20 | head | 2,707 | 499 | 437 | 30 | 1,087 | 1,087 |
+| CWE-78 | head | 2,554 | 465 | 690 | 24 | 1,184 | 1,184 |
+| CWE-476 | tail | 2,191 | 415 | 1,132 | 65 | 802 | 802 |
+| CWE-120 | tail | 2,149 | 413 | 361 | 13 | 444 | 444 |
+| CWE-434 | tail | 2,061 | 418 | 558 | 28 | 488 | 488 |
+| CWE-200 | tail | 1,921 | 385 | 619 | 34 | 1,056 | 1,056 |
+| CWE-284 | tail | 1,456 | 255 | 697 | 20 | 2,605 | 2,605 |
 
 ## Description lengths
 
@@ -55,6 +55,16 @@ Character counts are for selected-class population records before SFT truncation
 | train | 244 | 531 | 1,498 | 3,998 |
 | val | 270 | 588 | 2,954 | 3,998 |
 | test | 352 | 783 | 1,748 | 3,998 |
+
+## Token lengths
+
+Counts cover the rendered Qwen3 chat prompt plus completion, with thinking disabled.
+
+| Split | p50 | p95 | p99 | Maximum | Over 480 | Over 1,536 |
+|---|---:|---:|---:|---:|---:|---:|
+| train | 368 | 470 | 780 | 1,371 | 537 | 0 |
+| val | 373 | 511 | 916 | 1,189 | 68 | 0 |
+| test | 385 | 523 | 700 | 1,322 | 2,761 | 0 |
 
 ## Duplicate and overlap checks
 
