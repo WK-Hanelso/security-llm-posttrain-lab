@@ -874,3 +874,91 @@ runs get a section too.
 `experiments/*/trainer/`, `logs/`, `.venv/`, `__pycache__/`, `*.pyc`, `.pytest_cache/`, `*.gguf`, `*.safetensors`, `*.bin`.
 `predictions.jsonl`, `metrics.json`, `metadata.json`, `train_log.jsonl`, `config_resolved.yaml` **are committed**
 (they are the evidence). Commit messages: `T-XXX: summary`.
+
+---
+
+## 13. v2 additions — canonical record, label policy, claim boundaries (2026-09-18)
+
+Rationale: the project's centre of gravity moves from "a CWE classifier" to "a reproducible security dataset
+specification + evaluation pipeline". The existing code already separates the data layer
+(`security_llm.data.*` → `data/processed/normalized.jsonl`) from the model adapter (`security_llm.prompt`);
+v2 makes those responsibilities explicit and documented. No experiment, split, or label set changes.
+
+### 13.1 Canonical security record (`src/security_llm/data/schema.py`)
+
+`normalized.jsonl` (§4.2) **is** the canonical record. `schema.py` adds a typed definition + validator:
+
+```
+SCHEMA_VERSION = "1.0"
+@dataclass(frozen=True) class CanonicalRecord: (every field of §4.2, same names/types)
+REQUIRED = [...]; validate_record(d: dict) -> list[str]   # returns problems; empty list == valid
+  - cve_id matches ^CVE-\d{4}-\d{4,}$
+  - published is YYYY-MM-DD; last_modified is ISO date or datetime
+  - cwe_all is a sorted list of unique ^CWE-\d+$ strings; cwe_id is None or cwe_all[0] when len(cwe_all)==1
+  - label_status ∈ {single, multi, placeholder_only, none} and consistent with cwe_all / placeholder_only
+  - description_norm_hash == text_hash(description_en)  (recomputed)
+  - is_kev == (kev_date_added is not None)
+validate_file(path, sample: int | None) -> {rows, invalid, problems_by_type: Counter, examples: list}
+```
+CLI: `python -m security_llm.data.validate --config configs/data.yaml [--sample N]` → prints a summary and exits
+non-zero when `invalid > 0`. **Principle (binding): the canonical record holds security facts only; no prompt,
+template, tokenizer or model field may be added to it.** Model-specific fields live only in `data/sft/*.jsonl`.
+
+### 13.2 Model adapter namespace (`src/security_llm/adapters/cwe_instruction.py`)
+
+Thin module that re-exports `PROMPT_TEMPLATE`, `build_user_prompt`, `render_chat_prompt`,
+`prompt_template_sha256` from `security_llm.prompt` and adds `OUTPUT_SCHEMA = {"type":"object","properties":
+{"cwe_id":{"type":"string","pattern":"^CWE-\\d+$"}},"required":["cwe_id"],"additionalProperties":false}` and
+`serialize_label(cwe_id) -> '{"cwe_id": "CWE-79"}'` (must produce byte-identical strings to build_sft).
+`security_llm.prompt` stays (import path used by existing code/tests); the adapter is the documented entry point.
+
+### 13.3 Manifest v2 fields (`manifests/dataset_manifest.json`)
+
+Add, without removing existing keys: `schema_version` ("1.0"), `source` ("NVD CVE API 2.0"),
+`snapshot_time` (= dataset_snapshot), `label_policy` (object: `placeholder_cwes_excluded`, `single_label_only`,
+`top_k`, `min_train_samples_per_class`, `label_selection_period` = train range, `selected_labels`),
+`split_policy` (object: `type: temporal_by_published`, `train`, `val`, `test` ranges, `snapshot_date`),
+`dedup_policy` (object: `train_exact_duplicates: drop_keep_earliest`, `train_overlap_with_eval: drop`,
+`eval_overlap: report_only`), `dataset_hash` (sha256 over the concatenated sha256 of train/val/test files in
+that order), `validation_count` (= counts.val). Implement in `build_sft.py` (manifest writer) so a rebuild
+produces v2; ALSO write a one-off `python -m security_llm.data.manifest --config configs/data.yaml --upgrade`
+that upgrades the existing manifest in place from the existing files (no dataset rebuild, hashes must match
+the current files). `tests/test_manifest.py` checks required keys and that dataset_hash is deterministic.
+
+### 13.4 Dataset report (`reports/dataset_report.json` + `reports/dataset_report.md`)
+
+`python -m security_llm.data.report --config configs/data.yaml` reads `reports/dataset_stats.json`,
+`manifests/dataset_manifest.json`, `reports/contamination.json`, `data/processed/labels.json` and writes:
+- `dataset_report.json`: `{raw_records, unique_records, rejected, no_weakness, placeholder_only, multi_label,
+  single_label, selected_class_records: {train,val,test} (population), sampled_counts, class_distribution
+  (population and sampled), description_length_chars, duplicate_cve_count (=0 by construction, state why),
+  duplicate_description_count: {train_internal, train_val, train_test, val_test}, excluded_label_counts
+  (placeholder_only, multi_label, not_in_selected per split), missing_data_counts (no_english_description,
+  no_weakness), label_policy, split_policy, snapshot_date, schema_version}`.
+- `dataset_report.md`: the same as readable tables (funnel table, per-split table with head/tail marking —
+  tail = bottom third of selected labels by train count —, length percentiles, duplicate/overlap table,
+  policy summary). Numbers only from the JSON; no prose claims about model quality.
+
+### 13.5 Documents
+
+- `DATASET_CARD.md` (repo root, replaces placeholder): Source / Purpose / Canonical record schema (field table
+  from §4.2, schema_version) / Label policy (§13.3) / Split policy / Dedup & overlap checks (state exact-hash
+  only; wording rule below) / Statistics (from dataset_report.json) / Known limitations (NVD label noise, top-15
+  only, CNA vs NVD weakness disagreement excluded as multi-label, description-only ambiguity, base-model
+  pretraining exposure to NVD cannot be verified, 2026 test period has fewer NVD-enriched records).
+- `docs/claim-boundaries.md`: what this project does and does not demonstrate. Must include the allowed and
+  forbidden phrasings verbatim: allowed — "checked exact CVE-ID and normalized-description overlap between
+  fine-tuning splits"; forbidden — "contamination-free benchmark", "base-model/pretraining contamination
+  removed or verified", "foundation model", "CPT", "RLVR", "malware detection", "threat intelligence model",
+  "SOC automation", "large-scale Ray cluster". Also state: verifier is a *deterministic evaluation verifier*,
+  not an RL reward; KEV is an evaluation slice only; single-label CVEs only; top-15 closed set; one seed.
+- `docs/data-layer.md`: one page — the pipeline diagram (NVD API → raw pages → canonical record →
+  validate/dedup/split → model adapter → SFT jsonl → Qwen), the data-layer vs model-adapter responsibility
+  table (from brief v2 §4), and a file→responsibility map of `src/security_llm`.
+- `reports/base_eval.md`: baseline results as tables from `reports/baseline_metrics.json` (headline, per-class
+  P/R/F1 sorted by support with head/tail marker, invalid breakdown, KEV slice, generation config, throughput)
+  plus the 4 observations from `agent/T-002_EXEC.md`. No SFT numbers, no speculation.
+
+### 13.6 Wording rules (apply everywhere)
+Use "overlap check between fine-tuning splits"; never "contamination-free". Use "deterministic evaluation
+verifier". Use "LoRA SFT of an open-weight 0.6B model"; never "foundation model", "pretraining", "CPT", "RLVR".
