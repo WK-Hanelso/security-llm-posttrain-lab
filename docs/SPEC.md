@@ -1040,3 +1040,35 @@ From `experiments/exp_001_baseline/predictions.jsonl` using `failure_analysis.er
 - `README.md`: completed scope only — description (v2 §22 sentences), pipeline diagram with the SFT/failure-analysis stages marked
   "pending", dataset at a glance, Base results table with the SFT/Delta columns left `pending`, base failure pattern (top confusions),
   claim boundaries link, reproduce commands, repository map. Any sentence of the form "SFT improves/improved …" is forbidden.
+
+---
+
+## 15. T-004c near-duplicate audit (sampled, non-blocking) — 2026-09-19
+
+Purpose: measure how often a test description has a highly similar *template* counterpart in the train set that the exact-hash guard
+cannot catch, and record it in the claim boundary. It does not change the dataset, Base, SFT, or the frozen 18,000-ID evaluation, and it
+is **not** a formal semantic-contamination detector.
+
+`src/security_llm/eval/near_duplicate_audit.py` (CPU, scikit-learn only):
+```
+inputs : data/sft/train.jsonl (12,000), experiments/exp_00{1,2}_*/predictions.jsonl, data/sft/test.jsonl (descriptions)
+sample : from the frozen 18,000 evaluated IDs, 200 `fixed_by_sft` + 100 `both_wrong`, class-stratified by gold label
+         (proportional allocation with at least 1 per class when available), random.Random(42); record the allocation.
+metric : word TF-IDF (1–2-grams, sublinear tf, min_df 2, English stop words kept) cosine similarity between each sampled test
+         description and every train description (12,000 × 300 dense is fine). Threshold definitions: high ≥ 0.80, very high ≥ 0.90
+         (cosine on TF-IDF; stated explicitly in the JSON). Also compute character 5-gram Jaccard for the top-20 pairs as a second view.
+output : reports/near_duplicate_audit.json =
+         {"metric": "...", "thresholds": {...}, "sample": {"fixed_by_sft": 200, "both_wrong": 100, "allocation": {...}},
+          "summary": {"n_audited", "similarity_p50", "similarity_p90", "similarity_p95", "similarity_max",
+                      "ge_0_80_count", "ge_0_90_count", "high_sim_same_label", "high_sim_different_label",
+                      "by_transition": {...same fields per transition...}},
+          "rows": [{"test_cve_id","gold_cwe","transition","base_prediction","sft_prediction","nearest_train_cve_id",
+                    "nearest_train_cwe","similarity","char5_jaccard"(top-20 only),"same_label"}],
+          "top20": [{...row..., "test_excerpt"(≤300 chars), "train_excerpt"(≤300 chars), "manual_category": null}]}
+         reports/near_duplicate_audit.md = summary tables + the top-20 pairs with excerpts and a manual category per pair from
+         {exact_or_near_copy, vendor_boilerplate_only, weakness_phrase_repeated, normal_semantic_similarity} with one-line justification.
+claim  : the sentence to be used verbatim in docs/claim-boundaries.md / README / DATASET_CARD (Korean source → English):
+         "Exact CVE-ID and normalized-description overlap between splits is blocked by a fail-fast guard. In addition, a sampled audit of
+          high text-similarity train/test pairs was run to check for template reuse; this is not a formal semantic-contamination detector."
+test   : tests/test_near_duplicate_audit.py — synthetic 6-row train / 3-row sample: identical text → similarity ≈ 1.0 and same_label logic;
+         thresholds recorded; stratification returns the requested counts.
