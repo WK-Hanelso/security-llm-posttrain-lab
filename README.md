@@ -1,77 +1,189 @@
-# security-llm-posttrain-lab
+# Security-domain LLM Post-training & Evaluation
 
-A reproducible security data and evaluation pipeline for mapping English NVD CVE descriptions to one CWE ID in a top-15 closed set. The repository separates the canonical security record from the Qwen3 instruction adapter and records exact overlap checks, dataset versions, and deterministic evaluation artifacts.
+*CVE-to-CWE domain SFT with reproducible evaluation*
 
-The completed evidence covers dataset construction and the unadapted `Qwen/Qwen3-0.6B` evaluation. The LoRA SFT and comparative failure-analysis stages are pending `exp_002_sft_v1`.
+The repository cleans public vulnerability data (NVD) into a CWE classification dataset and compares an open-weight LLM's base and LoRA-SFT performance on the same temporal held-out set.
+Raw NVD records and model-specific prompt formatting are kept separate so dataset construction and model adaptation are verified independently.
 
-## Pipeline
+## Problem
+
+The task maps one English CVE description to one JSON CWE label in a fixed closed set.
 
 ```text
-NVD CVE API 2.0
-  -> cached raw pages
-  -> canonical security records
-  -> validate / exact-hash dedup / temporal split
-  -> fixed CWE instruction adapter
-  -> versioned SFT JSONL
-  -> Base evaluation (complete; frozen 18,000-ID subset)
-  -> LoRA SFT (pending exp_002_sft_v1)
-  -> SFT evaluation and comparative failure analysis (pending exp_002_sft_v1)
+NVD CVE → Canonical Security Record → CWE Label Policy → Temporal Split + Overlap Check
+→ Model Adapter → Qwen3-0.6B Base → LoRA SFT → Same Held-out Test
+→ Deterministic Evaluation Verifier → Failure Analysis (→ Data Distribution Ablation, if present)
 ```
 
-## Dataset at a glance
+## Dataset
 
-Snapshot: `2026-09-17`; dataset version: `1.1`; canonical schema: `1.0`.
+The NVD snapshot date is `2026-09-17`. The source funnel contains 257,913 raw records and 194,797 single-label records.
 
-| Split | Date range | Selected-class population after required split dedup | SFT rows |
-|---|---|---:|---:|
-| Train | 2020-01-01–2024-12-31 | 65,272 | 12,000 |
-| Validation | 2025-01-01–2025-12-31 | 20,918 | 1,000 |
-| Test | 2026-01-01–2026-09-17 | 24,975 | 24,975 |
+Selected CWE IDs: `CWE-79`, `CWE-89`, `CWE-787`, `CWE-352`, `CWE-125`, `CWE-862`, `CWE-416`, `CWE-22`, `CWE-20`, `CWE-78`, `CWE-476`, `CWE-120`, `CWE-434`, `CWE-200`, `CWE-284`.
 
-The project checked exact CVE-ID and normalized-description overlap between fine-tuning splits. The post-build guard passes all pairs. See the [dataset report](reports/dataset_report.md), [dataset card](DATASET_CARD.md), and [claim boundaries](docs/claim-boundaries.md).
+| Split | Selected-class population | Sampled rows |
+|---|---:|---:|
+| Train | 65,272 | 12,000 |
+| Validation | 20,918 | 1,000 |
+| Test | 24,975 | 24,975 |
 
-## Evaluation results
+The training and validation views use seeded natural-distribution samples; the test view retains the full selected-class population. See the [dataset card](DATASET_CARD.md) and [dataset report](reports/dataset_report.md).
 
-The Base evaluation uses the ID-pinned 18,000-record subset in `reports/eval_subset_manifest.json`.
+## Temporal split and leakage guard
+
+| Split | Published-date range |
+|---|---|
+| Train | 2020-01-01–2024-12-31 |
+| Validation | 2025-01-01–2025-12-31 |
+| Test | 2026-01-01–2026-09-17 |
+
+Exact CVE-ID and normalized-description overlap between fine-tuning splits: 0 after build. This is an exact check, not a semantic-similarity claim.
+
+## Base model
+
+The unadapted run uses `Qwen/Qwen3-0.6B` at revision `c1899de289a04d12100db370d81485cdf75e47ca`. It is evaluated with the same prompt, ordered CVE-ID subset, generation settings, and deterministic evaluation verifier as the adapted run.
+
+## LoRA SFT
+
+| Setting | Recorded value |
+|---|---|
+| Model / revision | `Qwen/Qwen3-0.6B` / `c1899de289a04d12100db370d81485cdf75e47ca` |
+| LoRA rank / alpha / dropout | 16 / 32 / 0.05 |
+| Target modules | `q_proj`, `k_proj`, `v_proj`, `o_proj` |
+| Epochs / learning rate | 3 / 0.0002 |
+| Device batch / gradient accumulation / effective batch | 2 / 8 / 16 |
+| Maximum sequence length | 1,536 tokens |
+| Precision / quantization | fp16 / no quantization |
+| GPU | NVIDIA GeForce RTX 2060 |
+| Training wall time | 7835.1 s |
+| Peak allocated VRAM | 2001.4 MiB |
+| Trainable parameters | 4,587,520 |
+
+The 1,536-token limit was used because the recorded rendered prompt-plus-completion maxima are 1,371 for train, 1,189 for validation, and 1,322 for test, with no rows over the configured limit.
+
+## Base vs SFT
 
 | Metric | Base | SFT | Delta |
 |---|---:|---:|---:|
-| Accuracy | 0.3969 | pending | pending |
-| Macro F1 | 0.3048 | pending | pending |
-| Weighted F1 | 0.3891 | pending | pending |
-| Invalid-output rate | 0.0237 | pending | pending |
-| KEV accuracy (n=35) | 0.3143 | pending | pending |
+| Accuracy | 0.3969 | 0.8627 | +0.4657 |
+| Macro F1 | 0.3048 | 0.8332 | +0.5284 |
+| Invalid-output rate | 0.0237 | 0.0000 | -0.0237 |
 
-The most frequent Base confusions are CWE-862→CWE-200 (1,976), CWE-284→CWE-200 (1,573), CWE-416→CWE-434 (724), CWE-20→CWE-200 (678), and CWE-787→CWE-120 (619). Full Base details are in [reports/base_eval.md](reports/base_eval.md).
+n = 18,000: a seed-42 subsample of the 24,975-row 2026 test split.
 
-## Reproduce completed artifacts
+### Per-class F1
 
-Use the existing environment and cached tokenizer; these commands do not run training:
+Rows are sorted by evaluation support.
+
+| CWE ID | Name | Test support | Base F1 | SFT F1 | Delta |
+|---|---|---:|---:|---:|---:|
+| CWE-79 | Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') | 3,771 | 0.8788 | 0.9629 | +0.0842 |
+| CWE-862 | Missing Authorization | 2,161 | 0.1153 | 0.7781 | +0.6628 |
+| CWE-284 | Improper Access Control | 1,863 | 0.0117 | 0.7353 | +0.7236 |
+| CWE-89 | Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection') | 1,522 | 0.8450 | 0.9789 | +0.1339 |
+| CWE-416 | Use After Free | 1,419 | 0.0028 | 0.9670 | +0.9642 |
+| CWE-22 | Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal') | 1,368 | 0.7437 | 0.9302 | +0.1865 |
+| CWE-125 | Out-of-bounds Read | 914 | 0.0317 | 0.9071 | +0.8754 |
+| CWE-78 | Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection') | 879 | 0.0462 | 0.9243 | +0.8782 |
+| CWE-20 | Improper Input Validation | 788 | 0.0176 | 0.6329 | +0.6154 |
+| CWE-200 | Exposure of Sensitive Information to an Unauthorized Actor | 786 | 0.1819 | 0.6420 | +0.4601 |
+| CWE-787 | Out-of-bounds Write | 749 | 0.0473 | 0.7665 | +0.7192 |
+| CWE-476 | NULL Pointer Dereference | 587 | 0.5282 | 0.9073 | +0.3792 |
+| CWE-352 | Cross-Site Request Forgery (CSRF) | 550 | 0.7918 | 0.9209 | +0.1291 |
+| CWE-434 | Unrestricted Upload of File with Dangerous Type | 344 | 0.1166 | 0.8189 | +0.7023 |
+| CWE-120 | Buffer Copy without Checking Size of Input ('Classic Buffer Overflow') | 299 | 0.2139 | 0.6252 | +0.4113 |
+
+## Failure analysis
+
+### Outcome transitions
+
+| Transition | Count |
+|---|---:|
+| `both_right` | 6,813 |
+| `fixed_by_sft` | 8,715 |
+| `broken_by_sft` | 332 |
+| `both_wrong` | 2,140 |
+
+### Error types
+
+| Outcome or error type | Base | SFT |
+|---|---:|---:|
+| `correct` | 7,145 | 15,528 |
+| `invalid_format` | 0 | 0 |
+| `unknown_cwe` | 426 | 0 |
+| `nearby_cwe_confusion` | 1,828 | 852 |
+| `semantic_confusion` | 8,601 | 1,620 |
+
+### Most frequent SFT confusions
+
+| Gold → prediction | Count |
+|---|---:|
+| CWE-862 → CWE-284 | 367 |
+| CWE-284 → CWE-200 | 138 |
+| CWE-862 → CWE-200 | 138 |
+| CWE-284 → CWE-20 | 133 |
+| CWE-787 → CWE-120 | 133 |
+
+### Representative residual examples
+
+The comparison artifact stores residual failures, so the available examples are broken or still wrong rather than fixed cases.
+
+| Transition | CVE ID | Gold | Base | SFT | Description excerpt |
+|---|---|---|---|---|---|
+| `broken_by_sft` | CVE-2018-25276 | CWE-120 | CWE-120 | CWE-20 | RoboImport 1.2.0.72 contains a denial of service vulnerability that allows local attackers to crash the application by submitting oversized input to registrati… |
+| `broken_by_sft` | CVE-2018-25330 | CWE-89 | CWE-89 | CWE-79 | Joomla! extension EkRishta 2.10 contains persistent cross-site scripting and SQL injection vulnerabilities that allow attackers to inject malicious code throug… |
+| `both_wrong` | CVE-2013-20005 | CWE-79 | CWE-352 | CWE-352 | Qool CMS 2.0 RC2 contains a cross-site request forgery vulnerability that allows attackers to perform administrative actions by tricking logged-in users into v… |
+
+See [the full failure analysis](reports/failure_analysis.md) for the top confusions, long-tail results, and quoted records.
+
+## Reproduction
+
+Run these commands from the repository root, in order:
 
 ```bash
-export HF_HOME=$PWD/data/hf_cache
-export TRANSFORMERS_OFFLINE=1
-
-.venv/bin/python -m security_llm.data.validate --config configs/data.yaml
-.venv/bin/python -m security_llm.data.guard --config configs/data.yaml --stage sft
-.venv/bin/python -m security_llm.eval.contamination --config configs/data.yaml
-.venv/bin/python -m security_llm.data.report --config configs/data.yaml
-.venv/bin/python -m security_llm.eval.failure_analysis --single \
-  --base experiments/exp_001_baseline/predictions.jsonl \
-  --test data/sft/test.jsonl \
-  --labels data/processed/labels.json
-.venv/bin/pytest -q -k "not completion_mask"
+bash scripts/setup_env.sh       # create the Python environment and install pinned dependencies
+bash scripts/prepare_data.sh    # fetch NVD pages and build canonical, split, and SFT views
+bash scripts/eval_base.sh       # evaluate the unadapted model on the frozen subset
+bash scripts/train_sft.sh       # train and write the LoRA adapter
+bash scripts/eval_sft.sh        # evaluate the adapter on the identical frozen subset
+bash scripts/build_report.sh    # rebuild comparison and failure-analysis JSON/Markdown artifacts
 ```
+
+`NVD_API_KEY` is optional and is never written to a file; setting it increases the NVD API rate limit. Model execution also requires access to the model weights or a populated local cache.
+
+Measured on an RTX 2060 6 GB: Base evaluation used batch 2 and took 5448.4 s; training used device batch 2 with 8 accumulation steps and took 7835.1 s; SFT evaluation used batch 8 and took 2025.4 s. Setup, NVD ingestion, and report-rendering time depend on cache and API state and were not recorded in the cited JSON artifacts.
+
+The mandatory smoke run completed before the full run. Earlier runs next to a GPU co-tenant included two fp16 LoRA OOM probes and an OOM in the quantized fallback; a separate attempt was stopped when the host CUDA driver could not initialize. The successful run started only after the GPU and driver checks passed.
+
+## Scope and limitations
+
+See [claim boundaries](docs/claim-boundaries.md) for the fixed wording and complete scope.
+
+- The dataset includes single-label CVEs only; multi-label CVEs are excluded.
+- The output space is a closed set of 15 CWE IDs.
+- Results cover one temporal snapshot and one seed.
+- Prior exposure of the unadapted model to NVD text cannot be verified.
+- KEV is an evaluation slice only.
+- No continued-domain adaptation or reinforcement-learning phase was run.
+- Exact normalized-description matching does not detect paraphrases.
+- The Natural-vs-Balanced ablation was not run. It is a conditional follow-up if tail recall remains low, predictions remain concentrated, and failures continue to co-occur with class imbalance.
 
 ## Repository map
 
-| Path | Responsibility |
+| Directory | Responsibility |
 |---|---|
-| `src/security_llm/data/` | ingestion, canonical schema, splitting, dedup, guard, SFT build, reports |
-| `src/security_llm/adapters/` | canonical-record to fixed prompt/completion adapter |
-| `src/security_llm/eval/` | generation, deterministic evaluation verifier, metrics, overlap checks, failure rules |
-| `configs/` | data, LoRA SFT, and evaluation configuration |
-| `manifests/` | versioned dataset identity and file hashes |
-| `reports/` | dataset, Base evaluation, taxonomy, and pending comparison documents |
-| `experiments/` | immutable run artifacts by experiment ID |
-| `docs/` | binding specification, data-layer design, and claim boundaries |
+| `src/security_llm/data/` | NVD ingestion, canonical records, validation, statistics, temporal splits, exact deduplication, SFT views, and manifests |
+| `src/security_llm/adapters/` | Fixed CWE instruction, closed-set labels, output schema, and model-facing serialization |
+| `src/security_llm/eval/` | Generation, deterministic evaluation verifier, metrics, exact overlap checks, failure analysis, and documentation rendering |
+| `src/security_llm/train/` | LoRA SFT execution and training-artifact capture |
+| `src/security_llm/utils/` | Atomic I/O, metadata, and seed helpers |
+| `configs/` | Data, training, and evaluation configuration |
+| `data/` | Raw cache, canonical records, split populations, and derived SFT JSONL |
+| `manifests/` | Versioned dataset identity, row counts, policies, and file hashes |
+| `experiments/` | Run-specific metadata, logs, predictions, metrics, and local adapter output |
+| `reports/` | Dataset, Base/SFT evaluation, comparison, and failure-analysis artifacts |
+| `docs/` | Specification, data/model boundary, and claim boundaries |
+| `scripts/` | End-to-end setup, data preparation, training, evaluation, and report commands |
+| `tests/` | Schema, split, verifier, deduplication, metric, and completion-mask checks |
+
+License: MIT. Vulnerability records are sourced from the [NIST National Vulnerability Database](https://nvd.nist.gov/); CWE identifiers and names are from [MITRE CWE](https://cwe.mitre.org/).
