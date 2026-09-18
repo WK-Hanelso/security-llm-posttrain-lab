@@ -8,19 +8,19 @@ data:
   val_file: data/sft/val.jsonl
 training:
   epochs: 3
-  max_steps: null
-  learning_rate: 2.0e-4
+  max_steps: 5
+  learning_rate: 0.0002
   lr_scheduler_type: cosine
   warmup_ratio: 0.03
   max_seq_length: 512
-  per_device_train_batch_size: 2
-  gradient_accumulation_steps: 8
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 16
   fp16: true
   bf16: false
   gradient_checkpointing: true
   logging_steps: 10
   eval_strategy: epoch
-  save_strategy: "no"
+  save_strategy: 'no'
   weight_decay: 0.0
   max_grad_norm: 1.0
   completion_only_loss: true
@@ -28,9 +28,13 @@ lora:
   rank: 16
   alpha: 32
   dropout: 0.05
-  target_modules: [q_proj, k_proj, v_proj, o_proj]
+  target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
   bias: none
 quantization:
-  load_in_4bit: false
+  load_in_4bit: true
 output:
   root: experiments

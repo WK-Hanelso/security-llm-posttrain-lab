@@ -38,12 +38,19 @@ def make_dataset(path: str | Path, tokenizer: Any) -> Dataset:
     )
 
 
-def make_sft_config(cfg: dict[str, Any], output_dir: Path, *, use_cpu: bool = False, max_steps: int = -1) -> SFTConfig:
+def make_sft_config(
+    cfg: dict[str, Any],
+    output_dir: Path,
+    *,
+    use_cpu: bool = False,
+    max_steps: int | None = None,
+) -> SFTConfig:
     training = cfg["training"]
+    resolved_max_steps = training.get("max_steps") if max_steps is None else max_steps
     return SFTConfig(
         output_dir=str(output_dir),
         num_train_epochs=float(training["epochs"]),
-        max_steps=max_steps,
+        max_steps=-1 if resolved_max_steps is None else int(resolved_max_steps),
         learning_rate=float(training["learning_rate"]),
         lr_scheduler_type=training["lr_scheduler_type"],
         warmup_steps=float(training["warmup_ratio"]),
@@ -96,6 +103,8 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout)
     cfg = load_config(args.config, args.override)
     set_seed(int(cfg["seed"]))
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
     out_dir = Path(cfg["output"]["root"]) / cfg["experiment_id"]
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config_resolved.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
@@ -116,7 +125,14 @@ def main() -> None:
     lora = LoraConfig(r=int(lora_cfg["rank"]), lora_alpha=int(lora_cfg["alpha"]), lora_dropout=float(lora_cfg["dropout"]), target_modules=lora_cfg["target_modules"], bias=lora_cfg["bias"], task_type="CAUSAL_LM")
     train_ds = make_dataset(cfg["data"]["train_file"], tokenizer)
     val_ds = make_dataset(cfg["data"]["val_file"], tokenizer)
-    trainer = SFTTrainer(model=model, args=make_sft_config(cfg, out_dir / "trainer"), train_dataset=train_ds, eval_dataset=val_ds, processing_class=tokenizer, peft_config=lora)
+    trainer = SFTTrainer(
+        model=model,
+        args=make_sft_config(cfg, out_dir / "trainer"),
+        train_dataset=train_ds,
+        eval_dataset=val_ds,
+        processing_class=tokenizer,
+        peft_config=lora,
+    )
     for parameter in trainer.model.parameters():
         if parameter.requires_grad and parameter.dtype == torch.float16:
             parameter.data = parameter.data.float()
@@ -125,7 +141,6 @@ def main() -> None:
     batch = next(iter(trainer.get_train_dataloader()))
     masked, supervised = assert_completion_mask(batch, tokenizer.convert_tokens_to_ids("<|im_end|>"))
     LOG.info("completion mask sanity masked=%d supervised=%d", masked, supervised)
-    torch.cuda.reset_peak_memory_stats()
     started = time.monotonic()
     result = trainer.train()
     trainer.model.save_pretrained(out_dir / "adapter")
@@ -145,4 +160,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BaseException:
+        if torch.cuda.is_available():
+            LOG.error("CUDA peak allocated before failure: %.1f MiB", torch.cuda.max_memory_allocated() / 1024**2)
+        raise
