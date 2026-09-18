@@ -62,3 +62,11 @@ The fallback decision was QLoRA because both permitted fp16 LoRA configurations 
 - Every class gained F1. Recall declined for CWE-200 by 0.300254 and CWE-120 by 0.224080; no other class had a recall decline.
 - Accuracy co-occurred with gains in both token-length slices: `<480` 0.427907→0.865678 and `480-1536` 0.160346→0.839654. Description-length slice results are in `reports/comparison.md` and `reports/failure_summary.json`; these are co-occurrences, not causal claims.
 - Manual review covered 30 residual failures: 15 broken-by-SFT rows followed by one both-wrong row from each class. Notes are in `agent/T-004_EXEC.md`.
+
+## T-004c — sampled near-duplicate audit (2026-09-19)
+
+Exact CVE-ID and normalized-description overlap between splits is blocked by a fail-fast guard. In addition, a sampled audit of high text-similarity train/test pairs was run to check for template reuse; this is not a formal semantic-contamination detector.
+
+Audit (`reports/near_duplicate_audit.md`, word TF-IDF 1–2-gram cosine, 300 evaluated test rows = 200 `fixed_by_sft` + 100 `both_wrong`, class-stratified, seed 42): nearest-train similarity p50 0.27 / p90 0.70 / p95 0.74 / max 1.00; 8 rows ≥ 0.80 (5 same-label, 3 different-label), 3 rows ≥ 0.90; all 8 fall in the `fixed_by_sft` sample (5 same-label = 2.5% of the 200 sampled fixes), 0 in `both_wrong`. Manual review of the top 20: 7 exact-or-near copies, 11 vendor-boilerplate-only, 2 repeated weakness phrases. These sampled counts do not establish template reuse as a material shortcut for the 8,715 `fixed_by_sft` transitions.
+
+Dataset, Base, SFT and the frozen 18,000-ID evaluation were not changed by this audit.
