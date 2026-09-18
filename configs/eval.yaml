@@ -8,12 +8,13 @@ model:
 data:
   file: data/sft/test.jsonl
   labels_file: data/processed/labels.json
-  limit: null
+  limit: 18000
+  subsample_seed: 42
 generation:
   do_sample: false
   temperature: null
   max_new_tokens: 32
-  batch_size: 8
-  max_seq_length: 512
+  batch_size: 2
+  max_seq_length: 1536
 output:
   root: experiments

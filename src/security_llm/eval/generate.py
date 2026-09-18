@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import shutil
 import time
 from pathlib import Path
@@ -25,6 +26,17 @@ from security_llm.utils.seed import set_seed
 def _chunks(rows: list[dict[str, Any]], size: int) -> Iterator[list[dict[str, Any]]]:
     for offset in range(0, len(rows), size):
         yield rows[offset : offset + size]
+
+
+def _select_rows(
+    rows: list[dict[str, Any]], limit: int | None, subsample_seed: int | None
+) -> list[dict[str, Any]]:
+    selected = list(rows)
+    if limit is None:
+        return selected
+    if subsample_seed is not None:
+        random.Random(subsample_seed).shuffle(selected)
+    return selected[:limit]
 
 
 def main() -> None:
@@ -49,8 +61,13 @@ def main() -> None:
     model.eval()
     rows = read_jsonl(cfg["data"]["file"])
     limit = cfg["data"].get("limit")
-    if limit is not None:
-        rows = rows[: int(limit)]
+    rows = _select_rows(
+        rows,
+        int(limit) if limit is not None else None,
+        int(cfg["data"]["subsample_seed"])
+        if cfg["data"].get("subsample_seed") is not None
+        else None,
+    )
     with Path(cfg["data"]["labels_file"]).open(encoding="utf-8") as handle:
         labels = json.load(handle)
     allowed = set(labels["selected"])
