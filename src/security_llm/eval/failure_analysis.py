@@ -31,6 +31,14 @@ CWE_FAMILIES = {
     "redirect": {"CWE-601"}, "ssti_expression": {"CWE-1321", "CWE-917"},
 }
 ERROR_TYPES = ("invalid_format", "unknown_cwe", "nearby_cwe_confusion", "semantic_confusion")
+ALL_OUTCOMES = ("correct",) + ERROR_TYPES
+TRACKED_CONFUSIONS = (
+    ("CWE-862", "CWE-200"),
+    ("CWE-284", "CWE-200"),
+    ("CWE-416", "CWE-434"),
+    ("CWE-787", "CWE-120"),
+    ("CWE-125", "CWE-120"),
+)
 OVERGENERAL_PREDICTIONS = {"CWE-200", "CWE-20", "CWE-284"}
 UNDER_SPECIFIC_CHILDREN = {
     "CWE-120": {"CWE-125", "CWE-787", "CWE-121", "CWE-122"},
@@ -86,6 +94,70 @@ def _description_bucket(length: int) -> str:
 
 def _token_bucket(length: int) -> str:
     return "<480" if length < 480 else "480-1536"
+
+
+def _confusion_count(
+    rows: dict[str, dict[str, Any]], gold: str, pred: str
+) -> int:
+    return sum(
+        row["gold"] == gold and row.get("pred") == pred and not row["exact_match"]
+        for row in rows.values()
+    )
+
+
+def _gold_sinks(
+    rows: dict[str, dict[str, Any]], gold: str, limit: int = 3
+) -> list[dict[str, Any]]:
+    counts = Counter(
+        row.get("pred") or "INVALID"
+        for row in rows.values()
+        if row["gold"] == gold and not row["exact_match"]
+    )
+    return [{"pred": pred, "count": count} for pred, count in counts.most_common(limit)]
+
+
+def _prediction_concentration(rows: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    counts = Counter(row.get("pred") or "INVALID" for row in rows.values())
+    top = counts.most_common(3)
+    return {
+        "top_3": [{"pred": pred, "count": count} for pred, count in top],
+        "top_3_count": sum(count for _, count in top),
+        "top_3_share": sum(count for _, count in top) / len(rows) if rows else 0.0,
+        "denominator": len(rows),
+    }
+
+
+def _model_slices(
+    rows: dict[str, dict[str, Any]],
+    sources: dict[str, dict[str, Any]],
+    token_lengths: dict[str, int],
+) -> dict[str, Any]:
+    joined = [
+        {
+            "prediction": prediction,
+            "source": sources[cve_id],
+            "token_length": token_lengths[cve_id],
+        }
+        for cve_id, prediction in rows.items()
+    ]
+    return {
+        "description_length_buckets": _bucketed(
+            joined,
+            lambda row: _description_bucket(len(row["source"]["description"])),
+            ("<250", "250-500", "500-1000", ">=1000"),
+        ),
+        "token_length_buckets": _bucketed(
+            joined,
+            lambda row: _token_bucket(row["token_length"]),
+            ("<480", "480-1536"),
+        ),
+        "kev": {
+            "kev": _slice([row for row in joined if row["source"]["is_kev"]]),
+            "non_kev": _slice(
+                [row for row in joined if not row["source"]["is_kev"]]
+            ),
+        },
+    }
 
 
 def _base_failure_row(row: dict[str, Any]) -> dict[str, Any]:
@@ -308,13 +380,22 @@ def analyze_single(base_path: str, test_path: str, labels_path: str) -> dict[str
 
 
 def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> dict[str, Any]:
-    base = {row["cve_id"]: row for row in read_jsonl(base_path)}
-    sft = {row["cve_id"]: row for row in read_jsonl(sft_path)}
+    base_rows = read_jsonl(base_path)
+    sft_rows = read_jsonl(sft_path)
+    base_ids = [row["cve_id"] for row in base_rows]
+    sft_ids = [row["cve_id"] for row in sft_rows]
+    if base_ids != sft_ids:
+        raise AssertionError("Base and SFT prediction CVE sequences differ")
+    base = {row["cve_id"]: row for row in base_rows}
+    sft = {row["cve_id"]: row for row in sft_rows}
     test = {row["cve_id"]: row for row in read_jsonl(test_path)}
     if set(base) != set(sft):
         raise AssertionError("Base and SFT prediction CVE sets differ")
-    if set(base) != set(test):
-        raise AssertionError("Predictions and test CVE sets differ")
+    missing_test_ids = set(base) - set(test)
+    if missing_test_ids:
+        raise AssertionError(
+            f"{len(missing_test_ids)} prediction IDs are missing from the test data"
+        )
     with Path(labels_path).open(encoding="utf-8") as handle:
         labels = json.load(handle)
     selected = labels["selected"]
@@ -322,9 +403,10 @@ def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> 
     ranked = sorted(selected, key=lambda cwe: (labels["train_counts"].get(cwe, 0), cwe))
     long_tail = set(ranked[: max(1, len(selected) // 3)])
     transitions: Counter[str] = Counter()
-    error_counts = {"base": Counter(), "sft": Counter()}
+    outcome_counts = {"base": Counter(), "sft": Counter()}
+    flag_counts = {"base": Counter(), "sft": Counter()}
     failures: list[dict[str, Any]] = []
-    for cve_id in sorted(base):
+    for cve_id in base_ids:
         base_row, sft_row = base[cve_id], sft[cve_id]
         if base_row["gold"] != sft_row["gold"]:
             raise AssertionError(f"Gold mismatch for {cve_id}")
@@ -333,15 +415,43 @@ def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> 
         transitions[transition] += 1
         for name, row in (("base", base_row), ("sft", sft_row)):
             kind = error_type(row, gold, allowed)
-            if kind:
-                error_counts[name][kind] += 1
+            outcome_counts[name][kind or "correct"] += 1
+            pred = row.get("pred")
+            pred_family = family(pred)
+            if kind and gold in long_tail:
+                flag_counts[name]["gold_is_long_tail"] += 1
+            if (
+                kind
+                and pred in OVERGENERAL_PREDICTIONS
+                and family(gold) != pred_family
+            ):
+                flag_counts[name]["overgeneralization"] += 1
+            if (
+                kind
+                and pred in UNDER_SPECIFIC_CHILDREN
+                and gold in UNDER_SPECIFIC_CHILDREN[pred]
+                and family(gold) == pred_family
+            ):
+                flag_counts[name]["under_specific"] += 1
         if not sft_row["exact_match"]:
             source = test[cve_id]
+            sft_kind = error_type(sft_row, gold, allowed)
+            sft_pred = sft_row.get("pred")
             failures.append({"cve_id": cve_id, "description": source["description"], "gold": gold,
-                "prediction": sft_row.get("pred"), "base_prediction": base_row.get("pred"),
+                "prediction": sft_pred, "base_prediction": base_row.get("pred"),
                 "sft_raw_output": sft_row["raw_output"], "base_raw_output": base_row["raw_output"],
-                "transition": transition, "error_type": error_type(sft_row, gold, allowed),
-                "gold_is_long_tail": gold in long_tail, "is_kev": source["is_kev"]})
+                "transition": transition, "error_type": sft_kind,
+                "gold_is_long_tail": gold in long_tail,
+                "overgeneralization": bool(
+                    sft_kind and sft_pred in OVERGENERAL_PREDICTIONS
+                    and family(gold) != family(sft_pred)
+                ),
+                "under_specific": bool(
+                    sft_kind and sft_pred in UNDER_SPECIFIC_CHILDREN
+                    and gold in UNDER_SPECIFIC_CHILDREN[sft_pred]
+                    and family(gold) == family(sft_pred)
+                ),
+                "is_kev": source["is_kev"]})
     failures.sort(key=lambda row: (0 if row["transition"] == "broken_by_sft" else 1, row["cve_id"]))
     write_jsonl("reports/failures.jsonl", failures)
     if len(failures) < 30:
@@ -350,19 +460,101 @@ def analyze(base_path: str, sft_path: str, test_path: str, labels_path: str) -> 
         base_metrics = json.load(handle)
     with (Path(sft_path).parent / "metrics.json").open(encoding="utf-8") as handle:
         sft_metrics = json.load(handle)
-    per_class_delta = {cwe: {"base_f1": base_metrics["per_class"][cwe]["f1"],
-        "sft_f1": sft_metrics["per_class"][cwe]["f1"],
-        "delta": sft_metrics["per_class"][cwe]["f1"] - base_metrics["per_class"][cwe]["f1"]} for cwe in selected}
+    per_class = {}
+    per_class_delta = {}
+    for cwe in selected:
+        base_values = base_metrics["per_class"][cwe]
+        sft_values = sft_metrics["per_class"][cwe]
+        delta = {
+            metric: sft_values[metric] - base_values[metric]
+            for metric in ("precision", "recall", "f1")
+        }
+        per_class[cwe] = {
+            "support": base_values["support"],
+            "base": {metric: base_values[metric] for metric in ("precision", "recall", "f1")},
+            "sft": {metric: sft_values[metric] for metric in ("precision", "recall", "f1")},
+            "delta": delta,
+        }
+        per_class_delta[cwe] = {
+            "base_f1": base_values["f1"],
+            "sft_f1": sft_values["f1"],
+            "delta": delta["f1"],
+        }
 
     def confusions(rows: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
         counts = Counter((row["gold"], row.get("pred") or "INVALID") for row in rows.values() if not row["exact_match"])
         return [{"gold": gold, "pred": pred, "count": count} for (gold, pred), count in counts.most_common(15)]
 
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME, local_files_only=True)
+    ordered_sources = [test[cve_id] for cve_id in base_ids]
+    token_lengths = dict(
+        zip(base_ids, token_lengths_for_rows(ordered_sources, tokenizer), strict=True)
+    )
+    slices = {
+        "base": _model_slices(base, test, token_lengths),
+        "sft": _model_slices(sft, test, token_lengths),
+    }
+    tracked_confusions = {
+        f"{gold}->{pred}": {
+            "gold": gold,
+            "pred": pred,
+            "base": _confusion_count(base, gold, pred),
+            "sft": _confusion_count(sft, gold, pred),
+        }
+        for gold, pred in TRACKED_CONFUSIONS
+    }
+    changes = {}
+    for metric in ("f1", "recall"):
+        ranked_changes = sorted(
+            (
+                {
+                    "cwe": cwe,
+                    "base": values["base"][metric],
+                    "sft": values["sft"][metric],
+                    "delta": values["delta"][metric],
+                }
+                for cwe, values in per_class.items()
+            ),
+            key=lambda row: (-row["delta"], row["cwe"]),
+        )
+        changes[metric] = {
+            "largest_gains": [row for row in ranked_changes if row["delta"] > 0][:5],
+            "largest_regressions": sorted(
+                (row for row in ranked_changes if row["delta"] < 0),
+                key=lambda row: (row["delta"], row["cwe"])
+            )[:5],
+        }
     tail_ids = [cve_id for cve_id, row in base.items() if row["gold"] in long_tail]
     summary = {"n_test": len(base),
         "transitions": {name: transitions[name] for name in ("both_right", "fixed_by_sft", "broken_by_sft", "both_wrong")},
-        "error_type_counts": {name: {kind: values[kind] for kind in ("invalid_format", "unknown_cwe", "nearby_cwe_confusion", "semantic_confusion")} for name, values in error_counts.items()},
-        "per_class_delta": per_class_delta, "top_confusions_sft": confusions(sft), "top_confusions_base": confusions(base),
+        "error_type_counts": {name: {kind: values[kind] for kind in ALL_OUTCOMES} for name, values in outcome_counts.items()},
+        "flag_counts": {name: {
+            flag: values[flag]
+            for flag in ("overgeneralization", "under_specific", "gold_is_long_tail")
+        } for name, values in flag_counts.items()},
+        "rules": {
+            "error_type": "failure_analysis.error_type: correct, format, allowed-label, same-family, then semantic",
+            "gold_is_long_tail": "gold is in the bottom third of selected labels by training-period count",
+            "overgeneralization": "prediction is CWE-200, CWE-20, or CWE-284 and gold is outside the prediction family",
+            "under_specific": (
+                "gold is a mapped specific sibling of a broader prediction in the same family; "
+                f"mapping={{{', '.join(f'{key}: {sorted(value)}' for key, value in UNDER_SPECIFIC_CHILDREN.items())}}}"
+            ),
+            "token_length": "Qwen3 rendered chat prompt with thinking disabled plus completion",
+        },
+        "per_class": per_class,
+        "per_class_delta": per_class_delta,
+        "largest_changes": changes,
+        "top_confusions_sft": confusions(sft), "top_confusions_base": confusions(base),
+        "tracked_confusions": tracked_confusions,
+        "cwe_416_top_3_sinks": {"base": _gold_sinks(base, "CWE-416"), "sft": _gold_sinks(sft, "CWE-416")},
+        "slices": slices,
+        "prediction_distribution_concentration": {
+            "base": _prediction_concentration(base),
+            "sft": _prediction_concentration(sft),
+        },
         "long_tail": {"base_accuracy": sum(base[cve_id]["exact_match"] for cve_id in tail_ids) / len(tail_ids) if tail_ids else 0.0,
             "sft_accuracy": sum(sft[cve_id]["exact_match"] for cve_id in tail_ids) / len(tail_ids) if tail_ids else 0.0, "n": len(tail_ids)}}
     atomic_write_json("reports/failure_summary.json", summary)

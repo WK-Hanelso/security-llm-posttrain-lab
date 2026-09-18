@@ -1,0 +1,177 @@
+{
+  "experiment_id": "exp_002_sft_v1",
+  "git_commit": "5cbeb5c6b3cec9063b6e218f2bb96ac008df49ba",
+  "python": "3.11.15",
+  "gpu": "NVIDIA GeForce RTX 2060",
+  "cuda": "12.1",
+  "pytorch": "2.5.1+cu121",
+  "transformers": "5.17.0",
+  "trl": "1.13.0",
+  "peft": "0.21.0",
+  "created_at": "2026-09-18T18:02:25.126140+00:00",
+  "model_name": "Qwen/Qwen3-0.6B",
+  "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "dataset_snapshot": "2026-09-17",
+  "dataset_manifest_sha256": "ca9efa71978d63c7d8ef0292aacd0af121b709ab69e953fd166f16b16edf7b9c",
+  "train_count": 12000,
+  "val_count": 1000,
+  "test_count": 24975,
+  "class_distribution": {
+    "train": {
+      "CWE-20": 499,
+      "CWE-22": 599,
+      "CWE-78": 465,
+      "CWE-862": 614,
+      "CWE-79": 3479,
+      "CWE-89": 1424,
+      "CWE-120": 413,
+      "CWE-476": 415,
+      "CWE-284": 255,
+      "CWE-416": 574,
+      "CWE-125": 619,
+      "CWE-787": 1091,
+      "CWE-200": 385,
+      "CWE-352": 750,
+      "CWE-434": 418
+    },
+    "val": {
+      "CWE-416": 45,
+      "CWE-79": 353,
+      "CWE-89": 67,
+      "CWE-476": 65,
+      "CWE-862": 123,
+      "CWE-200": 34,
+      "CWE-120": 13,
+      "CWE-352": 93,
+      "CWE-20": 30,
+      "CWE-78": 24,
+      "CWE-125": 37,
+      "CWE-22": 43,
+      "CWE-284": 20,
+      "CWE-787": 25,
+      "CWE-434": 28
+    },
+    "test": {
+      "CWE-78": 1184,
+      "CWE-476": 802,
+      "CWE-79": 5244,
+      "CWE-125": 1277,
+      "CWE-787": 1065,
+      "CWE-20": 1087,
+      "CWE-89": 2151,
+      "CWE-416": 1932,
+      "CWE-284": 2605,
+      "CWE-200": 1056,
+      "CWE-352": 775,
+      "CWE-862": 2971,
+      "CWE-22": 1894,
+      "CWE-434": 488,
+      "CWE-120": 444
+    }
+  },
+  "seed": 42,
+  "learning_rate": 0.0002,
+  "epochs": 3,
+  "batch_size": 2,
+  "gradient_accumulation": 8,
+  "max_seq_length": 1536,
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj"
+  ],
+  "precision": "fp16",
+  "quantization": {
+    "load_in_4bit": false
+  },
+  "prompt_template_sha256": "62bfc76e7e98d479185db793fbd02c9b9e968753c22e44120ee90d78d77ef99c",
+  "trainable_params": 4587520,
+  "dataset_hash": "ab321617504329a0e00469637aa75a13a457d1c8cfa82db37002fb40ae83ad26",
+  "subset_hash": "N/A",
+  "training_config": {
+    "experiment_id": "exp_002_sft_v1",
+    "seed": 42,
+    "model": {
+      "name": "Qwen/Qwen3-0.6B",
+      "revision": null
+    },
+    "data": {
+      "train_file": "data/sft/train.jsonl",
+      "val_file": "data/sft/val.jsonl"
+    },
+    "training": {
+      "epochs": 3,
+      "max_steps": null,
+      "learning_rate": 0.0002,
+      "lr_scheduler_type": "cosine",
+      "warmup_ratio": 0.03,
+      "max_seq_length": 1536,
+      "per_device_train_batch_size": 2,
+      "gradient_accumulation_steps": 8,
+      "fp16": true,
+      "bf16": false,
+      "gradient_checkpointing": true,
+      "logging_steps": 10,
+      "eval_strategy": "epoch",
+      "save_strategy": "no",
+      "weight_decay": 0.0,
+      "max_grad_norm": 1.0,
+      "completion_only_loss": true
+    },
+    "lora": {
+      "rank": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ],
+      "bias": "none"
+    },
+    "quantization": {
+      "load_in_4bit": false
+    },
+    "output": {
+      "root": "experiments"
+    }
+  },
+  "merged": true,
+  "evaluation": {
+    "config": {
+      "experiment_id": "exp_002_sft_v1",
+      "seed": 42,
+      "model": {
+        "name": "Qwen/Qwen3-0.6B",
+        "revision": null,
+        "adapter_path": "experiments/exp_002_sft_v1/adapter",
+        "dtype": "float16"
+      },
+      "data": {
+        "file": "data/sft/test.jsonl",
+        "labels_file": "data/processed/labels.json",
+        "subset_manifest": "reports/eval_subset_manifest.json",
+        "limit": 18000,
+        "subsample_seed": 42
+      },
+      "generation": {
+        "do_sample": false,
+        "temperature": null,
+        "max_new_tokens": 32,
+        "batch_size": 8,
+        "max_seq_length": 1536
+      },
+      "output": {
+        "root": "experiments"
+      }
+    },
+    "subset_hash": "229dd47c3cdeb532d47c2dd8c5962f2c9bff8ff2c6d89d8d2776ee6d09a7d707",
+    "evaluated_rows": 18000,
+    "merged": true
+  }
+}

@@ -176,9 +176,12 @@ def main() -> None:
     with Path("manifests/dataset_manifest.json").open(encoding="utf-8") as handle:
         manifest = json.load(handle)
     metadata = build_metadata(cfg, manifest)
+    metadata["dataset_hash"] = manifest.get("dataset_hash")
     metadata["dataset_manifest_sha256"] = sha256_file("manifests/dataset_manifest.json")
     metadata["model_revision"] = getattr(model.config, "_commit_hash", None) or model_cfg.get("revision")
     metadata["trainable_params"] = trainable_params
+    metadata["training_config"] = cfg
+    metadata["subset_hash"] = "N/A"
     atomic_write_json(out_dir / "metadata.json", metadata)
 
 

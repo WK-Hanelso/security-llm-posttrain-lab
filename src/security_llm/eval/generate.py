@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 import torch
+import yaml
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -135,11 +136,29 @@ def main() -> None:
     atomic_write_json(out_dir / "metrics.json", metrics)
     with Path("manifests/dataset_manifest.json").open(encoding="utf-8") as handle:
         manifest = json.load(handle)
-    metadata = build_metadata(cfg, manifest)
+    metadata_path = out_dir / "metadata.json"
+    if model_cfg.get("adapter_path") and metadata_path.exists():
+        with metadata_path.open(encoding="utf-8") as handle:
+            metadata = json.load(handle)
+        resolved_config = out_dir / "config_resolved.yaml"
+        if resolved_config.exists():
+            with resolved_config.open(encoding="utf-8") as handle:
+                metadata.setdefault("training_config", yaml.safe_load(handle))
+        metadata.setdefault("dataset_hash", manifest.get("dataset_hash"))
+        metadata.setdefault("subset_hash", "N/A")
+    else:
+        metadata = build_metadata(cfg, manifest)
+        metadata["dataset_hash"] = manifest.get("dataset_hash")
     metadata["dataset_manifest_sha256"] = sha256_file("manifests/dataset_manifest.json")
     metadata["model_revision"] = getattr(model.config, "_commit_hash", None) or model_cfg.get("revision")
     metadata["merged"] = merged
-    atomic_write_json(out_dir / "metadata.json", metadata)
+    metadata["evaluation"] = {
+        "config": cfg,
+        "subset_hash": subset_manifest["subset_hash"] if subset_manifest else None,
+        "evaluated_rows": len(rows),
+        "merged": merged,
+    }
+    atomic_write_json(metadata_path, metadata)
     report_name = args.report_name or ("sft_metrics.json" if "sft" in cfg["experiment_id"] else "baseline_metrics.json")
     Path("reports").mkdir(exist_ok=True)
     shutil.copy2(out_dir / "metrics.json", Path("reports") / report_name)

@@ -1,4 +1,4 @@
-experiment_id: exp_002_sft_v1
+experiment_id: exp_002_sft_v1_smoke
 seed: 42
 model:
   name: Qwen/Qwen3-0.6B
@@ -8,7 +8,7 @@ data:
   val_file: data/sft/val.jsonl
 training:
   epochs: 3
-  max_steps: null
+  max_steps: 15
   learning_rate: 0.0002
   lr_scheduler_type: cosine
   warmup_ratio: 0.03

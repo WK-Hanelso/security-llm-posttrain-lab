@@ -7,5 +7,5 @@ timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 python -m security_llm.eval.generate --config configs/eval.yaml \
   --override experiment_id=exp_002_sft_v1 \
   --override model.adapter_path=experiments/exp_002_sft_v1/adapter \
+  --override generation.batch_size=8 \
   --report-name sft_metrics.json 2>&1 | tee "logs/eval_sft_${timestamp}.log"
-
