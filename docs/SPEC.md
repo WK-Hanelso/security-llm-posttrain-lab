@@ -962,3 +962,81 @@ the current files). `tests/test_manifest.py` checks required keys and that datas
 ### 13.6 Wording rules (apply everywhere)
 Use "overlap check between fine-tuning splits"; never "contamination-free". Use "deterministic evaluation
 verifier". Use "LoRA SFT of an open-weight 0.6B model"; never "foundation model", "pretraining", "CPT", "RLVR".
+
+---
+
+## 14. Post-dedup fail-fast invariant, frozen evaluation subset, pre-SFT CPU deliverables (2026-09-19)
+
+### 14.1 Split-overlap guard (`src/security_llm/data/guard.py`)
+
+```
+check_split_invariants(train, val, test) -> dict
+  for each pair in [(train,val),(train,test),(val,test)]:
+     id_overlap   = |{cve_id}_a ∩ {cve_id}_b|
+     hash_overlap = |{text_hash(description)}_a ∩ {text_hash(description)}_b|   # hash of the row's `description` field (sft rows)
+                                                                                  # or `description_norm_hash` (processed rows)
+  return {"pairs": {"train_val": {"cve_id": n, "text_hash": n, "examples": [ (cve_id_a, cve_id_b, hash[:12]) ... ≤ 5 ]}, ...},
+          "ok": all counts == 0}
+```
+Rules: never print a description; examples carry CVE IDs and a 12-char hash prefix only. CLI
+`python -m security_llm.data.guard --config configs/data.yaml [--stage sft|processed]` prints the JSON and exits 1 when `ok` is false.
+`build_sft.py` calls the guard on the three row lists **after dedup/sampling and before writing any file**; on failure it writes
+nothing and exits 1 with the same JSON on stderr. The pre-dedup counts stay in `reports/contamination.json` (`report_only` semantics for
+the raw populations). `tests/test_guard.py`: synthetic overlaps in each pair are detected; clean sets pass; build refuses to write on failure.
+
+### 14.2 Consequence for the current artifacts (dataset v1.0 → v1.1, val only)
+
+`val.jsonl` (v1.0) contains rows whose normalized description also occurs in `test.jsonl` (190 in the populations). The guard therefore
+fails on the current files. Fix policy (data.yaml `dedup.drop_val_overlap_with_test: true`): drop from the **val population** every row whose
+hash occurs in the test population or the train population, then resample val with `random.Random(seed)` (independent RNG) to
+`val_max_samples`. `train.jsonl` and `test.jsonl` are **not rewritten** — their sha256 values in the manifest must stay identical
+(`1887fbb3…` and `bb7c6952…`); the tool asserts this. Manifest changes: `dataset_version: "1.1"`, `files.val` (rows, sha256),
+`counts.val`, `population_counts.val`, `class_distribution.val`, `dedup.val_overlap_with_eval_dropped`, `dataset_hash`, and a
+`changelog` list entry `{version: "1.1", date, reason: "val rows overlapping test/train by normalized text dropped to satisfy the
+post-dedup invariant; train and test unchanged"}`. Implement as `python -m security_llm.data.build_sft --config configs/data.yaml --rebuild-val-only`.
+Val is used only for the trainer's eval_loss; it is not a benchmark, so this does not touch the Base protocol.
+
+Going forward `build_sft.py` samples each split with its own `random.Random(seed)` instance (train sample, val sample, test shuffle)
+so that a change in one population cannot reorder another. `train` under this rule reproduces the v1.0 file exactly (it was the first
+draw from `Random(42)`); `test` row order under this rule differs from the v1.0 file. Row order of `test.jsonl` is not semantically
+significant because the evaluation subset is pinned by ID (§14.3); the rebuild test compares `test` as a set of (cve_id, cwe_id, prompt).
+
+### 14.3 Frozen evaluation subset (`reports/eval_subset_manifest.json`)
+
+Written from `experiments/exp_001_baseline/predictions.jsonl`:
+```json
+{"experiment_of_record": "exp_001_baseline", "source_file": "data/sft/test.jsonl", "source_sha256": "bb7c6952…",
+ "selection": {"method": "random.Random(42).shuffle(rows)[:18000]", "seed": 42, "limit": 18000},
+ "count": 18000, "row_ids": ["CVE-…", ...],          // in evaluation order
+ "subset_hash": "sha256 of '\n'.join(row_ids)", "created_at": "…"}
+```
+`eval/generate.py`: new config key `data.subset_manifest: reports/eval_subset_manifest.json` (default null). When set, rows are selected
+**by ID in manifest order** and `limit`/`subsample_seed` are ignored; metrics.json records `subset_hash`. `scripts/eval_sft.sh` passes
+the manifest. A test asserts that loading test.jsonl + manifest yields exactly the IDs of exp_001 predictions in the same order.
+
+### 14.4 Token statistics in the dataset report
+
+`data/report.py` gains `token_length` (rendered chat prompt + completion, Qwen3 tokenizer from `HF_HOME`, `enable_thinking=False`):
+per split `{p50, p95, p99, max, n_over_480, n_over_1536}`; also written to `reports/dataset_stats.json`. CPU only.
+
+### 14.5 Base failure taxonomy draft (`reports/base_failures.jsonl`, `reports/base_failure_taxonomy.json`)
+
+From `experiments/exp_001_baseline/predictions.jsonl` using `failure_analysis.error_type` (base-only mode: `--single`):
+- `base_failure_taxonomy.json`: counts per error_type; per-class recall; top-15 confusions (gold, pred, count); long-tail slice
+  (tail = bottom third by train count) accuracy vs head; accuracy by description-length bucket (chars: <250, 250–500, 500–1000, ≥1000)
+  and by token-length bucket (<480, 480–1536); KEV slice.
+- `base_failures.jsonl`: ≤ 60 representative rows: for each of the top-8 confusions up to 5 rows, plus 5 invalid outputs and 5 tail-class
+  misses. Fields: `cve_id, gold, base_prediction, error_type, description_excerpt` (≤ 200 chars, ends with "…" when cut), `description_chars`.
+  No full descriptions. The taxonomy labels are the initial set (invalid_format, unknown_cwe, nearby_cwe_confusion, semantic_confusion)
+  plus the flags `gold_is_long_tail`, `overgeneralization` (pred ∈ {CWE-200, CWE-20, CWE-284} and gold ∉ pred's family) and
+  `under_specific` (gold is the more specific sibling of pred inside the same family, e.g. 787/125 → 120, 862/284 → 200 is NOT this
+  one — it is overgeneralization). Record the rule used for each flag in the JSON.
+
+### 14.6 Document skeletons and partial README (no completed-tense SFT sentences)
+
+- `MODEL_CARD.md`, `reports/sft_eval.md`, `reports/failure_analysis.md`: full section structure per §13.5/§13.4 with every result cell
+  reading `TBD (pending exp_002_sft_v1)`. Sections that are already known (base model, dataset, LoRA config from configs/sft.yaml,
+  evaluation protocol, base numbers) are filled.
+- `README.md`: completed scope only — description (v2 §22 sentences), pipeline diagram with the SFT/failure-analysis stages marked
+  "pending", dataset at a glance, Base results table with the SFT/Delta columns left `pending`, base failure pattern (top confusions),
+  claim boundaries link, reproduce commands, repository map. Any sentence of the form "SFT improves/improved …" is forbidden.
