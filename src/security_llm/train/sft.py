@@ -95,6 +95,27 @@ def assert_completion_mask(batch: dict[str, torch.Tensor], im_end_id: int) -> tu
     return masked, supervised
 
 
+def assert_dataset_completion_masks(
+    dataset: Dataset, im_end_id: int, expected_rows: int
+) -> None:
+    """Verify every trainer-tokenized row retains a complete supervised completion."""
+    if len(dataset) != expected_rows:
+        raise AssertionError(
+            "Trainer dropped rows with no supervised labels: "
+            f"expected={expected_rows} actual={len(dataset)}"
+        )
+    for index, row in enumerate(dataset):
+        labels = row["labels"]
+        supervised = [label for label in labels if label != -100]
+        if not supervised:
+            raise AssertionError(f"Train row {index} has no supervised labels")
+        if supervised[-1] != im_end_id:
+            raise AssertionError(
+                f"Train row {index} completion was truncated before <|im_end|>"
+            )
+    LOG.info("mask check: rows=%d truncated_completions=0", expected_rows)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True)
@@ -138,9 +159,11 @@ def main() -> None:
             parameter.data = parameter.data.float()
     trainer.model.print_trainable_parameters()
     trainable_params = sum(parameter.numel() for parameter in trainer.model.parameters() if parameter.requires_grad)
-    batch = next(iter(trainer.get_train_dataloader()))
-    masked, supervised = assert_completion_mask(batch, tokenizer.convert_tokens_to_ids("<|im_end|>"))
-    LOG.info("completion mask sanity masked=%d supervised=%d", masked, supervised)
+    assert_dataset_completion_masks(
+        trainer.train_dataset,
+        tokenizer.convert_tokens_to_ids("<|im_end|>"),
+        expected_rows=len(train_ds),
+    )
     started = time.monotonic()
     result = trainer.train()
     trainer.model.save_pretrained(out_dir / "adapter")
