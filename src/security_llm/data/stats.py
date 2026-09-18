@@ -49,15 +49,20 @@ def compute_stats(cfg: dict[str, Any]) -> dict[str, Any]:
     per_year: dict[str, dict[str, int]] = defaultdict(lambda: {"total": 0, "single_label": 0})
     train_frequency: Counter[str] = Counter()
     eligible_by_split: dict[str, list[dict[str, Any]]] = {name: [] for name in ("train", "val", "test")}
+    label_status_by_split: dict[str, Counter[str]] = {
+        name: Counter() for name in ("train", "val", "test")
+    }
     for row in rows:
         year = row["published"][:4]
         per_year[year]["total"] += 1
         if row["label_status"] == "single":
             per_year[year]["single_label"] += 1
+        split_name = assign_split(row["published"], cfg["split"], snapshot)
+        if split_name:
+            label_status_by_split[split_name][row["label_status"]] += 1
         eligible = not row["is_rejected"] and bool(row["description_en"]) and row["label_status"] == "single"
         if not eligible:
             continue
-        split_name = assign_split(row["published"], cfg["split"], snapshot)
         if split_name:
             eligible_by_split[split_name].append(row)
             if split_name == "train":
@@ -93,6 +98,9 @@ def compute_stats(cfg: dict[str, Any]) -> dict[str, Any]:
         "coverage": coverage,
         "split_class_distribution": split_distribution,
         "description_length_chars": description_lengths,
+        "label_status_by_split": {
+            name: dict(counts) for name, counts in label_status_by_split.items()
+        },
         "kev": kev,
     }
     atomic_write_json(cfg["paths"]["stats"], result)
@@ -111,4 +119,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

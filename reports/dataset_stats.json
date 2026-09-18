@@ -199,6 +199,26 @@
       "max": 3998
     }
   },
+  "label_status_by_split": {
+    "train": {
+      "single": 105615,
+      "none": 7896,
+      "multi": 12713,
+      "placeholder_only": 13032
+    },
+    "val": {
+      "single": 37533,
+      "none": 3346,
+      "multi": 7455,
+      "placeholder_only": 1638
+    },
+    "test": {
+      "single": 51649,
+      "none": 5924,
+      "multi": 9915,
+      "placeholder_only": 1197
+    }
+  },
   "kev": {
     "train": 313,
     "val": 59,

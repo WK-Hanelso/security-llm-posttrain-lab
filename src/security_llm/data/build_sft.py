@@ -14,8 +14,13 @@ from pathlib import Path
 from typing import Any
 
 from security_llm.config import load_config
+from security_llm.adapters.cwe_instruction import (
+    build_user_prompt,
+    prompt_template_sha256,
+    serialize_label,
+)
 from security_llm.data.dedup import drop_internal_duplicates
-from security_llm.prompt import build_user_prompt, prompt_template_sha256
+from security_llm.data.manifest import v2_fields
 from security_llm.utils.io import atomic_write_json, read_jsonl, sha256_file, write_jsonl
 
 LOG = logging.getLogger(__name__)
@@ -66,7 +71,7 @@ def to_sft_row(
         "description": description,
         "truncated": len(record["description_en"]) > max_chars,
         "prompt": build_user_prompt(description, selected),
-        "completion": json.dumps({"cwe_id": record["cwe_id"]}, separators=(",", ": ")),
+        "completion": serialize_label(record["cwe_id"]),
         "is_kev": record["is_kev"],
         "split": record["split"],
     }
@@ -130,6 +135,7 @@ def build(cfg: dict[str, Any], config_path: str | Path) -> dict[str, Any]:
             "train_overlap_with_eval_dropped": overlap_count,
         },
     }
+    manifest.update(v2_fields(cfg, snapshot, selected, files, manifest["counts"]))
     atomic_write_json(cfg["paths"]["manifest"], manifest)
     LOG.info("SFT counts: %s", manifest["counts"])
     return manifest

@@ -3,6 +3,7 @@ from pathlib import Path
 
 from security_llm.config import load_config
 from security_llm.data.normalize import normalize_record
+from security_llm.data.schema import SCHEMA_VERSION, validate_record
 
 
 def fixture_rows():
@@ -25,3 +26,13 @@ def test_normalize_record_schema_cases():
     assert rows[7]["description_en"] == ""
     assert rows[8] is None
 
+
+def test_canonical_validator_accepts_normalized_record_and_finds_inconsistency():
+    row = fixture_rows()[0]
+    assert SCHEMA_VERSION == "1.0"
+    assert validate_record(row) == []
+
+    invalid = {**row, "label_status": "multi", "description_norm_hash": "0" * 64}
+    problems = validate_record(invalid)
+    assert "inconsistent_label_status" in problems
+    assert "description_norm_hash_mismatch" in problems

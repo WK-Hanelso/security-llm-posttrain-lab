@@ -1,0 +1,241 @@
+{
+  "raw_records": 257913,
+  "unique_records": 257913,
+  "rejected": 10709,
+  "no_weakness": 17166,
+  "placeholder_only": 15867,
+  "multi_label": 30083,
+  "single_label": 194797,
+  "selected_class_records": {
+    "train": 65272,
+    "val": 21151,
+    "test": 24975
+  },
+  "sampled_counts": {
+    "train": 12000,
+    "val": 1000,
+    "test": 24975
+  },
+  "class_distribution": {
+    "population": {
+      "train": {
+        "CWE-79": 19261,
+        "CWE-787": 6304,
+        "CWE-89": 7294,
+        "CWE-352": 4010,
+        "CWE-20": 2707,
+        "CWE-200": 1921,
+        "CWE-125": 3811,
+        "CWE-78": 2554,
+        "CWE-434": 2061,
+        "CWE-22": 2984,
+        "CWE-120": 2149,
+        "CWE-416": 3215,
+        "CWE-284": 1456,
+        "CWE-476": 2191,
+        "CWE-862": 3354
+      },
+      "val": {
+        "CWE-79": 7362,
+        "CWE-862": 2199,
+        "CWE-352": 1812,
+        "CWE-78": 690,
+        "CWE-89": 1685,
+        "CWE-22": 981,
+        "CWE-434": 558,
+        "CWE-787": 722,
+        "CWE-120": 361,
+        "CWE-125": 849,
+        "CWE-416": 1016,
+        "CWE-20": 444,
+        "CWE-476": 1135,
+        "CWE-200": 627,
+        "CWE-284": 710
+      },
+      "test": {
+        "CWE-862": 2971,
+        "CWE-416": 1932,
+        "CWE-89": 2151,
+        "CWE-200": 1056,
+        "CWE-22": 1894,
+        "CWE-476": 802,
+        "CWE-120": 444,
+        "CWE-125": 1277,
+        "CWE-79": 5244,
+        "CWE-78": 1184,
+        "CWE-284": 2605,
+        "CWE-434": 488,
+        "CWE-352": 775,
+        "CWE-787": 1065,
+        "CWE-20": 1087
+      }
+    },
+    "sampled": {
+      "train": {
+        "CWE-20": 499,
+        "CWE-22": 599,
+        "CWE-78": 465,
+        "CWE-862": 614,
+        "CWE-79": 3479,
+        "CWE-89": 1424,
+        "CWE-120": 413,
+        "CWE-476": 415,
+        "CWE-284": 255,
+        "CWE-416": 574,
+        "CWE-125": 619,
+        "CWE-787": 1091,
+        "CWE-200": 385,
+        "CWE-352": 750,
+        "CWE-434": 418
+      },
+      "val": {
+        "CWE-284": 43,
+        "CWE-79": 323,
+        "CWE-89": 92,
+        "CWE-787": 32,
+        "CWE-434": 31,
+        "CWE-352": 82,
+        "CWE-476": 56,
+        "CWE-862": 115,
+        "CWE-78": 31,
+        "CWE-416": 49,
+        "CWE-125": 35,
+        "CWE-22": 50,
+        "CWE-120": 22,
+        "CWE-20": 17,
+        "CWE-200": 22
+      },
+      "test": {
+        "CWE-78": 1184,
+        "CWE-476": 802,
+        "CWE-79": 5244,
+        "CWE-125": 1277,
+        "CWE-787": 1065,
+        "CWE-20": 1087,
+        "CWE-89": 2151,
+        "CWE-416": 1932,
+        "CWE-284": 2605,
+        "CWE-200": 1056,
+        "CWE-352": 775,
+        "CWE-862": 2971,
+        "CWE-22": 1894,
+        "CWE-434": 488,
+        "CWE-120": 444
+      }
+    }
+  },
+  "description_length_chars": {
+    "train": {
+      "p50": 244,
+      "p90": 531,
+      "p99": 1498,
+      "max": 3998
+    },
+    "val": {
+      "p50": 270,
+      "p90": 588,
+      "p99": 2954,
+      "max": 3998
+    },
+    "test": {
+      "p50": 352,
+      "p90": 783,
+      "p99": 1748,
+      "max": 3998
+    }
+  },
+  "duplicate_cve_count": 0,
+  "duplicate_cve_count_reason": "The canonical record is keyed by CVE ID and normalization keeps the last occurrence.",
+  "duplicate_description_count": {
+    "train_internal": 3427,
+    "train_val": 92,
+    "train_test": 7,
+    "val_test": 190
+  },
+  "excluded_label_counts": {
+    "train": {
+      "placeholder_only": 13032,
+      "multi_label": 12713,
+      "not_in_selected": 40340
+    },
+    "val": {
+      "placeholder_only": 1638,
+      "multi_label": 7455,
+      "not_in_selected": 16382
+    },
+    "test": {
+      "placeholder_only": 1197,
+      "multi_label": 9915,
+      "not_in_selected": 26674
+    }
+  },
+  "missing_data_counts": {
+    "no_english_description": 0,
+    "no_weakness": 17166
+  },
+  "label_policy": {
+    "placeholder_cwes_excluded": [
+      "NVD-CWE-noinfo",
+      "NVD-CWE-Other"
+    ],
+    "single_label_only": true,
+    "top_k": 15,
+    "min_train_samples_per_class": 200,
+    "label_selection_period": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "selected_labels": [
+      "CWE-79",
+      "CWE-89",
+      "CWE-787",
+      "CWE-352",
+      "CWE-125",
+      "CWE-862",
+      "CWE-416",
+      "CWE-22",
+      "CWE-20",
+      "CWE-78",
+      "CWE-476",
+      "CWE-120",
+      "CWE-434",
+      "CWE-200",
+      "CWE-284"
+    ]
+  },
+  "split_policy": {
+    "type": "temporal_by_published",
+    "train": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "val": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "test": [
+      "2026-01-01",
+      null
+    ],
+    "snapshot_date": "2026-09-17"
+  },
+  "snapshot_date": "2026-09-17",
+  "schema_version": "1.0",
+  "label_tiers": {
+    "CWE-79": "head",
+    "CWE-89": "head",
+    "CWE-787": "head",
+    "CWE-352": "head",
+    "CWE-125": "head",
+    "CWE-862": "head",
+    "CWE-416": "head",
+    "CWE-22": "head",
+    "CWE-20": "head",
+    "CWE-78": "head",
+    "CWE-476": "tail",
+    "CWE-120": "tail",
+    "CWE-434": "tail",
+    "CWE-200": "tail",
+    "CWE-284": "tail"
+  }
+}

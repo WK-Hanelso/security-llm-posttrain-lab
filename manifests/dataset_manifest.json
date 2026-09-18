@@ -112,5 +112,61 @@
   "dedup": {
     "train_exact_duplicates_dropped": 3427,
     "train_overlap_with_eval_dropped": 36
-  }
+  },
+  "schema_version": "1.0",
+  "source": "NVD CVE API 2.0",
+  "snapshot_time": "2026-09-17",
+  "label_policy": {
+    "placeholder_cwes_excluded": [
+      "NVD-CWE-noinfo",
+      "NVD-CWE-Other"
+    ],
+    "single_label_only": true,
+    "top_k": 15,
+    "min_train_samples_per_class": 200,
+    "label_selection_period": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "selected_labels": [
+      "CWE-79",
+      "CWE-89",
+      "CWE-787",
+      "CWE-352",
+      "CWE-125",
+      "CWE-862",
+      "CWE-416",
+      "CWE-22",
+      "CWE-20",
+      "CWE-78",
+      "CWE-476",
+      "CWE-120",
+      "CWE-434",
+      "CWE-200",
+      "CWE-284"
+    ]
+  },
+  "split_policy": {
+    "type": "temporal_by_published",
+    "train": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "val": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "test": [
+      "2026-01-01",
+      null
+    ],
+    "snapshot_date": "2026-09-17"
+  },
+  "dedup_policy": {
+    "train_exact_duplicates": "drop_keep_earliest",
+    "train_overlap_with_eval": "drop",
+    "eval_overlap": "report_only"
+  },
+  "dataset_hash": "d4abf16beb51c55804d6756e3aa4110b30b536a51827f7dce0dfe52e664b45d9",
+  "validation_count": 1000
 }
