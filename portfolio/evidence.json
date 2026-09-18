@@ -1,0 +1,181 @@
+{
+  "claims": [
+    {
+      "id": "C01",
+      "claim": "Accuracy improved on the same frozen subset",
+      "value": "0.3969 -> 0.8627",
+      "source": "reports/baseline_metrics.json:accuracy; reports/sft_metrics.json:accuracy",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Raw values are rounded to four decimals for display."
+    },
+    {
+      "id": "C02",
+      "claim": "Macro F1 improved on the same frozen subset",
+      "value": "0.3048 -> 0.8332",
+      "source": "reports/baseline_metrics.json:macro_f1; reports/sft_metrics.json:macro_f1",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Raw values are rounded to four decimals for display."
+    },
+    {
+      "id": "C03",
+      "claim": "Weighted F1 improved on the same frozen subset",
+      "value": "0.3891 -> 0.8636",
+      "source": "reports/baseline_metrics.json:weighted_f1; reports/sft_metrics.json:weighted_f1",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Raw values are rounded to four decimals for display."
+    },
+    {
+      "id": "C04",
+      "claim": "Invalid-output rate fell",
+      "value": "2.37% -> 0%",
+      "source": "reports/baseline_metrics.json:invalid_rate,invalid_breakdown; reports/sft_metrics.json:invalid_rate",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Base has 426 invalid labels among 18,000 rows; SFT has zero."
+    },
+    {
+      "id": "C05",
+      "claim": "Base and SFT use the same frozen ordered subset",
+      "value": "18,000 IDs; seed 42; identical subset hash",
+      "source": "reports/eval_subset_manifest.json:count,selection.seed,subset_hash; reports/sft_metrics.json:subset_hash; reports/EXPERIMENT.md:47",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "The manifest names Base as the experiment of record; the experiment log confirms identical ordered sequences."
+    },
+    {
+      "id": "C06",
+      "claim": "Five tracked semantic prediction sinks declined",
+      "value": "862->200 1976->138; 284->200 1573->138; 416->434 724->1; 787->120 619->133; 125->120 519->4",
+      "source": "reports/failure_summary.json:tracked_confusions; reports/comparison.md:21-29",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Each count is a true-label to predicted-label pair on the same subset."
+    },
+    {
+      "id": "C07",
+      "claim": "Row-level outcome transitions",
+      "value": "both_right 6813; fixed_by_sft 8715; broken_by_sft 332; both_wrong 2140",
+      "source": "reports/failure_summary.json:transitions; reports/comparison.md:12-19",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "The four counts sum to n_test=18,000."
+    },
+    {
+      "id": "C08",
+      "claim": "Dataset funnel",
+      "value": "257,913 raw records; 194,797 single-label records",
+      "source": "reports/dataset_stats.json:funnel.raw_cves,funnel.single_label; reports/dataset_report.md:6-17",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Aggregate public NVD counts only."
+    },
+    {
+      "id": "C09",
+      "claim": "Label and split policy",
+      "value": "Top 15 training-period labels; temporal split by published date",
+      "source": "reports/dataset_report.json:label_policy,split_policy; DATASET_CARD.md:42-66",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "The test interval ends at the 2026-09-17 snapshot."
+    },
+    {
+      "id": "C10",
+      "claim": "Exact split overlap was guarded after build",
+      "value": "pre-build train-val 92 and train-test 7; post-build all exact-text split pairs 0",
+      "source": "reports/contamination.json:train_val_exact_text_overlap,train_test_exact_text_overlap,post_build",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Exact normalized-description hashes only; this is not a semantic-contamination claim."
+    },
+    {
+      "id": "C11",
+      "claim": "Model and adaptation scope",
+      "value": "Qwen3-0.6B; fp16 LoRA rank 16; 3 epochs; seed 42",
+      "source": "MODEL_CARD.md:3-37; reports/EXPERIMENT.md:30-40",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "One model and one successful training run of record."
+    },
+    {
+      "id": "C12",
+      "claim": "Most frequent residual SFT confusion",
+      "value": "CWE-862 -> CWE-284: 367",
+      "source": "reports/failure_summary.json:top_confusions_sft; reports/failure_analysis.md:61-74",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "Measured residual confusion; no ontology-quality conclusion is implied."
+    },
+    {
+      "id": "C13",
+      "claim": "Initial resource failures preceded the successful run",
+      "value": "2 fp16 LoRA OOM probes and 1 four-bit fallback OOM; later successful 3-epoch fp16 LoRA run",
+      "source": "reports/EXPERIMENT.md:20-42; README.md:158",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "No host, PID, or private infrastructure identifier is included."
+    },
+    {
+      "id": "C14",
+      "claim": "Near-duplicate audit is sampled and bounded",
+      "value": "300 sampled rows; 8 at similarity >= 0.80",
+      "source": "reports/near_duplicate_audit.json:sample,summary; reports/near_duplicate_audit.md:1-19",
+      "reproducible": true,
+      "public_safe": true,
+      "note": "This does not establish absence of semantic contamination or explain all fixed rows."
+    },
+    {
+      "id": "C15",
+      "claim": "Continued-domain adaptation and reinforcement learning were not run",
+      "value": "NOT_PERFORMED",
+      "source": "MODEL_CARD.md:83-89; README.md:160-172",
+      "reproducible": false,
+      "public_safe": true,
+      "note": "Scope statement, not an experimental result."
+    }
+  ],
+  "assets": [
+    {
+      "filename": "assets/01_base_vs_sft_metrics.png",
+      "shows": "Grouped Base versus LoRA SFT Accuracy, Macro F1, Weighted F1, plus a separate invalid-output mini panel.",
+      "claim_ids": ["C01", "C02", "C03", "C04", "C05"]
+    },
+    {
+      "filename": "assets/01_base_vs_sft_metrics.svg",
+      "shows": "Vector version of the primary result chart.",
+      "claim_ids": ["C01", "C02", "C03", "C04", "C05"]
+    },
+    {
+      "filename": "assets/02_confusion_reduction.png",
+      "shows": "Before-and-after counts for five tracked semantic prediction sinks.",
+      "claim_ids": ["C06"]
+    },
+    {
+      "filename": "assets/02_confusion_reduction.svg",
+      "shows": "Vector version of the tracked confusion chart.",
+      "claim_ids": ["C06"]
+    },
+    {
+      "filename": "assets/03_security_data_pipeline.svg",
+      "shows": "Data and model/evaluation layers from public NVD ingest through failure analysis.",
+      "claim_ids": ["C08", "C09", "C10", "C11"]
+    },
+    {
+      "filename": "assets/03_security_data_pipeline.png",
+      "shows": "Raster version of the security data pipeline.",
+      "claim_ids": ["C08", "C09", "C10", "C11"]
+    },
+    {
+      "filename": "assets/04_transition_summary.png",
+      "shows": "Four row-level Base-to-SFT correctness transitions summing to the frozen test size.",
+      "claim_ids": ["C05", "C07"]
+    },
+    {
+      "filename": "assets/04_transition_summary.svg",
+      "shows": "Vector version of the row-transition summary.",
+      "claim_ids": ["C05", "C07"]
+    }
+  ]
+}
