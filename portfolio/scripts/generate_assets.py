@@ -72,7 +72,7 @@ def primary_result(base: dict, sft: dict) -> None:
     sft_bars = ax.bar(
         [i + width / 2 for i in x], sft_values, width, color=SFT_COLOR, label="LoRA SFT"
     )
-    ax.set_ylim(0, 1.02)
+    ax.set_ylim(0, 1.10)
     ax.set_ylabel("Score")
     ax.set_xticks(list(x), labels)
     ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
