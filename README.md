@@ -192,12 +192,27 @@ See [claim boundaries](docs/claim-boundaries.md) for the fixed wording and compl
 
 License: MIT. Vulnerability records are sourced from the [NIST National Vulnerability Database](https://nvd.nist.gov/); CWE identifiers and names are from [MITRE CWE](https://cwe.mitre.org/).
 
-## Distributed data pipeline experiment
+## Data engineering learning track
 
-The v0.1.0 dataset-construction result is the baseline. On this branch, a Spark implementation
-of the same processing is being built alongside it. The E1–E12 equivalence checks compare more
-than row counts: they cover CVE-ID sets, per-row field contents, split assignment, class
-distribution, and the IDs surviving deduplication.
+The v0.1.0 result above is the baseline and is unchanged. This branch records a series of
+experiments extending the data pipeline, each one measured against that baseline before any
+technology was adopted.
 
-Running the same Spark workload in local mode, `local[8]` was 1.89x faster than `local[1]`.
-The design and verification criteria are in [the distributed pipeline specification](docs/SPEC_distributed.md).
+- **Spark reimplementation** of the dataset processing, checked against the reference at row
+  level rather than by row count — CVE-ID sets, per-row fields, split assignment, class
+  distribution, and the IDs surviving deduplication. Running the same Spark workload in local
+  mode, `local[8]` was 1.89x faster than `local[1]`.
+- **Near-duplicate scaling**, separating internal all-pairs (quadratic) from query-vs-fixed-
+  reference (linear in queries), then an exact audit of all 1,630,168,200 train/test pairs in
+  96.639 s.
+- **Incremental downstream rebuild**, measured and then declined: most of the work stays global
+  and verifying an incremental result costs more than it saves.
+- **Incremental NVD ingest**, where the API's modified-window semantics were probed directly and
+  source content was observed changing without `lastModified` moving.
+
+Several starting hypotheses were wrong — Ray, LSH and ANN were expected to be necessary and were
+not built. The reasoning, the measurements and the corrections are in
+[the learning track record](docs/LEARNING_TRACK.md), with specifications in
+[distributed pipeline](docs/SPEC_distributed.md),
+[candidate reduction](docs/SPEC_candidate_reduction.md),
+[change model](docs/CHANGE_MODEL.md) and [ingest semantics](docs/INGEST_SEMANTICS.md).
