@@ -1,0 +1,653 @@
+{
+ "boundary": {
+  "A_TT": {
+   "start": "2026-08-11T19:33:44.513",
+   "end": "2026-08-11T19:33:44.513",
+   "anchor_present": false,
+   "total": 0,
+   "status": 200
+  },
+  "B_T_to_Tplus1": {
+   "start": "2026-08-11T19:33:44.513",
+   "end": "2026-08-11T19:33:44.514",
+   "anchor_present": true,
+   "total": 139,
+   "status": 200
+  },
+  "C_Tminus1_to_T": {
+   "start": "2026-08-11T19:33:44.512",
+   "end": "2026-08-11T19:33:44.513",
+   "anchor_present": false,
+   "total": 0,
+   "status": 200
+  },
+  "D_after": {
+   "start": "2026-08-11T19:33:44.514",
+   "end": "2026-08-11T19:33:44.515",
+   "anchor_present": false,
+   "total": 0,
+   "status": 200
+  },
+  "E_before": {
+   "start": "2026-08-11T19:33:44.511",
+   "end": "2026-08-11T19:33:44.512",
+   "anchor_present": false,
+   "total": 0,
+   "status": 200
+  }
+ },
+ "timestamp": {
+  "plain": {
+   "start": "2026-08-11T19:33:44.512",
+   "end": "2026-08-11T19:33:44.514",
+   "status": 200,
+   "total": 139,
+   "anchor_present": true
+  },
+  "Z": {
+   "start": "2026-08-11T19:33:44.512Z",
+   "end": "2026-08-11T19:33:44.514Z",
+   "status": 200,
+   "total": 139,
+   "anchor_present": true
+  },
+  "utc_offset": {
+   "start": "2026-08-11T19:33:44.512+00:00",
+   "end": "2026-08-11T19:33:44.514+00:00",
+   "status": 200,
+   "total": 139,
+   "anchor_present": true
+  },
+  "shifted_offset": {
+   "start": "2026-08-11T15:33:44.512-04:00",
+   "end": "2026-08-11T15:33:44.514-04:00",
+   "status": 200,
+   "total": 139,
+   "anchor_present": true
+  }
+ },
+ "adjacent": {
+  "AB_total": 0,
+  "BC_total": 139,
+  "intersection": [],
+  "intersection_size": 0,
+  "windows": {
+   "A": "2026-08-11T19:32:44.513",
+   "B": "2026-08-11T19:33:44.513",
+   "C": "2026-08-11T19:34:44.513"
+  }
+ },
+ "ordering": {
+  "n": 139,
+  "identical_order": true,
+  "same_set": true,
+  "lastmod_sorted_asc": true,
+  "lastmod_sorted_desc": true,
+  "head": [
+   "CVE-2017-3806",
+   "CVE-2017-3822",
+   "CVE-2017-3887",
+   "CVE-2017-6625",
+   "CVE-2017-6632"
+  ]
+ },
+ "recent_window": {
+  "window": [
+   "2026-09-17T16:16:29.000",
+   "2026-09-17T18:16:29.000"
+  ],
+  "total": 672,
+  "returned": 672,
+  "rejected_count": 2,
+  "rejected_sample": [
+   "CVE-2026-56395",
+   "CVE-2026-9314"
+  ],
+  "newly_published_in_window": 481,
+  "newly_sample": [
+   "CVE-2026-92184",
+   "CVE-2026-92358",
+   "CVE-2026-92615",
+   "CVE-2026-47094",
+   "CVE-2026-51990"
+  ],
+  "statuses": [
+   "Analyzed",
+   "Awaiting Analysis",
+   "Deferred",
+   "Modified",
+   "Received",
+   "Rejected",
+   "Undergoing Analysis"
+  ]
+ },
+ "pagination": {
+  "pages": [
+   {
+    "startIndex": 0,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   },
+   {
+    "startIndex": 20,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   },
+   {
+    "startIndex": 40,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   },
+   {
+    "startIndex": 60,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   },
+   {
+    "startIndex": 80,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   },
+   {
+    "startIndex": 100,
+    "returned": 20,
+    "totalResults": 672,
+    "resultsPerPage": 20
+   }
+  ],
+  "summed_rows": 120,
+  "totals_seen": [
+   672,
+   672,
+   672,
+   672,
+   672,
+   672
+  ],
+  "totalResults_stable": true,
+  "rows_match_total": false,
+  "last_startIndex": 120
+ },
+ "idempotency": {
+  "n1": 139,
+  "n2": 139,
+  "id_set_equal": true,
+  "canonical_hash_differs_for": [],
+  "canonical_all_equal": true,
+  "order_identical": true
+ },
+ "_meta": {
+  "anchor": "CVE-2021-44228",
+  "anchor_lastModified": "2026-08-11T19:33:44.513",
+  "sleep_seconds": 7.0,
+  "requests": 23,
+  "api_key_used": false,
+  "run_at_utc": "2026-09-19T16:17:38.060867+00:00"
+ },
+ "_request_log": [
+  {
+   "label": "A_TT",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.513",
+    "lastModEndDate": "2026-08-11T19:33:44.513",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.55,
+   "totalResults": 0,
+   "resultsPerPage": 0,
+   "startIndex": 0,
+   "returned": 0,
+   "ids_head": []
+  },
+  {
+   "label": "B_T_to_Tplus1",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.513",
+    "lastModEndDate": "2026-08-11T19:33:44.514",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.8,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "C_Tminus1_to_T",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.512",
+    "lastModEndDate": "2026-08-11T19:33:44.513",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.24,
+   "totalResults": 0,
+   "resultsPerPage": 0,
+   "startIndex": 0,
+   "returned": 0,
+   "ids_head": []
+  },
+  {
+   "label": "D_after",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.514",
+    "lastModEndDate": "2026-08-11T19:33:44.515",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.27,
+   "totalResults": 0,
+   "resultsPerPage": 0,
+   "startIndex": 0,
+   "returned": 0,
+   "ids_head": []
+  },
+  {
+   "label": "E_before",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.511",
+    "lastModEndDate": "2026-08-11T19:33:44.512",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.25,
+   "totalResults": 0,
+   "resultsPerPage": 0,
+   "startIndex": 0,
+   "returned": 0,
+   "ids_head": []
+  },
+  {
+   "label": "plain",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.512",
+    "lastModEndDate": "2026-08-11T19:33:44.514",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.94,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "Z",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.512Z",
+    "lastModEndDate": "2026-08-11T19:33:44.514Z",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.9,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "utc_offset",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.512+00:00",
+    "lastModEndDate": "2026-08-11T19:33:44.514+00:00",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.9,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "shifted_offset",
+   "params": {
+    "lastModStartDate": "2026-08-11T15:33:44.512-04:00",
+    "lastModEndDate": "2026-08-11T15:33:44.514-04:00",
+    "resultsPerPage": 200
+   },
+   "status": 200,
+   "seconds": 0.93,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "AB",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:32:44.513",
+    "lastModEndDate": "2026-08-11T19:33:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 0.25,
+   "totalResults": 0,
+   "resultsPerPage": 0,
+   "startIndex": 0,
+   "returned": 0,
+   "ids_head": []
+  },
+  {
+   "label": "BC",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:44.513",
+    "lastModEndDate": "2026-08-11T19:34:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 0.83,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "overlap",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:33:43.513",
+    "lastModEndDate": "2026-08-11T19:33:45.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 0.86,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "order_1",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:32:44.513",
+    "lastModEndDate": "2026-08-11T19:34:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 0.7,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "order_2",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:32:44.513",
+    "lastModEndDate": "2026-08-11T19:34:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 1.01,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "recent_window",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 1.0,
+   "totalResults": 672,
+   "resultsPerPage": 672,
+   "startIndex": 0,
+   "returned": 672,
+   "ids_head": [
+    "CVE-2023-4751",
+    "CVE-2023-4750",
+    "CVE-2023-4752",
+    "CVE-2023-4781",
+    "CVE-2023-5535"
+   ]
+  },
+  {
+   "label": "page_0",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 0
+   },
+   "status": 200,
+   "seconds": 0.55,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 0,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2023-4751",
+    "CVE-2023-4750",
+    "CVE-2023-4752",
+    "CVE-2023-4781",
+    "CVE-2023-5535"
+   ]
+  },
+  {
+   "label": "page_20",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 20
+   },
+   "status": 200,
+   "seconds": 0.42,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 20,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2026-69351",
+    "CVE-2025-68624",
+    "CVE-2026-43695",
+    "CVE-2026-43787",
+    "CVE-2026-43789"
+   ]
+  },
+  {
+   "label": "page_40",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 40
+   },
+   "status": 200,
+   "seconds": 0.27,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 40,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2026-55776",
+    "CVE-2026-59965",
+    "CVE-2026-91849",
+    "CVE-2026-91967",
+    "CVE-2026-91972"
+   ]
+  },
+  {
+   "label": "page_60",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 60
+   },
+   "status": 200,
+   "seconds": 0.36,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 60,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2026-61668",
+    "CVE-2026-81237",
+    "CVE-2026-69208",
+    "CVE-2026-69213",
+    "CVE-2026-51133"
+   ]
+  },
+  {
+   "label": "page_80",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 80
+   },
+   "status": 200,
+   "seconds": 0.43,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 80,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2026-83079",
+    "CVE-2026-83080",
+    "CVE-2026-83081",
+    "CVE-2026-83082",
+    "CVE-2026-83086"
+   ]
+  },
+  {
+   "label": "page_100",
+   "params": {
+    "lastModStartDate": "2026-09-17T16:16:29.000",
+    "lastModEndDate": "2026-09-17T18:16:29.000",
+    "resultsPerPage": 20,
+    "startIndex": 100
+   },
+   "status": 200,
+   "seconds": 0.42,
+   "totalResults": 672,
+   "resultsPerPage": 20,
+   "startIndex": 100,
+   "returned": 20,
+   "ids_head": [
+    "CVE-2026-83134",
+    "CVE-2026-83135",
+    "CVE-2026-83136",
+    "CVE-2026-83137",
+    "CVE-2026-83138"
+   ]
+  },
+  {
+   "label": "idem_1",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:32:44.513",
+    "lastModEndDate": "2026-08-11T19:34:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 1.02,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  },
+  {
+   "label": "idem_2",
+   "params": {
+    "lastModStartDate": "2026-08-11T19:32:44.513",
+    "lastModEndDate": "2026-08-11T19:34:44.513",
+    "resultsPerPage": 2000
+   },
+   "status": 200,
+   "seconds": 0.9,
+   "totalResults": 139,
+   "resultsPerPage": 139,
+   "startIndex": 0,
+   "returned": 139,
+   "ids_head": [
+    "CVE-2017-3806",
+    "CVE-2017-3822",
+    "CVE-2017-3887",
+    "CVE-2017-6625",
+    "CVE-2017-6632"
+   ]
+  }
+ ]
+}

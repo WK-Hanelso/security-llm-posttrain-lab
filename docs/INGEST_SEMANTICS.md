@@ -103,16 +103,52 @@ fetch. **Periodic full reconciliation is a requirement, not an optimisation.**
 
 ### 2.3 Not established — must be probed before use
 
-| Question | Status |
-|---|---|
-| Is `lastModStartDate` inclusive or exclusive? | **unknown** |
-| Is `lastModEndDate` inclusive or exclusive? | **unknown** |
-| Timestamp precision and timezone handling at the boundary | **unknown** |
-| Can one CVE appear in two adjacent lastMod windows? | **unknown** |
-| Are results ordered by modification time? | **unknown** — must not be assumed |
-| Do newly published CVEs appear in a lastMod query? | **unknown** |
-| Is `totalResults` stable across a window's pagination? | **unknown** |
-| Is there any deletion signal at all? | **unknown** |
+**Resolved by the T-016B probes** — see `reports/incremental/t016b_api_probe.md` for method
+and raw results. Status is one of confirmed, observed only, or unresolved; **observed-only
+items are not relied on in design.**
+
+| Question | Status | Finding |
+|---|---|---|
+| Is `lastModStartDate` inclusive? | **confirmed** | yes, inclusive |
+| Is `lastModEndDate` inclusive? | **confirmed** | no, **exclusive** — the interval is `[start, end)` |
+| Timestamp precision and timezone | **confirmed** | millisecond precision honoured; no-zone is UTC; `Z`, `+00:00` and shifted offsets equivalent |
+| Can one CVE appear in two adjacent windows? | *observed only* | intersection empty with both windows non-empty, but no record sat exactly on the boundary |
+| Are results ordered by modification time? | *observed only* | order stable across repeats and between paged and single reads; **not** to be assumed |
+| Do newly published CVEs appear in a lastMod query? | **confirmed** | yes — 481 of 672 in a recent window were published within three days |
+| Is `totalResults` stable across pagination? | *observed only* | stable in every run; no run overlapped a concurrent update |
+| Pagination completeness | **confirmed** | summed rows equalled `totalResults` exactly; no cross-page duplicates; paged set and order matched a single request |
+| Identical-window idempotency | **confirmed** | same IDs, same canonical hashes, same order |
+| Rejected records included by default? | **confirmed** | yes |
+| Is there any deletion signal? | **unresolved** | none looked for or found; `MISSING` stays distinct from `DELETE` |
+
+### 2.3.1 The boundary result, and what it costs to get wrong
+
+Because the interval is `[start, end)`, setting the next `lastModStartDate` to the timestamp of
+the last record received — NVD's own recommendation — returns that record once more and omits
+nothing. Starting one millisecond later omits every record sharing that millisecond.
+
+That count is not constant. An ordinary hour carried 490 records with 490 distinct timestamps,
+at most one per millisecond. The anchor's own millisecond was shared by **139 records**, from
+what appears to be a bulk re-analysis. The omission risk is therefore episodic and peaks during
+bulk events.
+
+So the deliberate overlap in §5 is no longer needed for correctness, provided the start is set
+to the last record's exact timestamp. It stays as cheap insurance against clock and precision
+surprises, but the justification is now measured rather than assumed.
+
+### 2.3.2 The completeness condition
+
+§1.1 records that `"complete": True` is a literal and therefore cannot fail. The probe settles
+what replaces it:
+
+```
+sum(len(page["vulnerabilities"]) for page in window) == totalResults
+```
+
+with `totalResults` identical on every page of the window. Both were verified on a 489-record
+window paged at 200 (200 + 200 + 89), with no cross-page duplicates and the paged set and order
+matching a single-request read. Since `totalResults` stability is observed only, an ingester
+must still compare the first and last page and reject the window on disagreement.
 
 The official recommendation — start the next window at the timestamp of the last record
 received — only makes sense under a particular inclusivity, and it produces either duplicates

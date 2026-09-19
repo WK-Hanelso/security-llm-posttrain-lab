@@ -1,0 +1,70 @@
+{
+ "window": [
+  "2026-09-17T16:48:55.000",
+  "2026-09-17T17:18:55.000"
+ ],
+ "per_page": 200,
+ "pages": [
+  {
+   "startIndex": 0,
+   "returned": 200,
+   "resultsPerPage": 200,
+   "totalResults": 489
+  },
+  {
+   "startIndex": 200,
+   "returned": 200,
+   "resultsPerPage": 200,
+   "totalResults": 489
+  },
+  {
+   "startIndex": 400,
+   "returned": 89,
+   "resultsPerPage": 89,
+   "totalResults": 489
+  }
+ ],
+ "summed_rows": 489,
+ "totals_seen": [
+  489
+ ],
+ "totalResults_stable": true,
+ "rows_match_total": true,
+ "completed_pagination": true,
+ "unique_ids": 489,
+ "duplicate_ids_across_pages": 0,
+ "dup_sample": [],
+ "single_request_total": 489,
+ "paged_set_equals_single_set": true,
+ "paged_order_equals_single_order": true,
+ "_log": [
+  {
+   "label": "pg0",
+   "status": 200,
+   "total": 489,
+   "returned": 200,
+   "startIndex": 0
+  },
+  {
+   "label": "pg200",
+   "status": 200,
+   "total": 489,
+   "returned": 200,
+   "startIndex": 200
+  },
+  {
+   "label": "pg400",
+   "status": 200,
+   "total": 489,
+   "returned": 89,
+   "startIndex": 400
+  },
+  {
+   "label": "single_full",
+   "status": 200,
+   "total": 489,
+   "returned": 489,
+   "startIndex": 0
+  }
+ ]
+}
