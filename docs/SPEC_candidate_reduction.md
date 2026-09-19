@@ -304,7 +304,95 @@ evaluation leakage. CVE text repeats vendor templates, product names and advisor
 the published top-20 review found 11 of 20 to be vendor boilerplate against 7 near/exact
 copies.
 
-## 8. T-014F — Audit B scale-up decision
+## 8. T-014F — Audit B blockwise exact cost probe
+
+The question is whether full Audit B can be done exactly, before any approximate retrieval is
+built. Success is a measured answer either way — "exact is enough here" is a result, not a
+shortfall.
+
+### 8.1 Populations (verified 2026-09-19)
+
+| Side | Source | Rows |
+|---|---|---:|
+| Query | `data/processed/test.jsonl` | 24,975 |
+| Reference | `data/processed/train.jsonl` | 65,272 |
+
+Potential pairs 1,630,169,200. These are the *processed* split populations, before SFT
+sampling — a different question from Audit A, which concerns the model result.
+
+### 8.2 Text field, and why Audit A and B are not directly comparable
+
+Audit B uses `description_en` **untruncated**. Audit A used `description` from
+`data/sft/*.jsonl`, which `build_sft.py` truncates at 1,500 characters. Measured: 653 train
+rows (1.00%) and 377 test rows (1.51%) exceed 1,500 characters, with a maximum of 3,998.
+
+Audit B's question is about the selected split itself, and the 1,500-character limit is a
+model-input budget rather than a property of the data, so the untruncated text is the faithful
+choice here.
+
+The consequence is that Audit A and Audit B differ in **two** ways — population and text
+preprocessing — so their similarity values are never placed side by side as though they
+measured the same thing. Every figure states its audit.
+
+### 8.3 Measured reference-side cost
+
+Fitting the vectorizer on all 65,272 references and transforming them: **3.3 s**, vocabulary
+**169,215** (against 42,488 for Audit A's 12,000 references), sparse matrix about
+**0.052 GiB**. The reference side is cheap; the dominant memory is the per-block dense score
+array, roughly `Q × block_size × 8` bytes.
+
+### 8.4 Probe design
+
+Fixed reference R = 65,272. Query ladder Q = 300, 1,000, 2,500, and 5,000 only if warranted.
+
+**Query subsets are fixed before any result is seen**: fixed seed, stored query-ID manifest
+with its hash, recorded class distribution and description-length distribution. Subsets are
+nested where possible so the ladder measures scale rather than sample variation. Queries are
+never reselected after seeing results.
+
+Block size 2048 by default, since it measured fastest in T-014C. R is 5.4× larger here, so if
+peak RSS rises beyond expectation, drop to 1024 and **record the reason**. Do not tune block
+size across Q values — this measures scale behaviour, not block tuning.
+
+Per Q record: Q, R, pair count, block size, wall time, peak RSS, pairs/sec, queries/sec,
+growth ratios versus the previous step for Q, wall time and peak RSS, success or failure, swap
+delta, major page faults, CPU utilisation, execution environment, commit.
+
+### 8.5 Correctness, not only speed
+
+A probe that only measures speed is not sufficient. On a small query subset, compare blockwise
+output against a direct dense computation on the same inputs: top-20 membership, top-20 scores,
+pairs ≥ 0.80, pairs ≥ 0.90, and per-query threshold counts.
+
+Cross-implementation score tolerance is `2e-15` per §3.2. Near-tie ordering differences are
+recorded against their score deltas as a known limitation, never treated as a logic defect,
+and scores are never rounded to force agreement.
+
+### 8.6 Projection and the full-run gate
+
+A full Q = 24,975 cost may be projected from the ladder and **must be labelled a projection**.
+Gate 1's memory projection missed by about 31%, so projections are not evidence of the same
+standing as measurements.
+
+Full Audit B may be run when Q scaling is stable, peak RSS stays in a safe range, there is no
+swap growth or severe paging, the projection is minutes rather than hours, and a full run adds
+real information about the data. If run, store only top-k and threshold matches with the §3
+schema — never all 1.63 billion scores.
+
+### 8.7 The decision this probe produces
+
+- **Exact is sufficient** — full Audit B completes in minutes at acceptable memory. Then
+  candidate reduction is **not built**, §7 does not execute, and the conclusion is recorded:
+  approximate retrieval was considered because 1.63 billion pairs looked large, and measurement
+  showed exact audit was practical at this scale.
+- **Exact is the bottleneck** — clearly compute-bound for 30 minutes or more, or repeated
+  audits are impractical. Only then does §7 open, with recall measured against exact truth or
+  an exact validation subset.
+
+Neither outcome is a failure. Not adding a technique whose need was not demonstrated is the
+intended result of this track.
+
+## 8.8 Former scale-up notes
 
 Truth comes from exact blockwise top-k over fixed query subsets (300 / 1,000 / 2,500) against
 all 65,272 references — not a full 1.63-billion-pair matrix.
