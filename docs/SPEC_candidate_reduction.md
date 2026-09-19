@@ -407,6 +407,94 @@ visible.
 
 ---
 
+## 8.9 T-014G — full Audit B exact run and track closure
+
+The last step of this track. Its purpose is to close the §8.6 projection with a measurement
+and to look once at the whole split's near-duplicate structure — **not** to start new work.
+
+Q = 24,975 (`data/processed/test.jsonl`) × R = 65,272 (`data/processed/train.jsonl`),
+`description_en` untruncated, **1,630,168,200** potential pairs. Blockwise exact, block size
+2048, which was fastest in T-014C and safe in the probe. Change it only on a real memory
+problem, and record the reason.
+
+### 8.9.1 Storage
+
+Never store all 1.63 billion scores. Store each query's top-20, every pair ≥ 0.80, every pair
+≥ 0.90, and the exact-1.0 pairs, using the §3 schema.
+
+### 8.9.2 Analysis bins — declared before the run
+
+These are fixed here so they cannot be chosen after seeing results.
+
+**Description length** reuses the project's existing buckets from
+`src/security_llm/eval/failure_analysis.py::_description_bucket`, unchanged:
+
+```
+<250    250-500    500-1000    >=1000
+```
+
+**Rare classes** are the five selected CWEs with the smallest reference count in the processed
+train population (`data/processed/labels.json` `train_counts`), i.e. count ≤ 2,191:
+
+```
+CWE-476 (2,191)   CWE-120 (2,149)   CWE-434 (2,061)   CWE-200 (1,921)   CWE-284 (1,456)
+```
+
+The list is written out so the rule cannot be re-derived differently later. The remaining ten
+are the non-rare comparison group.
+
+### 8.9.3 Required measurements
+
+Measured: wall time, peak RSS, processed pair count, pairs/sec, queries/sec, swap delta, major
+page faults, block size, execution environment, commit, success or interruption.
+
+Projection error, computed both ways: measured wall against the projected 98.05 s, and measured
+peak RSS against the projected 1.144 GiB and the conservative 1.499 GiB, each as absolute and
+relative error. **Explain the difference, do not only score it.** Absolute wall time is
+load-sensitive — the same probe point measured 10.113 s and 7.88 s on two runs — so a wall-time
+miss is not by itself a performance regression.
+
+### 8.9.4 Required analysis
+
+- Totals at ≥ 0.80, ≥ 0.90 and cosine 1.0: pair count, query count, same-label and cross-label.
+- Rank-1 similarity over all 24,975 queries: p50, p90, p95, p99, max. Mean may be recorded but
+  is not used as the central statistic.
+- Per CWE class: query count, rank-1 p50 and p90, share of queries ≥ 0.80 and ≥ 0.90, and the
+  same-label/cross-label split among high-similarity pairs.
+- Per length bucket and for the rare-class group: the same shares.
+
+### 8.9.5 Correctness
+
+The run is not final until checked: recompute a random query subset independently and compare
+top-20 membership and scores, both threshold pair sets, and per-query threshold counts.
+Cross-implementation tolerance `2e-15` per §3.2; 1-ULP near-tie ordering differences are the
+known limitation, not defects.
+
+### 8.9.6 How the results are described
+
+High similarity is **not** contamination. CVE descriptions repeat vendor advisory templates,
+product naming, version lists and shared vulnerability phrasing, and the published manual
+review of the top 20 found 11 of 20 to be vendor boilerplate against 7 near/exact copies.
+
+Report the results as near-duplicate structure, high-similarity structure, and a signal about
+semantic independence of the split. Words like contamination or leakage require manual
+inspection or explicit evidence, per `docs/claim-boundaries.md`.
+
+The published sampled audit (300 queries × 12,000 SFT references: p50 0.2694, p90 0.7036,
+p95 0.7438, ≥0.80 8, ≥0.90 3) is **Audit A shaped and differently preprocessed**. It is
+context for reading the structure, never a statistic to compare against Audit B directly.
+
+Limited manual review of new high-similarity structure is allowed — cross-label pairs first,
+using the four existing categories (near/exact copy, vendor boilerplate, weakness phrase
+overlap, normal semantic similarity). It does not expand into a taxonomy study.
+
+### 8.9.7 Closure
+
+T-014G ends this track. No further technique is added: no LSH, no ANN, no Ray, no new
+embedding model, no new similarity metric, no threshold tuning. The dataset split, the query
+population and the v0.1.0 results are not modified in response to anything found. If the
+results raise a new question, it is recorded as a separate decision, not pursued here.
+
 ## 9. Measurement and wording
 
 Three kinds of number, never interchangeable: **algorithmic complexity** (theory and scaling
