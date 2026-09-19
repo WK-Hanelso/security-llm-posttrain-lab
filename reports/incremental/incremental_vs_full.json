@@ -1,0 +1,928 @@
+{
+  "task": "T-015C",
+  "truth": "isolated full rebuilds executed with the unmodified reference functions; committed Snapshot B artifacts checked against hashes.json",
+  "snapshot_b_hash_check": {
+    "artifact_entries": 35,
+    "all_nonvolatile_artifacts_match": true,
+    "mismatches": [
+      {
+        "path": "data/fixture/snapshot_b/dataset_manifest.json",
+        "expected": "e1b58fd530cf6cd600ee79746a04af2c1022a0601f52651a3bd97953f60c1266",
+        "actual": "36ca435814e258d5b3f373f2f6d64c3cfed81b971b89d2a371a0ad0d5ae0127a"
+      }
+    ],
+    "dataset_manifest_current_worktree_mismatch": true,
+    "dataset_manifest_expected_sha256": "e1b58fd530cf6cd600ee79746a04af2c1022a0601f52651a3bd97953f60c1266",
+    "dataset_manifest_committed_head_sha256": "e1b58fd530cf6cd600ee79746a04af2c1022a0601f52651a3bd97953f60c1266",
+    "dataset_manifest_committed_head_matches": true,
+    "cause": "pre-existing worktree change to created_at and git_commit only; committed HEAD blob matches hashes.json"
+  },
+  "classification_counts_canonical_nine": {
+    "INSERT": 1,
+    "MISSING_REVIEW": 1,
+    "UNCHANGED": 1,
+    "UPDATE_DATASET_RELEVANT": 5,
+    "UPDATE_INTERMEDIATE_ONLY": 1
+  },
+  "combined_run": {
+    "apply_status": "REVIEW_REQUIRED",
+    "completed": false,
+    "writes_performed": false,
+    "missing_ids": [
+      "CVE-2007-6070"
+    ]
+  },
+  "stage_dependency_map": {
+    "normalization": "LOCAL",
+    "eligibility": "LOCAL",
+    "temporal_split": "LOCAL",
+    "row_serialization": "LOCAL",
+    "exact_dedup": "GROUP_RECOMPUTE (old and new description hash)",
+    "cross_split_overlap": "GROUP_RECOMPUTE (old and new description hash)",
+    "label_selection": "GLOBAL_RECOMPUTE",
+    "sft_sampling": "GLOBAL_RECOMPUTE (reference random.sample semantics)"
+  },
+  "per_case": [
+    {
+      "case_id": "C01_INSERT",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2024-999999",
+      "classification": "INSERT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "a89df7a186ade0a13aff598964397a0926a04828692fa29083d2c0db436ac994",
+              "full_rebuild": "a89df7a186ade0a13aff598964397a0926a04828692fa29083d2c0db436ac994",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "18ddab348cca6ec01d17d8a58a21c3d16659808f422d3c7d4e6250c5852b3a6f",
+              "full_rebuild": "18ddab348cca6ec01d17d8a58a21c3d16659808f422d3c7d4e6250c5852b3a6f",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "12aac2e06e1b08f4443e766ecd9426b327fe469d06119f43972e553752e3e494",
+                "full_rebuild": "12aac2e06e1b08f4443e766ecd9426b327fe469d06119f43972e553752e3e494",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C02_DESCRIPTION_UPDATE",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2022-30677",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "aa8238813d05f86db9e0c984f48183d213b45f18ae2dab8174870fd3c610adf4",
+              "full_rebuild": "aa8238813d05f86db9e0c984f48183d213b45f18ae2dab8174870fd3c610adf4",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "2aa40c6c1463d6bee83e5614487c9ae1f88f18ed4407fc04e7ee7613c84631e0",
+              "full_rebuild": "2aa40c6c1463d6bee83e5614487c9ae1f88f18ed4407fc04e7ee7613c84631e0",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "503d604c298bbc86b7363ce5d239e425963b7bb0d2ffaf1d29e7c2d2f2a7a0e0",
+                "full_rebuild": "503d604c298bbc86b7363ce5d239e425963b7bb0d2ffaf1d29e7c2d2f2a7a0e0",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C03_CWE_UPDATE",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2014-125083",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "8eed7143946eb95fc11b75887beebebd2506c57024fc65ce99f51462bd8ece18",
+              "full_rebuild": "8eed7143946eb95fc11b75887beebebd2506c57024fc65ce99f51462bd8ece18",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "2aa7e3a76fe07fd5d6a72d5256aad7e87cfa3884119e89962884586ee87990e9",
+              "full_rebuild": "2aa7e3a76fe07fd5d6a72d5256aad7e87cfa3884119e89962884586ee87990e9",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "a8b248938e2e1a0834aedfa7159ba335e7d8999e22ff392f2d63bd0cf05bed3e",
+                "full_rebuild": "a8b248938e2e1a0834aedfa7159ba335e7d8999e22ff392f2d63bd0cf05bed3e",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C04_MULTI_LABEL_UPDATE",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2014-8490",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "9bca25873149b568737ac60e19a5c8f96982c181480db943fb22b8f287f7880c",
+              "full_rebuild": "9bca25873149b568737ac60e19a5c8f96982c181480db943fb22b8f287f7880c",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "674d86653e4a870f830e565cfaf3bb1ecad590c59e83077c5d2de008bdcc3a81",
+              "full_rebuild": "674d86653e4a870f830e565cfaf3bb1ecad590c59e83077c5d2de008bdcc3a81",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "529b2f4eea03b67ab23bd961d795105464c381b71ce08d4d183230851a34d458",
+                "full_rebuild": "529b2f4eea03b67ab23bd961d795105464c381b71ce08d4d183230851a34d458",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C05_REJECTED_UPDATE",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2017-20125",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "ef32088fa320a4fee01677498072ea2541ed1b92f447a1344e4cbab36f74006f",
+              "full_rebuild": "ef32088fa320a4fee01677498072ea2541ed1b92f447a1344e4cbab36f74006f",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "82fd181e5d4a9cf9b084777d057ab45b8929f167722a6bdd14d356a2edd6c06e",
+              "full_rebuild": "82fd181e5d4a9cf9b084777d057ab45b8929f167722a6bdd14d356a2edd6c06e",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "d11a6cdf85fd5c1da166cb929a8daee59844e0c2c69b6d4ca62b9a5f6f278cbb",
+                "full_rebuild": "d11a6cdf85fd5c1da166cb929a8daee59844e0c2c69b6d4ca62b9a5f6f278cbb",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C06_KEV_UPDATE",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2016-20046",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "SAME",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "full_rebuild": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "3c0fc0cfe26c37d962c7a95b3b62d763fe3f1f8da24da8e74e460b5482b68199",
+              "full_rebuild": "3c0fc0cfe26c37d962c7a95b3b62d763fe3f1f8da24da8e74e460b5482b68199",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "bc090742552d1bc8cb27855ddd91905014446d5f749a54648509dc9985c06940",
+              "full_rebuild": "bc090742552d1bc8cb27855ddd91905014446d5f749a54648509dc9985c06940",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "full_rebuild": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "85fb25944f1fa3140065dfab30231855248c4b812cd2ef7e2aae45b30d99a4d1",
+                "full_rebuild": "85fb25944f1fa3140065dfab30231855248c4b812cd2ef7e2aae45b30d99a4d1",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C07_CVSS_NEGATIVE_CONTROL",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2019-25373",
+      "classification": "UPDATE_INTERMEDIATE_ONLY",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "SAME",
+        "B_final_byte": "SAME",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "full_rebuild": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "bf7ac244eb068a699e3579c169d88e7ae875daf21c1c7b9e7effb832a449d504",
+              "full_rebuild": "bf7ac244eb068a699e3579c169d88e7ae875daf21c1c7b9e7effb832a449d504",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "full_rebuild": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "6e30516360a515d67fa6ae301ecc1767d8ab45731ab8d091e298f8871365a6bc",
+                "full_rebuild": "6e30516360a515d67fa6ae301ecc1767d8ab45731ab8d091e298f8871365a6bc",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C08_UNCHANGED",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2019-25455",
+      "classification": "UNCHANGED",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "SAME",
+        "B_final_byte": "SAME",
+        "C_intermediate_byte": "SAME"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "full_rebuild": "d373d92466e119c635439dfdd1085019671b43f89332c3606426d62d416ba75c",
+              "equal": true
+            },
+            "val": {
+              "incremental": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "full_rebuild": "912eb4d438afd2ad0d5dc565cbc2bd81319e30abcb114e9d41f4b294837fe3d0",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "44b04f653cb3fa794edd154079647eadfbc8c9cc89e287ffc685904cc8191b78",
+              "full_rebuild": "44b04f653cb3fa794edd154079647eadfbc8c9cc89e287ffc685904cc8191b78",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "full_rebuild": "9e428c319607cda58311f498289be17059edcda98125305802ec2cbecdf5536f",
+                "equal": true
+              },
+              "val": {
+                "incremental": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "full_rebuild": "d5ac3857d60aa3a14768f69c63bf42a3a85fc3c570e369c9c904ec8d0f1f99a3",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "case_id": "C09_MISSING_REVIEW",
+      "canonical_t015b_case": true,
+      "cve_id": "CVE-2007-6070",
+      "classification": "MISSING_REVIEW",
+      "apply_status": "REVIEW_REQUIRED",
+      "observed_A_to_case_truth": {
+        "A_composition": "SAME",
+        "B_final_byte": "SAME",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "comparison": "NOT_RUN_REVIEW_REQUIRED"
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "comparison": "NOT_RUN_REVIEW_REQUIRED"
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "comparison": "NOT_RUN_REVIEW_REQUIRED"
+        }
+      }
+    },
+    {
+      "case_id": "C10_PUBLISHED_BOUNDARY_UPDATE",
+      "canonical_t015b_case": false,
+      "cve_id": "CVE-2013-10072",
+      "classification": "UPDATE_DATASET_RELEVANT",
+      "apply_status": "COMPLETED",
+      "observed_A_to_case_truth": {
+        "A_composition": "DIFFERENT",
+        "B_final_byte": "DIFFERENT",
+        "C_intermediate_byte": "DIFFERENT"
+      },
+      "predeclared_expectation_check": "PASS",
+      "layers": {
+        "A_composition": {
+          "verdict": "PASS",
+          "selected_labels_and_order_equal": true,
+          "split_assignment_and_labels_equal": true,
+          "dedup_survivors_and_overlap_equal": true,
+          "sft_membership_and_order_equal": true
+        },
+        "B_final_byte": {
+          "verdict": "PASS",
+          "sft_files_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sft_sha256": {
+            "train": {
+              "incremental": "76bfc02dd6e15d4a69b25a01197ecf2ece958ecff5157c7b9a9f9cddb9f81a92",
+              "full_rebuild": "76bfc02dd6e15d4a69b25a01197ecf2ece958ecff5157c7b9a9f9cddb9f81a92",
+              "equal": true
+            },
+            "val": {
+              "incremental": "b3303c2679026acb55ed1d317479a8e51c2b75010137b51f913bb9fb65eb1ebf",
+              "full_rebuild": "b3303c2679026acb55ed1d317479a8e51c2b75010137b51f913bb9fb65eb1ebf",
+              "equal": true
+            },
+            "test": {
+              "incremental": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "full_rebuild": "a91010bb9e340eb21eb4b8d04594bbe633f9be1ee6eb6eb3d2b2e398973e5b0f",
+              "equal": true
+            }
+          },
+          "manifest_deterministic_values_equal": true,
+          "manifest_provenance_values": {
+            "created_at_equal": false,
+            "git_commit_equal": true,
+            "data_config_sha256_equal": true,
+            "comparison_policy": "created_at is recorded but excluded from deterministic equivalence; git_commit and config hash are reported separately"
+          }
+        },
+        "C_intermediate_byte": {
+          "verdict": "PASS",
+          "normalized_exact": true,
+          "processed_exact": {
+            "train": true,
+            "val": true,
+            "test": true
+          },
+          "sha256": {
+            "normalized": {
+              "incremental": "f91b4791f72f3d524f4fb6394488790bef0de85b08a4d7d12053cd09bbf2418d",
+              "full_rebuild": "f91b4791f72f3d524f4fb6394488790bef0de85b08a4d7d12053cd09bbf2418d",
+              "equal": true
+            },
+            "processed": {
+              "train": {
+                "incremental": "f36f8eb752e96abfd0fa54ba9eb5d4429335688810be04374230311e0c9a197b",
+                "full_rebuild": "f36f8eb752e96abfd0fa54ba9eb5d4429335688810be04374230311e0c9a197b",
+                "equal": true
+              },
+              "val": {
+                "incremental": "938d32f1e46c066df3233d9af012f5d55f8540d87a7f0601c9eab53aec728350",
+                "full_rebuild": "938d32f1e46c066df3233d9af012f5d55f8540d87a7f0601c9eab53aec728350",
+                "equal": true
+              },
+              "test": {
+                "incremental": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "full_rebuild": "cb00a5c69d73c6a3ab5313bbe5759aa65b3f6d71b69bdfe3c7f29ffac1c99588",
+                "equal": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "work_accounting": {
+    "basis": "all eight non-missing changed records in the ten-case fixture (seven canonical plus the C10 extension), with the unresolved missing A row retained only for this diagnostic plan; this is not a completed Snapshot B run",
+    "input_rows": 1217,
+    "normalized_rows_reused": 1209,
+    "normalized_rows_locally_recomputed": 8,
+    "processed_rows_reused": 814,
+    "processed_rows_locally_recomputed": 6,
+    "affected_hash_groups": 9,
+    "affected_hashes": [
+      "80dc80c13cd750b31498e71251a2a92773a34c9471c53a065451613f6b28452c",
+      "9b03ad08f89bf63936e765c7d2049e2d4d6356fde08e8ebbdf545659ad1dff94",
+      "9b9fdfb37e5d0888b605c4709a7b47226b28e9604dcfc4bd44294a8982df98ed",
+      "b88f538ca6d6c92e01f2822154a9dd4a390cdce7295baf5b363bda1afc9b4ed9",
+      "c5fc4b7ec113ba562249c8a34dd11fda8ccc23d5939d359bb464610d7fabc572",
+      "c6365f016dc054607721ef1e82d2149c622dd05f5be60fcab23c26e8c091c93c",
+      "c720e7e997d76c76ad015cd016b5c7949fa9c1a7ff8595236d64f9e3cc684cd2",
+      "edcca204367e88a11452295387555fa6055ff1dcf9b845f1f7e77fd61eee779f",
+      "f5a99406fa52df9937824286bc77d45d4ad21baf1cdbce4e093ca42d90128bed"
+    ],
+    "group_recomputed_rows_by_split": {
+      "train": 16,
+      "val": 0,
+      "test": 2
+    },
+    "group_recomputed_rows_total": 18,
+    "sft_rows_reused": 351,
+    "sft_rows_serialized": 140,
+    "sft_source_changed_rows_locally_recomputed": 3,
+    "sft_unchanged_rows_materialized_after_global_sampling": 137,
+    "global_label_selection_input_rows": 1217,
+    "global_sampling_input_rows": 742,
+    "global_recomputed_stages": 2,
+    "global_stage_share": 1.0,
+    "local_stages": 4,
+    "group_stages": 2,
+    "global_stages": 2,
+    "global_stage_fraction": 0.25,
+    "global_stages_recomputed_fraction": 1.0,
+    "global_row_visit_proxy": 1959,
+    "total_accounted_row_visit_proxy": 2159,
+    "global_row_visit_proxy_fraction": 0.9073645206113942,
+    "row_visit_proxy_caveat": "scale-independent operation-count proxy; stages have different per-row costs, so this is not a runtime fraction"
+  },
+  "production_projection": {
+    "label": "PROJECTION, not a fixture timing result",
+    "measured_denominators_seconds": {
+      "normalize": 38.6,
+      "post_ingest_total": 56.18
+    },
+    "changed_normalization_fraction": 0.00657354149548069,
+    "projected_incremental_normalize_seconds_linear": 0.25,
+    "projected_downstream_seconds_before_incremental_overhead": 17.83,
+    "projected_saving_seconds_before_incremental_overhead": 38.35,
+    "peak_memory": "not measured or projected reliably; global label selection and sampling still retain full-population state",
+    "verification_policy": "full rebuild on every code/config release and weekly for daily routine runs (1 in 7)",
+    "amortized_weekly_verification_seconds_per_daily_run": 8.03,
+    "projected_total_with_amortized_verification_before_incremental_overhead": 25.86,
+    "verify_every_run_seconds_before_incremental_overhead": 74.01
+  },
+  "decision": {
+    "case": "B",
+    "answer": "Pursue incremental ingestion; retain a deterministic full rebuild downstream at this scale.",
+    "reason": "The maximum projected downstream saving is only about 38 seconds, both global stages remain full recomputes, peak-memory reduction is unproven, MISSING blocks application, and exactness adds classification, cache, old/new-group, ordering, manifest, and verification failure modes to an already 56.18-second rebuild."
+  },
+  "mismatches": [
+    {
+      "scope": "combined Snapshot B incremental application",
+      "finding": "No output by design",
+      "cause": "CVE-2007-6070 is MISSING_REVIEW; producing B by silently deleting it is forbidden"
+    }
+  ]
+}
