@@ -459,26 +459,11 @@ def _terminate_process(process: subprocess.Popen[str]) -> None:
             pass
 
 
-def _run_child(
-    shape: str,
-    n: int,
-    train_path: Path,
-    test_path: Path,
-) -> tuple[dict[str, Any], str | None]:
-    command = [
-        sys.executable,
-        "-m",
-        "security_llm.bench.near_duplicate_scaling",
-        "--child",
-        "--shape",
-        shape,
-        "--n",
-        str(n),
-        "--train",
-        str(train_path),
-        "--test",
-        str(test_path),
-    ]
+def run_instrumented_subprocess(
+    command: list[str],
+) -> tuple[str, dict[str, Any], str | None]:
+    """Run a child with the benchmark's RSS and host-pressure instrumentation."""
+
     before_memory = _memory_info()
     before_load = _load_average()
     parent_started = time.perf_counter()
@@ -532,10 +517,36 @@ def _run_child(
         "load_average_after": _load_average(),
         "stderr": stderr,
     }
-    if runtime_stop_reason or process.returncode != 0:
-        reason = runtime_stop_reason or (
+    failure_reason = runtime_stop_reason
+    if failure_reason is None and process.returncode != 0:
+        failure_reason = (
             f"child failed with exit code {process.returncode}: {stderr.strip()[:500]}"
         )
+    return stdout, monitor, failure_reason
+
+
+def _run_child(
+    shape: str,
+    n: int,
+    train_path: Path,
+    test_path: Path,
+) -> tuple[dict[str, Any], str | None]:
+    command = [
+        sys.executable,
+        "-m",
+        "security_llm.bench.near_duplicate_scaling",
+        "--child",
+        "--shape",
+        shape,
+        "--n",
+        str(n),
+        "--train",
+        str(train_path),
+        "--test",
+        str(test_path),
+    ]
+    stdout, monitor, reason = run_instrumented_subprocess(command)
+    if reason:
         return {
             "shape": shape,
             "n": n,
@@ -571,6 +582,7 @@ def _run_child(
         reason = f"child recorded {record['major_page_faults']} major page faults"
         record["pressure_stop_after_completion"] = reason
         return record, reason
+    swap_delta = monitor["swap_increase_during_run_bytes"]
     if swap_delta > 0:
         reason = f"host swap usage increased by {swap_delta} bytes"
         record["pressure_stop_after_completion"] = reason

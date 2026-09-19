@@ -1,0 +1,215 @@
+{
+  "audit": "Audit A exact truth",
+  "branch": "feat/distributed-pipeline",
+  "commit": "d974db7031b26224015e9af350dc62853fc00402",
+  "continuity_check": {
+    "max_absolute_score_delta": 0.31103686424728283,
+    "mean_absolute_score_delta": 0.034069134827614145,
+    "passed": true,
+    "published_fitting_scope": "12,000 references plus 300 sampled queries",
+    "query_count": 300,
+    "recomputed_fitting_scope": "12,000 references only; queries transformed",
+    "reference_only_ge_0_80_query_count": 18,
+    "top1_reference_agreement_count": 258,
+    "top1_reference_agreement_fraction": 0.86
+  },
+  "host": {
+    "hostname": "hanelso-GL73-8SE",
+    "logical_cpu_count": 12,
+    "numpy": "2.4.6",
+    "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+    "pyarrow": "25.0.1",
+    "python": "3.11.15",
+    "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+    "scikit_learn": "1.9.1"
+  },
+  "measurement": {
+    "cpu": {
+      "system_seconds": 0.259883,
+      "user_seconds": 11.872974
+    },
+    "major_page_faults": 0,
+    "minor_page_faults": 69063,
+    "monitor": {
+      "command": [
+        "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+        "-m",
+        "security_llm.bench.audit_a_exact_truth",
+        "--child",
+        "--train",
+        "data/sft/train.jsonl",
+        "--test",
+        "data/sft/test.jsonl",
+        "--subset-manifest",
+        "reports/eval_subset_manifest.json",
+        "--sampled-audit",
+        "reports/near_duplicate_audit.json",
+        "--output-dir",
+        "reports/distributed",
+        "--staging-dir",
+        "reports/distributed/.audit-a-exact-_nkmnq67"
+      ],
+      "exit_code": 0,
+      "load_average_after": {
+        "fifteen_minutes": 0.29,
+        "five_minutes": 0.31,
+        "one_minute": 0.52
+      },
+      "load_average_before": {
+        "fifteen_minutes": 0.28,
+        "five_minutes": 0.28,
+        "one_minute": 0.38
+      },
+      "maximum_swap_used_bytes": 570548224,
+      "minimum_mem_available_bytes": 25673134080,
+      "parent_wall_seconds": 14.245202924008481,
+      "peak_rss_observed_by_parent_bytes": 2328363008,
+      "peak_thread_count": 24,
+      "stderr": "",
+      "swap_increase_during_run_bytes": 0,
+      "swap_used_after_bytes": 570548224,
+      "swap_used_before_bytes": 570548224
+    },
+    "peak_rss_bytes": 2328363008,
+    "phases_seconds": {
+      "continuity_check": 0.43693945300765336,
+      "full_exact_similarity": 4.552358657005243,
+      "input_load_and_validation": 1.276608964020852,
+      "query_transform": 1.4488157880259678,
+      "reduction_and_parquet_write": 3.4682696540257894,
+      "reference_vectorizer_fit_transform": 0.9493208109633997,
+      "total_child": 12.136107270955108
+    },
+    "rss_checkpoints": "child ru_maxrss plus parent /proc sampling",
+    "wall_time_seconds": 12.136107270955108
+  },
+  "populations": {
+    "cve_id_overlap": 0,
+    "normalized_text_hash_overlap": 0,
+    "pair_count": 216000000,
+    "queries": {
+      "ordered_cve_id_sha256": "229dd47c3cdeb532d47c2dd8c5962f2c9bff8ff2c6d89d8d2776ee6d09a7d707",
+      "ordered_normalized_text_hash_sha256": "a8665ce6781534ae430d3043430c846522b318bf725da92d05e2434bf2b67d86",
+      "rows": 18000,
+      "selection_manifest": "reports/eval_subset_manifest.json",
+      "selection_manifest_sha256": "a21635ffdb30e4019742b759365c98c638e794a88380dccea34edabe5ff8161b",
+      "source": "data/sft/test.jsonl",
+      "source_sha256": "bb7c6952067ff5fc1cb8bcd210e673edae2b2bd8b136ccc356adeac7cb3b5801",
+      "subset_hash": "229dd47c3cdeb532d47c2dd8c5962f2c9bff8ff2c6d89d8d2776ee6d09a7d707",
+      "unique_cve_ids": 18000,
+      "unique_normalized_text_hashes": 17138
+    },
+    "references": {
+      "ordered_cve_id_sha256": "68d5040eb3d936ed27444b1ab44e30277ba26fa3616c6f13b994846131183d50",
+      "ordered_normalized_text_hash_sha256": "6917dd31a4c47b24e5d071c0348e2d2579668ef82a5ee9b7ede4d56ad521cb4b",
+      "rows": 12000,
+      "source": "data/sft/train.jsonl",
+      "source_sha256": "1887fbb32b6af37f12e325656d799570c3474dc390dcca31477b7bf8a7d9f734",
+      "unique_cve_ids": 12000,
+      "unique_normalized_text_hashes": 12000
+    }
+  },
+  "representation": {
+    "query_tfidf_nnz": 1366808,
+    "query_tfidf_shape": [
+      18000,
+      42488
+    ],
+    "query_tfidf_storage_bytes": {
+      "data": 10934464,
+      "indices": 5467232,
+      "indptr": 72004,
+      "total": 16473700
+    },
+    "reference_tfidf_nnz": 789621,
+    "reference_tfidf_shape": [
+      12000,
+      42488
+    ],
+    "reference_tfidf_storage_bytes": {
+      "data": 6316968,
+      "indices": 3158484,
+      "indptr": 48004,
+      "total": 9523456
+    }
+  },
+  "result": {
+    "format": "parquet",
+    "path": "reports/distributed/audit_a_exact_truth.parquet",
+    "rows": 362631,
+    "schema": [
+      "query_cve_id",
+      "reference_cve_id",
+      "query_label",
+      "reference_label",
+      "exact_similarity",
+      "rank",
+      "threshold_80",
+      "threshold_90",
+      "query_text_hash",
+      "reference_text_hash"
+    ],
+    "sha256": "c6552a72c60b5643d73121c18991e7bb2f8dd41fb2f58f89c98f86d1641df0d3"
+  },
+  "schema_version": 1,
+  "similarity": {
+    "dense_bytes": 1728000000,
+    "dtype": "float64",
+    "exact": true,
+    "k": 20,
+    "metric": "cosine",
+    "shape": [
+      18000,
+      12000
+    ],
+    "thresholds": [
+      0.8,
+      0.9
+    ],
+    "tie_break": "descending exact similarity, then reference source order"
+  },
+  "summary": {
+    "result_rows": 362631,
+    "threshold_label_breakdown": {
+      "0.80": {
+        "cross_label": 310,
+        "same_label": 10578
+      },
+      "0.90": {
+        "cross_label": 21,
+        "same_label": 1714
+      }
+    },
+    "threshold_pair_counts": {
+      "0.80": 10888,
+      "0.90": 1735
+    },
+    "threshold_query_counts": {
+      "0.80": 1326,
+      "0.90": 424
+    },
+    "top1_score_distribution": {
+      "max": 1.0000000000000004,
+      "p50": 0.33511661357572203,
+      "p90": 0.7716625427068652,
+      "p95": 0.8376524233717529
+    },
+    "top_k_rows": 360000
+  },
+  "timestamp_utc": "2026-09-19T12:52:41Z",
+  "vectorizer": {
+    "class": "sklearn.feature_extraction.text.TfidfVectorizer",
+    "fitting_scope": "12,000 reference rows only; queries transformed",
+    "settings": {
+      "dtype": "float64",
+      "min_df": 2,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "stop_words": null,
+      "sublinear_tf": true
+    },
+    "vocabulary_size": 42488
+  }
+}
