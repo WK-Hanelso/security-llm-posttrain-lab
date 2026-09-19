@@ -1,0 +1,500 @@
+{
+  "all_passed": true,
+  "audit": "B",
+  "block_size": 2048,
+  "block_size_decision": "Used 2048 for every Q as specified; observed RSS did not warrant dropping to 1024.",
+  "branch": "feat/distributed-pipeline",
+  "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+  "correctness_monitor": {
+    "command": [
+      "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+      "-m",
+      "security_llm.bench.audit_b_cost_probe",
+      "--correctness-child",
+      "--block-size",
+      "2048",
+      "--train",
+      "data/processed/train.jsonl",
+      "--test",
+      "data/processed/test.jsonl",
+      "--manifest",
+      "reports/distributed/audit_b_probe_queries.json"
+    ],
+    "exit_code": 0,
+    "load_average_after": {
+      "fifteen_minutes": 0.34,
+      "five_minutes": 0.32,
+      "one_minute": 0.7
+    },
+    "load_average_before": {
+      "fifteen_minutes": 0.32,
+      "five_minutes": 0.28,
+      "one_minute": 0.55
+    },
+    "maximum_swap_used_bytes": 570548224,
+    "minimum_mem_available_bytes": 27271512064,
+    "parent_wall_seconds": 9.02965832001064,
+    "peak_rss_observed_by_parent_bytes": 678465536,
+    "peak_thread_count": 24,
+    "stderr": "",
+    "swap_increase_during_run_bytes": 0,
+    "swap_used_after_bytes": 570548224,
+    "swap_used_before_bytes": 570548224
+  },
+  "correctness_spot_check": {
+    "all_passed": true,
+    "audit": "B",
+    "audit_b_similarity_pair_counts": {
+      "0.80": 225,
+      "0.90": 34,
+      "interpretation": "similarity counts, not contamination findings"
+    },
+    "block_size": 2048,
+    "execution": {
+      "branch": "feat/distributed-pipeline",
+      "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+      "hostname": "hanelso-GL73-8SE",
+      "logical_cpu_count": 12,
+      "memory_available_bytes": 27331842048,
+      "memory_total_bytes": 33482199040,
+      "numpy": "2.4.6",
+      "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+      "python": "3.11.15",
+      "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+      "scikit_learn": "1.9.1",
+      "swap_total_bytes": 2147479552,
+      "swap_used_bytes": 570548224,
+      "thread_environment": {
+        "MKL_NUM_THREADS": null,
+        "OMP_NUM_THREADS": null,
+        "OPENBLAS_NUM_THREADS": null
+      }
+    },
+    "known_float64_limitation_only": true,
+    "method": "blockwise exact versus one direct dense cosine matrix on the same inputs",
+    "near_tie_ordering_differences": [],
+    "per_query_threshold_counts_identical": true,
+    "query_count": 50,
+    "query_source": "first 50 IDs of the frozen Q=300 subset",
+    "raw_float64_threshold_decisions": true,
+    "reference_count": 65272,
+    "score_absolute_tolerance": 2e-15,
+    "scores_rounded_for_comparison": false,
+    "threshold_80_pair_set_identical": true,
+    "threshold_90_pair_set_identical": true,
+    "top20_membership_identical": true,
+    "top20_ordering_identical": true,
+    "top20_score_max_absolute_delta_aligned_by_reference": 0.0,
+    "top20_scores_within_tolerance": true
+  },
+  "created_utc": "2026-09-19T13:39:04Z",
+  "decision": "**Exact is sufficient at this scale; it is not the bottleneck.** The measured Q=2,500 point completed in 15.724 seconds at 0.645 GiB peak RSS; maximum measured swap growth was 0 bytes and the ladder recorded 0 major page faults. The labelled full-run projection is minutes, not 30 minutes or more, and its projected memory remains well inside this host's available RAM.",
+  "execution": {
+    "branch": "feat/distributed-pipeline",
+    "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+    "hostname": "hanelso-GL73-8SE",
+    "logical_cpu_count": 12,
+    "memory_available_bytes": 27873353728,
+    "memory_total_bytes": 33482199040,
+    "numpy": "2.4.6",
+    "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+    "python": "3.11.15",
+    "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+    "scikit_learn": "1.9.1",
+    "swap_total_bytes": 2147479552,
+    "swap_used_bytes": 570548224,
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null
+    }
+  },
+  "full_run_executed": false,
+  "full_run_projection": {
+    "assumptions": "wall time and peak RSS remain linear in Q at fixed R=65,272, block size 2,048, software, host, and comparable load; no full Audit B run was executed",
+    "full_pair_count": 1630168200,
+    "full_query_count": 24975,
+    "label": "projection, not measurement",
+    "memory_projection_caution": "Gate 1's memory projection missed by about 31%; this peak-RSS projection is lower-standing evidence than a measurement.",
+    "method": "ordinary least-squares line through the three measured ladder points",
+    "peak_rss_fit": {
+      "bytes_per_query": 23924.90891820584,
+      "intercept_bytes": 631324726.0369394,
+      "r_squared": 0.9621231224743854
+    },
+    "projected_peak_rss_bytes": 1228849326.2691302,
+    "projected_peak_rss_with_31_percent_sensitivity_bytes": 1609792617.4125607,
+    "projected_wall_time_seconds": 98.05232852057522,
+    "reference_count": 65272,
+    "wall_fit": {
+      "intercept_seconds": 6.535408321134057,
+      "r_squared": 0.9996566584393355,
+      "seconds_per_query": 0.003664341149126773
+    }
+  },
+  "manifest": {
+    "path": "reports/distributed/audit_b_probe_queries.json",
+    "sha256": "71a4d37379df7b14cc6f94e00839176b052aa7ee075fc75f56d01423cd37132f"
+  },
+  "q_5000": {
+    "reason": "The required ladder gave stable, decision-relevant scaling with no swap growth or major faults, and the full-run classification was unambiguous.",
+    "run": false
+  },
+  "runs": [
+    {
+      "audit": "B",
+      "block_size": 2048,
+      "execution": {
+        "branch": "feat/distributed-pipeline",
+        "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+        "hostname": "hanelso-GL73-8SE",
+        "logical_cpu_count": 12,
+        "memory_available_bytes": 27362971648,
+        "memory_total_bytes": 33482199040,
+        "numpy": "2.4.6",
+        "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+        "python": "3.11.15",
+        "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+        "scikit_learn": "1.9.1",
+        "swap_total_bytes": 2147479552,
+        "swap_used_bytes": 570548224,
+        "thread_environment": {
+          "MKL_NUM_THREADS": null,
+          "OMP_NUM_THREADS": null,
+          "OPENBLAS_NUM_THREADS": null
+        }
+      },
+      "fingerprints": {
+        "threshold_80_pair_set_sha256": "8eb141d5d597a6fbaec7be3e7994321b4cd076b110e57207f4b3aa73eb5af4e1",
+        "threshold_90_pair_set_sha256": "e9c8e608e954c5ee86c8f4a09a54a7cef55e418c17a25155f42a58edb044b5b6",
+        "top20_reference_indices_sha256": "9861f4e358b0ade31363fbee8e38ae62dffeb67a8038cb8a9142b1ff391b2099",
+        "top20_scores_sha256": "d0420cad66369dbd69a6ba4c3a3f28a0abb14de2b21afac2bc16378918321a43"
+      },
+      "fitting_scope": "all 65,272 Audit B references; queries transformed",
+      "growth_vs_previous_step": {
+        "peak_rss": null,
+        "q": null,
+        "wall_time": null
+      },
+      "matrix_storage_bytes": {
+        "query": {
+          "data": 207816,
+          "indices": 103908,
+          "indptr": 1204,
+          "total": 312928
+        },
+        "reference": {
+          "data": 37143904,
+          "indices": 18571952,
+          "indptr": 261092,
+          "total": 55976948
+        }
+      },
+      "measurement": {
+        "blockwise_exact_seconds": 1.2128112750360742,
+        "cpu_system_seconds": 0.22007299999999996,
+        "cpu_user_seconds": 7.470021000000001,
+        "cpu_utilisation_percent": 99.9554373038804,
+        "end_to_end_pairs_per_second": 2545206.0678447676,
+        "end_to_end_queries_per_second": 38.99384219642064,
+        "major_page_faults": 0,
+        "monitor": {
+          "command": [
+            "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+            "-m",
+            "security_llm.bench.audit_b_cost_probe",
+            "--child",
+            "--q",
+            "300",
+            "--block-size",
+            "2048",
+            "--train",
+            "data/processed/train.jsonl",
+            "--test",
+            "data/processed/test.jsonl",
+            "--manifest",
+            "reports/distributed/audit_b_probe_queries.json"
+          ],
+          "exit_code": 0,
+          "load_average_after": {
+            "fifteen_minutes": 0.3,
+            "five_minutes": 0.2,
+            "one_minute": 0.26
+          },
+          "load_average_before": {
+            "fifteen_minutes": 0.29,
+            "five_minutes": 0.17,
+            "one_minute": 0.12
+          },
+          "maximum_swap_used_bytes": 570548224,
+          "minimum_mem_available_bytes": 27322986496,
+          "parent_wall_seconds": 9.229731236002408,
+          "peak_rss_observed_by_parent_bytes": 636387328,
+          "peak_thread_count": 24,
+          "stderr": "",
+          "swap_increase_during_run_bytes": 0,
+          "swap_used_after_bytes": 570548224,
+          "swap_used_before_bytes": 570548224
+        },
+        "pairs_per_second": 16145628.263076264,
+        "peak_rss_bytes": 642613248,
+        "queries_per_second": 247.35917794883355,
+        "swap_delta_bytes": 0,
+        "vectorizer_fit_and_transform_seconds": 5.049205592018552,
+        "wall_time_seconds": 7.693522441026289
+      },
+      "pair_count": 19581600,
+      "q": 300,
+      "r": 65272,
+      "status": "success",
+      "success": true,
+      "text_field": "description_en",
+      "text_preprocessing": "untruncated",
+      "threshold_similarity_pair_counts": {
+        "0.80": 830,
+        "0.90": 88,
+        "audit": "B",
+        "interpretation": "similarity counts, not contamination findings"
+      },
+      "vocabulary_size": 169215
+    },
+    {
+      "audit": "B",
+      "block_size": 2048,
+      "execution": {
+        "branch": "feat/distributed-pipeline",
+        "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+        "hostname": "hanelso-GL73-8SE",
+        "logical_cpu_count": 12,
+        "memory_available_bytes": 27359268864,
+        "memory_total_bytes": 33482199040,
+        "numpy": "2.4.6",
+        "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+        "python": "3.11.15",
+        "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+        "scikit_learn": "1.9.1",
+        "swap_total_bytes": 2147479552,
+        "swap_used_bytes": 570548224,
+        "thread_environment": {
+          "MKL_NUM_THREADS": null,
+          "OMP_NUM_THREADS": null,
+          "OPENBLAS_NUM_THREADS": null
+        }
+      },
+      "fingerprints": {
+        "threshold_80_pair_set_sha256": "7148fc7da221a42faa3fa134057da33239affe94cbbcbb0d7ccfea0a923f70e4",
+        "threshold_90_pair_set_sha256": "5c280535d663672870654486964294c3ddb9220fd2d77c740a89a22e38fce648",
+        "top20_reference_indices_sha256": "e3e102274756b8b93ae30118151ab8f9f63968bb0407a0a74edcedb2f0a36150",
+        "top20_scores_sha256": "b1b07a24f95c4a4ba240660c608bec6715b11525cd39d16bceb6ecee487f53d1"
+      },
+      "fitting_scope": "all 65,272 Audit B references; queries transformed",
+      "growth_vs_previous_step": {
+        "peak_rss": 1.0102812197236244,
+        "q": 3.3333333333333335,
+        "wall_time": 1.314546396342943
+      },
+      "matrix_storage_bytes": {
+        "query": {
+          "data": 669544,
+          "indices": 334772,
+          "indptr": 4004,
+          "total": 1008320
+        },
+        "reference": {
+          "data": 37143904,
+          "indices": 18571952,
+          "indptr": 261092,
+          "total": 55976948
+        }
+      },
+      "measurement": {
+        "blockwise_exact_seconds": 3.651326613035053,
+        "cpu_system_seconds": 0.195812,
+        "cpu_user_seconds": 9.913645,
+        "cpu_utilisation_percent": 99.96010082417767,
+        "end_to_end_pairs_per_second": 6453952.6712421095,
+        "end_to_end_queries_per_second": 98.87781393617645,
+        "major_page_faults": 0,
+        "monitor": {
+          "command": [
+            "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+            "-m",
+            "security_llm.bench.audit_b_cost_probe",
+            "--child",
+            "--q",
+            "1000",
+            "--block-size",
+            "2048",
+            "--train",
+            "data/processed/train.jsonl",
+            "--test",
+            "data/processed/test.jsonl",
+            "--manifest",
+            "reports/distributed/audit_b_probe_queries.json"
+          ],
+          "exit_code": 0,
+          "load_average_after": {
+            "fifteen_minutes": 0.31,
+            "five_minutes": 0.23,
+            "one_minute": 0.37
+          },
+          "load_average_before": {
+            "fifteen_minutes": 0.3,
+            "five_minutes": 0.2,
+            "one_minute": 0.26
+          },
+          "maximum_swap_used_bytes": 570548224,
+          "minimum_mem_available_bytes": 27356209152,
+          "parent_wall_seconds": 11.638346414023545,
+          "peak_rss_observed_by_parent_bytes": 626032640,
+          "peak_thread_count": 24,
+          "stderr": "",
+          "swap_increase_during_run_bytes": 0,
+          "swap_used_after_bytes": 570548224,
+          "swap_used_before_bytes": 570548224
+        },
+        "pairs_per_second": 17876242.50511642,
+        "peak_rss_bytes": 649220096,
+        "queries_per_second": 273.8730620345083,
+        "swap_delta_bytes": 0,
+        "vectorizer_fit_and_transform_seconds": 5.021004802023526,
+        "wall_time_seconds": 10.11349220003467
+      },
+      "pair_count": 65272000,
+      "q": 1000,
+      "r": 65272,
+      "status": "success",
+      "success": true,
+      "text_field": "description_en",
+      "text_preprocessing": "untruncated",
+      "threshold_similarity_pair_counts": {
+        "0.80": 2154,
+        "0.90": 274,
+        "audit": "B",
+        "interpretation": "similarity counts, not contamination findings"
+      },
+      "vocabulary_size": 169215
+    },
+    {
+      "audit": "B",
+      "block_size": 2048,
+      "execution": {
+        "branch": "feat/distributed-pipeline",
+        "commit": "e38df7f29cafe62ef96a84575ede76e8a850ce8f",
+        "hostname": "hanelso-GL73-8SE",
+        "logical_cpu_count": 12,
+        "memory_available_bytes": 27344957440,
+        "memory_total_bytes": 33482199040,
+        "numpy": "2.4.6",
+        "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+        "python": "3.11.15",
+        "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+        "scikit_learn": "1.9.1",
+        "swap_total_bytes": 2147479552,
+        "swap_used_bytes": 570548224,
+        "thread_environment": {
+          "MKL_NUM_THREADS": null,
+          "OMP_NUM_THREADS": null,
+          "OPENBLAS_NUM_THREADS": null
+        }
+      },
+      "fingerprints": {
+        "threshold_80_pair_set_sha256": "ec00cd9405bf5a6a4eac6deb0bc292a31d91668ad73590d6f83f6f7fd99036ee",
+        "threshold_90_pair_set_sha256": "9fa73866c1746647603629b0e3bc90bc058e2fddc097530dab6d7159889693d1",
+        "top20_reference_indices_sha256": "00c757338474abbb566197346cd71a33d2911baacb428735cddf579913ab62a5",
+        "top20_scores_sha256": "91d332531e6586659f7910e431223693f1bd96d05aeda79e128c2dc0d51ff7cb"
+      },
+      "fitting_scope": "all 65,272 Audit B references; queries transformed",
+      "growth_vs_previous_step": {
+        "peak_rss": 1.0675200787376735,
+        "q": 2.5,
+        "wall_time": 1.5547257443842242
+      },
+      "matrix_storage_bytes": {
+        "query": {
+          "data": 1671864,
+          "indices": 835932,
+          "indptr": 10004,
+          "total": 2517800
+        },
+        "reference": {
+          "data": 37143904,
+          "indices": 18571952,
+          "indptr": 261092,
+          "total": 55976948
+        }
+      },
+      "measurement": {
+        "blockwise_exact_seconds": 9.110512876999564,
+        "cpu_system_seconds": 0.296023,
+        "cpu_user_seconds": 15.423113,
+        "cpu_utilisation_percent": 99.97093122433951,
+        "end_to_end_pairs_per_second": 10377960.059120119,
+        "end_to_end_queries_per_second": 158.9955886003205,
+        "major_page_faults": 0,
+        "monitor": {
+          "command": [
+            "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+            "-m",
+            "security_llm.bench.audit_b_cost_probe",
+            "--child",
+            "--q",
+            "2500",
+            "--block-size",
+            "2048",
+            "--train",
+            "data/processed/train.jsonl",
+            "--test",
+            "data/processed/test.jsonl",
+            "--manifest",
+            "reports/distributed/audit_b_probe_queries.json"
+          ],
+          "exit_code": 0,
+          "load_average_after": {
+            "fifteen_minutes": 0.32,
+            "five_minutes": 0.28,
+            "one_minute": 0.55
+          },
+          "load_average_before": {
+            "fifteen_minutes": 0.31,
+            "five_minutes": 0.23,
+            "one_minute": 0.37
+          },
+          "maximum_swap_used_bytes": 570548224,
+          "minimum_mem_available_bytes": 27273973760,
+          "parent_wall_seconds": 17.25407914503012,
+          "peak_rss_observed_by_parent_bytes": 692715520,
+          "peak_thread_count": 24,
+          "stderr": "",
+          "swap_increase_during_run_bytes": 0,
+          "swap_used_after_bytes": 570548224,
+          "swap_used_before_bytes": 570548224
+        },
+        "pairs_per_second": 17911176.04498039,
+        "peak_rss_bytes": 693055488,
+        "queries_per_second": 274.40826150539885,
+        "swap_delta_bytes": 0,
+        "vectorizer_fit_and_transform_seconds": 5.190772963978816,
+        "wall_time_seconds": 15.723706689022947
+      },
+      "pair_count": 163180000,
+      "q": 2500,
+      "r": 65272,
+      "status": "success",
+      "success": true,
+      "text_field": "description_en",
+      "text_preprocessing": "untruncated",
+      "threshold_similarity_pair_counts": {
+        "0.80": 4594,
+        "0.90": 421,
+        "audit": "B",
+        "interpretation": "similarity counts, not contamination findings"
+      },
+      "vocabulary_size": 169215
+    }
+  ],
+  "scaling_reading": "From Q=1,000 to Q=2,500, Q grew 2.500\u00d7, total wall time grew 1.555\u00d7, and peak RSS grew 1.068\u00d7. Fixed reference loading and vectorizer fitting make end-to-end wall growth sublinear at these small Q values; the exact kernel remains O(Q \u00d7 R). All runs completed; maximum swap growth was 0 bytes and the ladder recorded 0 total major page faults.",
+  "schema_version": 1,
+  "t_014d_should_open": false,
+  "task": "T-014F Audit B blockwise exact cost probe"
+}

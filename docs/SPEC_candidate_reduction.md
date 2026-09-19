@@ -51,7 +51,7 @@ the population the contamination question actually concerns.
 ### Audit B — dataset-design contamination (second)
 
 Query `data/processed/test.jsonl` 24,975 against reference `data/processed/train.jsonl`
-65,272. Potential pairs 1,630,169,200. Not started until Audit A's recall quality is
+65,272. Potential pairs 1,630,168,200. Not started until Audit A's recall quality is
 established. Truth comes from exact blockwise top-k on fixed query subsets (§8), not a full
 matrix.
 
@@ -264,7 +264,7 @@ exact truth is not an optimisation.
 ## 6.2 Strategy revision — candidate reduction is no longer assumed
 
 Audit A's 216,000,000 exact pairs completed in 12.136 s at 2.168 GiB. Audit B is
-1,630,169,200 pairs, about 7.5× more work. A naive scaling of the measured Audit A rate
+1,630,168,200 pairs, about 7.5× more work. A naive scaling of the measured Audit A rate
 suggests order-of-minutes, not hours — **this is a projection, not a measurement**.
 
 The original plan assumed approximate candidate reduction would be needed at Audit B's scale.
@@ -317,8 +317,11 @@ shortfall.
 | Query | `data/processed/test.jsonl` | 24,975 |
 | Reference | `data/processed/train.jsonl` | 65,272 |
 
-Potential pairs 1,630,169,200. These are the *processed* split populations, before SFT
-sampling — a different question from Audit A, which concerns the model result.
+Potential pairs **1,630,168,200** (24,975 × 65,272, verified by computation). Earlier planning
+documents carried 1,630,169,200; that figure is 1,000 too high and is not used anywhere.
+
+These are the *processed* split populations, before SFT sampling — a different question from
+Audit A, which concerns the model result.
 
 ### 8.2 Text field, and why Audit A and B are not directly comparable
 
