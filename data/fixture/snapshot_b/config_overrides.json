@@ -1,0 +1,12 @@
+{
+  "nvd.raw_dir": "data/fixture/snapshot_b/raw",
+  "paths.processed_dir": "data/fixture/snapshot_b/processed",
+  "paths.sft_dir": "data/fixture/snapshot_b/sft",
+  "paths.labels_file": "data/fixture/snapshot_b/labels.json",
+  "paths.manifest": "data/fixture/snapshot_b/dataset_manifest.json",
+  "paths.stats": "data/fixture/snapshot_b/stats.json",
+  "paths.contamination": "data/fixture/snapshot_b/contamination.json",
+  "labels.min_train_samples_per_class": 5,
+  "sft.train_max_samples": 300,
+  "sft.val_max_samples": 80
+}

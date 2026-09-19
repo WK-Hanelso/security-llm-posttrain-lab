@@ -1,0 +1,180 @@
+{
+  "created_at": "2026-09-19T14:28:12.078004+00:00",
+  "git_commit": "6d936f5332d65043b4505db990b5b045bdd3dc54",
+  "dataset_snapshot": "2026-09-17",
+  "data_config_sha256": "d211bb18ee0b51fd73b95a3353d0a2f867cf6ccbccc528a7e3281c8feba70fbf",
+  "prompt_template_sha256": "59d28b01b1b28f4ebb42145ac5aceea6a33910214b34b7dda5854bd56b2675a7",
+  "labels": [
+    "CWE-79",
+    "CWE-89",
+    "CWE-787",
+    "CWE-352",
+    "CWE-125",
+    "CWE-862",
+    "CWE-22",
+    "CWE-416",
+    "CWE-20",
+    "CWE-200",
+    "CWE-476",
+    "CWE-284",
+    "CWE-78",
+    "CWE-120",
+    "CWE-434"
+  ],
+  "files": {
+    "train": {
+      "path": "data/fixture/snapshot_b/sft/train.jsonl",
+      "rows": 300,
+      "sha256": "7dc18ec0c81d4bc269329816ff8b68b73e437d14d267d1fa7e8ea1bdd734668e"
+    },
+    "val": {
+      "path": "data/fixture/snapshot_b/sft/val.jsonl",
+      "rows": 80,
+      "sha256": "b3303c2679026acb55ed1d317479a8e51c2b75010137b51f913bb9fb65eb1ebf"
+    },
+    "test": {
+      "path": "data/fixture/snapshot_b/sft/test.jsonl",
+      "rows": 111,
+      "sha256": "3c0fc0cfe26c37d962c7a95b3b62d763fe3f1f8da24da8e74e460b5482b68199"
+    }
+  },
+  "counts": {
+    "train": 300,
+    "val": 80,
+    "test": 111
+  },
+  "population_counts": {
+    "train": 602,
+    "val": 89,
+    "test": 111
+  },
+  "class_distribution": {
+    "train": {
+      "CWE-78": 13,
+      "CWE-125": 21,
+      "CWE-79": 81,
+      "CWE-476": 13,
+      "CWE-22": 18,
+      "CWE-89": 33,
+      "CWE-862": 12,
+      "CWE-284": 11,
+      "CWE-20": 15,
+      "CWE-200": 12,
+      "CWE-416": 15,
+      "CWE-352": 20,
+      "CWE-787": 22,
+      "CWE-434": 9,
+      "CWE-120": 5
+    },
+    "val": {
+      "CWE-352": 9,
+      "CWE-79": 20,
+      "CWE-78": 7,
+      "CWE-476": 6,
+      "CWE-89": 4,
+      "CWE-22": 4,
+      "CWE-125": 4,
+      "CWE-416": 6,
+      "CWE-862": 10,
+      "CWE-200": 3,
+      "CWE-787": 2,
+      "CWE-20": 1,
+      "CWE-284": 3,
+      "CWE-434": 1
+    },
+    "test": {
+      "CWE-200": 4,
+      "CWE-416": 18,
+      "CWE-862": 14,
+      "CWE-284": 8,
+      "CWE-78": 11,
+      "CWE-20": 7,
+      "CWE-79": 18,
+      "CWE-22": 13,
+      "CWE-787": 4,
+      "CWE-89": 7,
+      "CWE-125": 2,
+      "CWE-434": 2,
+      "CWE-476": 1,
+      "CWE-352": 1,
+      "CWE-120": 1
+    }
+  },
+  "sampling": {
+    "max_description_chars": 1500,
+    "train_max_samples": 300,
+    "val_max_samples": 80,
+    "test_max_samples": null,
+    "sampling": "natural",
+    "balanced_max_per_class": 800
+  },
+  "dedup": {
+    "train_exact_duplicates_dropped": 58,
+    "train_overlap_with_eval_dropped": 2,
+    "val_overlap_with_eval_dropped": 18
+  },
+  "dataset_version": "1.1",
+  "changelog": [
+    {
+      "version": "1.1",
+      "date": "2026-09-19",
+      "reason": "val rows overlapping test/train by normalized text dropped to satisfy the post-dedup invariant; train and test unchanged"
+    }
+  ],
+  "schema_version": "1.0",
+  "source": "NVD CVE API 2.0",
+  "snapshot_time": "2026-09-17",
+  "label_policy": {
+    "placeholder_cwes_excluded": [
+      "NVD-CWE-noinfo",
+      "NVD-CWE-Other"
+    ],
+    "single_label_only": true,
+    "top_k": 15,
+    "min_train_samples_per_class": 5,
+    "label_selection_period": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "selected_labels": [
+      "CWE-79",
+      "CWE-89",
+      "CWE-787",
+      "CWE-352",
+      "CWE-125",
+      "CWE-862",
+      "CWE-22",
+      "CWE-416",
+      "CWE-20",
+      "CWE-200",
+      "CWE-476",
+      "CWE-284",
+      "CWE-78",
+      "CWE-120",
+      "CWE-434"
+    ]
+  },
+  "split_policy": {
+    "type": "temporal_by_published",
+    "train": [
+      "2020-01-01",
+      "2024-12-31"
+    ],
+    "val": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "test": [
+      "2026-01-01",
+      null
+    ],
+    "snapshot_date": "2026-09-17"
+  },
+  "dedup_policy": {
+    "train_exact_duplicates": "drop_keep_earliest",
+    "train_overlap_with_eval": "drop",
+    "eval_overlap": "report_only"
+  },
+  "dataset_hash": "58c57f737564e45ed9d6be83312ca0b90260b3005ccdc9b3cf867392fa2fd38c",
+  "validation_count": 80
+}

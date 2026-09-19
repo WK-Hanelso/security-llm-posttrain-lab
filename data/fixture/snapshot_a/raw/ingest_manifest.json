@@ -1,0 +1,284 @@
+{
+  "snapshot_date": "2026-09-17",
+  "start_date": "2020-01-01",
+  "fetched_at": "2026-09-17T11:45:59.339493+00:00",
+  "fixture": "T-015B controlled offline raw-page snapshot",
+  "windows": [
+    {
+      "pub_start": "2020-01-01",
+      "pub_end": "2020-04-28",
+      "total_results": 39,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2020-01-01_2020-04-28/page_0000000.json",
+          "sha256": "ae146a5b5a8f526d133a09dc1ef8ae15b6f3fd6c3b5a98c6da4389f8f3e57d67"
+        }
+      ]
+    },
+    {
+      "pub_start": "2020-04-29",
+      "pub_end": "2020-08-25",
+      "total_results": 41,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2020-04-29_2020-08-25/page_0000000.json",
+          "sha256": "1d7e9e40bb52a039bd6433884e67a7cf0bac581a0accb3130cd005d6919df68a"
+        }
+      ]
+    },
+    {
+      "pub_start": "2020-08-26",
+      "pub_end": "2020-12-22",
+      "total_results": 26,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2020-08-26_2020-12-22/page_0000000.json",
+          "sha256": "ee45e40be9438fe684f297dd59750ca0219e850ba1660d8037ad6967d7231241"
+        }
+      ]
+    },
+    {
+      "pub_start": "2020-12-23",
+      "pub_end": "2021-04-20",
+      "total_results": 32,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2020-12-23_2021-04-20/page_0000000.json",
+          "sha256": "59951b6fa3f33ac8962ed4e18593b938b59e46689ca701a2747c90f48a5e2a97"
+        }
+      ]
+    },
+    {
+      "pub_start": "2021-04-21",
+      "pub_end": "2021-08-17",
+      "total_results": 34,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2021-04-21_2021-08-17/page_0000000.json",
+          "sha256": "6f3d6158cb94ef2af160afb0431c6201d97bc606e4fd067f883b6f9314d77bd1"
+        }
+      ]
+    },
+    {
+      "pub_start": "2021-08-18",
+      "pub_end": "2021-12-14",
+      "total_results": 38,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2021-08-18_2021-12-14/page_0000000.json",
+          "sha256": "d91bca445fc5ced91c3227810969a75bf0926861e735ad2da4abeaa3d233d55d"
+        }
+      ]
+    },
+    {
+      "pub_start": "2021-12-15",
+      "pub_end": "2022-04-12",
+      "total_results": 58,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2021-12-15_2022-04-12/page_0000000.json",
+          "sha256": "a162e4c09be09553983128e678996de918b356c48489ba69185125484694cd1f"
+        }
+      ]
+    },
+    {
+      "pub_start": "2022-04-13",
+      "pub_end": "2022-08-09",
+      "total_results": 46,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2022-04-13_2022-08-09/page_0000000.json",
+          "sha256": "cffc89c459b7edd30229b11e6d9ae74255aaf135efabb294b7d13f8b4c0eb12a"
+        }
+      ]
+    },
+    {
+      "pub_start": "2022-08-10",
+      "pub_end": "2022-12-06",
+      "total_results": 49,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2022-08-10_2022-12-06/page_0000000.json",
+          "sha256": "0cd75d536a1a6b82622eae90225696ea21094321369317ce6db32b8e3a88f545"
+        }
+      ]
+    },
+    {
+      "pub_start": "2022-12-07",
+      "pub_end": "2023-04-04",
+      "total_results": 51,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2022-12-07_2023-04-04/page_0000000.json",
+          "sha256": "90e6c7acd5cfcc1dcf8372651b1724ec2bf8688280cc159e9f2e5ff651f9a254"
+        }
+      ]
+    },
+    {
+      "pub_start": "2023-04-05",
+      "pub_end": "2023-08-01",
+      "total_results": 55,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2023-04-05_2023-08-01/page_0000000.json",
+          "sha256": "852e959104bce09435ff5aba12b528a1cecd506a646c075b8d74a953bb604f91"
+        }
+      ]
+    },
+    {
+      "pub_start": "2023-08-02",
+      "pub_end": "2023-11-28",
+      "total_results": 57,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2023-08-02_2023-11-28/page_0000000.json",
+          "sha256": "e32a9e31fa6e546ba3e3e9e8f4ba9647634f98242f9bac3e71832de944ce4ea3"
+        }
+      ]
+    },
+    {
+      "pub_start": "2023-11-29",
+      "pub_end": "2024-03-26",
+      "total_results": 59,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2023-11-29_2024-03-26/page_0000000.json",
+          "sha256": "3882b8bb73327dc2d79ff98096ec9f13fdf08af2486e42f890a328bca21c5804"
+        }
+      ]
+    },
+    {
+      "pub_start": "2024-03-27",
+      "pub_end": "2024-07-23",
+      "total_results": 94,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2024-03-27_2024-07-23/page_0000000.json",
+          "sha256": "9cdcca3df0796c99c08dbe7fe89b1ed2236143833d4917a503948e9f8919fbe2"
+        }
+      ]
+    },
+    {
+      "pub_start": "2024-07-24",
+      "pub_end": "2024-11-19",
+      "total_results": 89,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2024-07-24_2024-11-19/page_0000000.json",
+          "sha256": "7208176491e092a7d4218f0a48e90502f96ae34c894d7f87eee1534435c1666d"
+        }
+      ]
+    },
+    {
+      "pub_start": "2024-11-20",
+      "pub_end": "2025-03-18",
+      "total_results": 74,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2024-11-20_2025-03-18/page_0000000.json",
+          "sha256": "862a0db31598d11ee7a9281e6fdd7f8ef4635dfec7d171a54a21e0654411d4b0"
+        }
+      ]
+    },
+    {
+      "pub_start": "2025-03-19",
+      "pub_end": "2025-07-15",
+      "total_results": 69,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2025-03-19_2025-07-15/page_0000000.json",
+          "sha256": "632762faef2dda2bab57d64b3cbfcdecff747472c0298f8904330573749af4ff"
+        }
+      ]
+    },
+    {
+      "pub_start": "2025-07-16",
+      "pub_end": "2025-11-11",
+      "total_results": 53,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2025-07-16_2025-11-11/page_0000000.json",
+          "sha256": "633b913b496989d84bb554458562a4ac29e5010805f2c23de481b21dc44dd516"
+        }
+      ]
+    },
+    {
+      "pub_start": "2025-11-12",
+      "pub_end": "2026-03-10",
+      "total_results": 67,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2025-11-12_2026-03-10/page_0000000.json",
+          "sha256": "8c80f184ad025370df08dc45ff1d349f4818c051c6793950bad9f9edb85c39fa"
+        }
+      ]
+    },
+    {
+      "pub_start": "2026-03-11",
+      "pub_end": "2026-07-07",
+      "total_results": 81,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2026-03-11_2026-07-07/page_0000000.json",
+          "sha256": "3d968b0982de1f82095f8150a947911e3e1377b56bfb957574b7ac0bae2e4917"
+        }
+      ]
+    },
+    {
+      "pub_start": "2026-07-08",
+      "pub_end": "2026-09-17",
+      "total_results": 104,
+      "pages": 1,
+      "complete": true,
+      "page_hashes": [
+        {
+          "file": "2026-07-08_2026-09-17/page_0000000.json",
+          "sha256": "e4e2c6110b5f444f87408cb27b38fd377138645c1be41bc6492d53c19a058af5"
+        }
+      ]
+    }
+  ],
+  "total_cves": 1216,
+  "api_key_used": false,
+  "ordered_page_hashes_sha256": "6c3579eb7aa25c37d57efd39d0051f260ec385e91a643dd1da2ff8726eaf8e4a"
+}

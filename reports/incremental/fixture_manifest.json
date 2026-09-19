@@ -1,0 +1,330 @@
+{
+  "task": "T-015B",
+  "source_snapshot": "2026-09-17",
+  "selection_rule": {
+    "reference": "docs/CHANGE_MODEL.md §11",
+    "seed": 20260919,
+    "strata_filled_in_declared_order": true,
+    "duplicate_groups_taken_whole": true,
+    "ordinary_strata_restricted_to_singleton_hashes": true
+  },
+  "selected_id_list": "data/fixture/snapshot_a/selected_ids.txt",
+  "selected_id_list_sha256": "958d3d8455126163bab9027b4b8986c7f88aedc5f6fc068a7742a2b3c14b167c",
+  "selected_id_count": 1216,
+  "strata": {
+    "train_top15": {
+      "target_rows": 500,
+      "new_rows": 500
+    },
+    "train_non_top15": {
+      "target_rows": 150,
+      "new_rows": 150
+    },
+    "val_eligible": {
+      "target_rows": 150,
+      "new_rows": 150
+    },
+    "test_eligible": {
+      "target_rows": 200,
+      "new_rows": 200
+    },
+    "within_split_duplicate_groups": {
+      "target_rows_approximate": 80,
+      "new_rows": 82,
+      "groups": 24,
+      "member_ids": [
+        [
+          "CVE-2023-48759",
+          "CVE-2023-48760",
+          "CVE-2023-48761"
+        ],
+        [
+          "CVE-2022-0525",
+          "CVE-2022-0623",
+          "CVE-2022-0630"
+        ],
+        [
+          "CVE-2023-30916",
+          "CVE-2023-30917"
+        ],
+        [
+          "CVE-2020-25770",
+          "CVE-2020-25772"
+        ],
+        [
+          "CVE-2024-43253",
+          "CVE-2024-43254"
+        ],
+        [
+          "CVE-2022-28851",
+          "CVE-2022-30677",
+          "CVE-2022-30678",
+          "CVE-2022-30680",
+          "CVE-2022-30681",
+          "CVE-2022-30682",
+          "CVE-2022-30684",
+          "CVE-2022-30685",
+          "CVE-2022-30686",
+          "CVE-2022-34218",
+          "CVE-2022-35664",
+          "CVE-2022-38438",
+          "CVE-2022-38439"
+        ],
+        [
+          "CVE-2024-45121",
+          "CVE-2024-45130"
+        ],
+        [
+          "CVE-2022-30719",
+          "CVE-2022-30720",
+          "CVE-2022-30721"
+        ],
+        [
+          "CVE-2022-0196",
+          "CVE-2022-0197",
+          "CVE-2022-0238"
+        ],
+        [
+          "CVE-2018-21182",
+          "CVE-2018-21183"
+        ],
+        [
+          "CVE-2024-33595",
+          "CVE-2024-35660"
+        ],
+        [
+          "CVE-2023-37429",
+          "CVE-2023-37430",
+          "CVE-2023-37431",
+          "CVE-2023-37432",
+          "CVE-2023-37433",
+          "CVE-2023-37434",
+          "CVE-2023-37435",
+          "CVE-2023-37436",
+          "CVE-2023-37437",
+          "CVE-2023-37438"
+        ],
+        [
+          "CVE-2021-28644",
+          "CVE-2021-35980"
+        ],
+        [
+          "CVE-2019-16466",
+          "CVE-2019-16467"
+        ],
+        [
+          "CVE-2020-9594",
+          "CVE-2020-9597"
+        ],
+        [
+          "CVE-2020-17048",
+          "CVE-2020-17054",
+          "CVE-2020-17131",
+          "CVE-2021-42279"
+        ],
+        [
+          "CVE-2024-44232",
+          "CVE-2024-44233",
+          "CVE-2024-44234"
+        ],
+        [
+          "CVE-2023-0106",
+          "CVE-2023-0107",
+          "CVE-2023-0108",
+          "CVE-2023-0110",
+          "CVE-2023-0111",
+          "CVE-2023-0112"
+        ],
+        [
+          "CVE-2023-4721",
+          "CVE-2023-4778",
+          "CVE-2024-0322"
+        ],
+        [
+          "CVE-2021-21746",
+          "CVE-2021-21747"
+        ],
+        [
+          "CVE-2023-2169",
+          "CVE-2023-2170"
+        ],
+        [
+          "CVE-2019-5319",
+          "CVE-2021-25144",
+          "CVE-2021-25149"
+        ],
+        [
+          "CVE-2022-30500",
+          "CVE-2022-37201"
+        ],
+        [
+          "CVE-2022-30666",
+          "CVE-2022-30667",
+          "CVE-2022-30668",
+          "CVE-2022-30669"
+        ]
+      ]
+    },
+    "cross_split_duplicate_groups": {
+      "target_rows_approximate": 40,
+      "new_rows": 40,
+      "groups": 14,
+      "member_ids": [
+        [
+          "CVE-2025-49675",
+          "CVE-2026-69275"
+        ],
+        [
+          "CVE-2025-50174",
+          "CVE-2026-69693"
+        ],
+        [
+          "CVE-2024-21320",
+          "CVE-2024-38030",
+          "CVE-2025-21308"
+        ],
+        [
+          "CVE-2024-54271",
+          "CVE-2025-31609",
+          "CVE-2026-25401"
+        ],
+        [
+          "CVE-2025-62565",
+          "CVE-2026-26165",
+          "CVE-2026-69392",
+          "CVE-2026-69606"
+        ],
+        [
+          "CVE-2025-50153",
+          "CVE-2026-20871"
+        ],
+        [
+          "CVE-2025-58719",
+          "CVE-2026-24292",
+          "CVE-2026-69516"
+        ],
+        [
+          "CVE-2025-39247",
+          "CVE-2026-1749"
+        ],
+        [
+          "CVE-2025-29978",
+          "CVE-2025-47175",
+          "CVE-2025-53761",
+          "CVE-2025-54908",
+          "CVE-2025-59238",
+          "CVE-2026-32200"
+        ],
+        [
+          "CVE-2025-62929",
+          "CVE-2025-68000"
+        ],
+        [
+          "CVE-2025-30400",
+          "CVE-2026-20842"
+        ],
+        [
+          "CVE-2025-48822",
+          "CVE-2026-45607"
+        ],
+        [
+          "CVE-2025-24999",
+          "CVE-2026-21262",
+          "CVE-2026-73028",
+          "CVE-2026-77487"
+        ],
+        [
+          "CVE-2025-24064",
+          "CVE-2026-69989",
+          "CVE-2026-77505"
+        ]
+      ]
+    },
+    "is_rejected": {
+      "target_rows": 30,
+      "new_rows": 30
+    },
+    "is_kev_eligible": {
+      "target_rows": 40,
+      "already_selected": 6,
+      "new_rows": 34
+    },
+    "ineligible": {
+      "target_rows": 30,
+      "new_rows": 30
+    },
+    "final_unique_rows": 1216,
+    "final_matching_counts": {
+      "train_top15": 602,
+      "train_non_top15": 158,
+      "val_eligible": 175,
+      "test_eligible": 221,
+      "is_rejected": 30,
+      "is_kev_eligible": 40,
+      "ineligible_multi_placeholder_no_description": 30
+    }
+  },
+  "config_overrides": {
+    "nvd.raw_dir": "data/fixture/snapshot_a/raw",
+    "paths.processed_dir": "data/fixture/snapshot_a/processed",
+    "paths.sft_dir": "data/fixture/snapshot_a/sft",
+    "paths.labels_file": "data/fixture/snapshot_a/labels.json",
+    "paths.manifest": "data/fixture/snapshot_a/dataset_manifest.json",
+    "paths.stats": "data/fixture/snapshot_a/stats.json",
+    "paths.contamination": "data/fixture/snapshot_a/contamination.json",
+    "labels.min_train_samples_per_class": 5,
+    "sft.train_max_samples": 300,
+    "sft.val_max_samples": 80
+  },
+  "train_population_assertion": {
+    "train_max_samples": 300,
+    "fixture_train_population_pre_dedup": 602,
+    "train_internal_duplicates_dropped": 59,
+    "train_overlap_with_eval_dropped": 2,
+    "fixture_train_sampling_population": 541,
+    "expression": "300 < 541",
+    "passed": true,
+    "evaluated_before_snapshot_a_write": true
+  },
+  "predicted_selected_labels_before_build": [
+    "CWE-79",
+    "CWE-89",
+    "CWE-787",
+    "CWE-352",
+    "CWE-125",
+    "CWE-862",
+    "CWE-22",
+    "CWE-416",
+    "CWE-20",
+    "CWE-200",
+    "CWE-476",
+    "CWE-284",
+    "CWE-78",
+    "CWE-120",
+    "CWE-434"
+  ],
+  "predicted_selected_label_counts_before_build": {
+    "CWE-79": 174,
+    "CWE-89": 70,
+    "CWE-787": 52,
+    "CWE-352": 44,
+    "CWE-125": 38,
+    "CWE-862": 35,
+    "CWE-22": 28,
+    "CWE-416": 27,
+    "CWE-20": 26,
+    "CWE-200": 20,
+    "CWE-476": 20,
+    "CWE-284": 18,
+    "CWE-78": 18,
+    "CWE-120": 17,
+    "CWE-434": 15
+  },
+  "freeze_order": [
+    "selection completed",
+    "train-population assertion passed",
+    "selected ID list and SHA-256 fixed",
+    "Snapshot A raw pages written",
+    "Snapshot B not yet declared or written"
+  ]
+}

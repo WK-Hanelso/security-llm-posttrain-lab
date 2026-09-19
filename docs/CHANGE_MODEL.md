@@ -28,7 +28,7 @@ assumed from documentation.
 | `vulnStatus` | `vuln_status`, `is_rejected` | yes — eligibility | no |
 | `weaknesses[].type`, `.description[lang=en].value` | `cwe_primary/secondary/all`, `cwe_id`, `label_status`, `placeholder_only` | yes — eligibility, label selection, class distribution | yes |
 | `cisaExploitAdd` | `is_kev`, `kev_date_added` | no | **yes** — `is_kev` is written into every SFT row |
-| `metrics.cvssMetricV31[0].cvssData` | `cvss_v31_base_score`, `cvss_v31_severity` | no | no |
+| `metrics.cvssMetricV31[0].cvssData` | `cvss_v31_base_score`, `cvss_v31_severity` | no | **corrected — see §17** |
 | `lastModified` | `last_modified` | no | no |
 
 Two consequences:
@@ -308,3 +308,47 @@ When expectation and result disagree, the expected value in this document is **n
 match. The run reports `prediction failed`, and identifies whether the cause was the fixture,
 the dependency model, a misreading of the pipeline, or an implementation bug. A failed
 prediction that is understood is a result of this task, not a defect in it.
+
+
+---
+
+## 17. Correction after T-015B: the CVSS row in §1 was wrong
+
+**H1 failed, and the cause was this document, not the implementation.**
+
+§1 recorded a CVSS-only change as affecting neither composition nor output bytes, and §8 used
+it as a negative control whose expected effect was "nothing changes". The full rebuild of
+Snapshot B showed otherwise.
+
+What is actually true, measured:
+
+- `to_sft_row` does not carry CVSS, so `data/sft/*.jsonl` and the SFT file hashes are
+  **byte-identical** across a CVSS-only change.
+- `normalize_record` **does** emit `cvss_v31_base_score` and `cvss_v31_severity`, and those
+  fields are serialized into `data/processed/normalized.jsonl` and carried through into
+  `data/processed/{train,val,test}.jsonl`.
+- §7's composition equivalence includes per-row field equality over the normalized schema,
+  which contains those two fields. So the rebuilt intermediate artifacts differ, and a strict
+  reading of §7 reports a difference.
+
+The error was mine: I scoped "output bytes" to the final SFT files and did not account for the
+intermediate artifacts. The correct statement is narrower and needs to name the artifact:
+
+> A CVSS-only change does not alter **dataset composition** — which records are selected, their
+> labels, splits, dedup survivors or SFT membership — and does not alter the **SFT output
+> bytes**. It does alter the **normalized and processed intermediate rows**, and therefore
+> their hashes.
+
+H1 is restated accordingly for later use:
+
+> **H1'** — A CVSS-only change alters no composition property and no SFT output byte, while
+> intermediate artifacts that serialize CVSS do change.
+
+This is also the negative control doing its job, just not the job I expected. It was placed to
+catch an implementation that over-triggers; it caught a dependency model that under-specified
+what "output" meant. That distinction — composition, final bytes, and intermediate bytes as
+three separate things rather than two — is the substantive result of T-015B, and it changes
+what an incremental implementation would have to promise.
+
+The original §1 and §8 text is left in place above, marked, rather than rewritten, so the
+failed prediction stays visible.
