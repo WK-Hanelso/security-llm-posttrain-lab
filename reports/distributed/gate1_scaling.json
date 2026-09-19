@@ -1,0 +1,1603 @@
+{
+  "benchmark": "Gate 1 exact near-duplicate audit scaling baseline",
+  "execution_environment": {
+    "branch": "feat/distributed-pipeline",
+    "hostname": "hanelso-GL73-8SE",
+    "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+    "logical_cpu_count": 12,
+    "memory_available_at_start_bytes": 27923161088,
+    "memory_total_bytes": 33482199040,
+    "numpy": "2.4.6",
+    "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+    "python": "3.11.15",
+    "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+    "scikit_learn": "1.9.1",
+    "swap_total_bytes": 2147479552,
+    "swap_used_at_start_bytes": 563994624,
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null
+    },
+    "timestamp_utc": "2026-09-19T12:28:04Z"
+  },
+  "global_pressure_stop_reason": null,
+  "inputs": {
+    "test": "data/sft/test.jsonl",
+    "test_rows": 24975,
+    "train": "data/sft/train.jsonl",
+    "train_rows": 12000
+  },
+  "method": {
+    "child_isolation": "one fresh subprocess per executed (N, shape)",
+    "cosine_similarity_dense_output": true,
+    "ladder": [
+      300,
+      1000,
+      2500,
+      5000,
+      10000,
+      24975
+    ],
+    "seed": 42,
+    "shapes": [
+      "query_vs_reference",
+      "internal_all_pairs"
+    ],
+    "stop_limits": {
+      "major_page_faults": 0,
+      "minimum_available_memory_bytes_during_run": 2147483648,
+      "projected_peak_rss_bytes": 12884901888,
+      "projected_wall_seconds": 1800,
+      "quadratic_similarity_slope_range": [
+        1.6,
+        2.4
+      ],
+      "quadratic_trend_min_points": 4,
+      "quadratic_trend_min_r_squared": 0.95,
+      "swap_increase_bytes": 0
+    },
+    "vectorizer": {
+      "min_df": 2,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "stop_words": null,
+      "sublinear_tf": true
+    }
+  },
+  "observed_log_log_trends": {
+    "internal_all_pairs": {
+      "peak_rss": {
+        "intercept": 17.640201492355214,
+        "r_squared": 0.7878674529399752,
+        "slope": 0.2459414568619729
+      },
+      "similarity": {
+        "intercept": -16.392779259972905,
+        "r_squared": 0.9994859320547551,
+        "slope": 1.87037133134024
+      },
+      "total_wall": {
+        "intercept": -4.296947337948408,
+        "r_squared": 0.918963897644591,
+        "slope": 0.5301294018406898
+      }
+    },
+    "query_vs_reference": {
+      "peak_rss": {
+        "intercept": 16.419143597823428,
+        "r_squared": 0.9234116343449749,
+        "slope": 0.49868090130734194
+      },
+      "similarity": {
+        "intercept": -8.754602994353897,
+        "r_squared": 0.9907520424454583,
+        "slope": 1.0860901802322547
+      },
+      "total_wall": {
+        "intercept": -2.9182572911426408,
+        "r_squared": 0.8763944744785693,
+        "slope": 0.5181656325683416
+      }
+    }
+  },
+  "records": [
+    {
+      "comparison_count": 3600000,
+      "completed": true,
+      "computed_score_count": 3600000,
+      "cpu": {
+        "system_seconds": 0.064068,
+        "total_seconds": 1.4794340000000006,
+        "user_seconds": 1.4153660000000006,
+        "utilization_percent_of_one_core": 99.99596632115035
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": null,
+        "n": null,
+        "peak_rss": null,
+        "wall_time_total": null
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 24393,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "300",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.14,
+          "five_minutes": 0.23,
+          "one_minute": 0.38
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.14,
+          "five_minutes": 0.21,
+          "one_minute": 0.33
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27697127424,
+        "parent_wall_seconds": 2.9094027410028502,
+        "peak_rss_observed_by_parent_bytes": 299343872,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 300,
+      "peak_rss_bytes": 306663424,
+      "phases_seconds": {
+        "argmax_reduction": 0.0017788420082069933,
+        "input_load_and_sample": 0.3944292700034566,
+        "similarity": 0.09265761502319947,
+        "total_child": 1.479493678023573,
+        "vectorizer_fit_transform": 0.9873966290033422
+      },
+      "process": {
+        "pid": 30,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 28800000,
+        "method": "bootstrap_dense_plus_fixed_overhead",
+        "note": "No measured point was available; this is a conservative bootstrap, not a measured trend.",
+        "peak_rss_bytes": 1102541824,
+        "wall_time_seconds": 60.0
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 1907249,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 2400,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 28800000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          300,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 814956,
+        "tfidf_shape": [
+          12300,
+          43771
+        ],
+        "tfidf_storage_bytes": {
+          "data": 6519648,
+          "indices": 3259824,
+          "indptr": 49204,
+          "total": 9828676
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 206770176,
+        "after_reduction": 306663424,
+        "after_similarity": 306663424,
+        "after_vectorizer": 267345920
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "80fa10a167cca2f5979080571422219c33c6df183cc55c74e1b6b0c02254bc3a",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 38852715.981289156,
+        "comparisons_per_second_total": 2433264.875324895,
+        "computed_scores_per_second_similarity": 38852715.981289156
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 44850,
+      "completed": true,
+      "computed_score_count": 90000,
+      "cpu": {
+        "system_seconds": 0.023992,
+        "total_seconds": 0.3204860000000005,
+        "user_seconds": 0.2964940000000005,
+        "utilization_percent_of_one_core": 99.99368593204593
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": null,
+        "n": null,
+        "peak_rss": null,
+        "wall_time_total": null
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 4641,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "internal_all_pairs",
+          "--n",
+          "300",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.14,
+          "five_minutes": 0.23,
+          "one_minute": 0.38
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.14,
+          "five_minutes": 0.23,
+          "one_minute": 0.38
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27787309056,
+        "parent_wall_seconds": 1.8066087660263292,
+        "peak_rss_observed_by_parent_bytes": 203354112,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 300,
+      "peak_rss_bytes": 207245312,
+      "phases_seconds": {
+        "argmax_reduction": 7.379299495369196e-05,
+        "input_load_and_sample": 0.27274535200558603,
+        "similarity": 0.0034013850381597877,
+        "total_child": 0.3205062369816005,
+        "vectorizer_fit_transform": 0.0410644689691253
+      },
+      "process": {
+        "pid": 54,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 720000,
+        "method": "bootstrap_dense_plus_fixed_overhead",
+        "note": "No measured point was available; this is a conservative bootstrap, not a measured trend.",
+        "peak_rss_bytes": 1074461824,
+        "wall_time_seconds": 60.0
+      },
+      "reference_rows": null,
+      "representation": {
+        "nearest_index_checksum": 42948,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 2400,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 720000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          300,
+          300
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 19908,
+        "tfidf_shape": [
+          300,
+          2737
+        ],
+        "tfidf_storage_bytes": {
+          "data": 159264,
+          "indices": 79632,
+          "indptr": 1204,
+          "total": 240100
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 201621504,
+        "after_reduction": 207245312,
+        "after_similarity": 207245312,
+        "after_vectorizer": 206311424
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "80fa10a167cca2f5979080571422219c33c6df183cc55c74e1b6b0c02254bc3a",
+        "seed": 42
+      },
+      "shape": "internal_all_pairs",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 13185805.046130467,
+        "comparisons_per_second_total": 139934.8743487158,
+        "computed_scores_per_second_similarity": 26459809.457117993
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 12000000,
+      "completed": true,
+      "computed_score_count": 12000000,
+      "cpu": {
+        "system_seconds": 0.07190700000000001,
+        "total_seconds": 1.749218,
+        "user_seconds": 1.677311,
+        "utilization_percent_of_one_core": 99.98913975678731
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 3.3333333333333335,
+        "n": 3.3333333333333335,
+        "peak_rss": 1.2331004821755334,
+        "wall_time_total": 1.182436948496794
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 28456,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "1000",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.24,
+          "one_minute": 0.43
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.14,
+          "five_minutes": 0.23,
+          "one_minute": 0.38
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27622567936,
+        "parent_wall_seconds": 3.211624648014549,
+        "peak_rss_observed_by_parent_bytes": 372490240,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 1000,
+      "peak_rss_bytes": 378146816,
+      "phases_seconds": {
+        "argmax_reduction": 0.006054163968656212,
+        "input_load_and_sample": 0.3932591819902882,
+        "similarity": 0.27319698996143416,
+        "total_child": 1.7494079899624921,
+        "vectorizer_fit_transform": 1.073706225026399
+      },
+      "process": {
+        "pid": 78,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 96000000,
+        "method": "one-point expected-order extrapolation (exponent=1); RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 1124432554,
+        "rss_log_fit": null,
+        "wall_log_fit": null,
+        "wall_time_seconds": 5.671392432423697
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 6206497,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 8000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 96000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          1000,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 875452,
+        "tfidf_shape": [
+          13000,
+          46729
+        ],
+        "tfidf_storage_bytes": {
+          "data": 7003616,
+          "indices": 3501808,
+          "indptr": 52004,
+          "total": 10557428
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 206827520,
+        "after_reduction": 378146816,
+        "after_similarity": 378146816,
+        "after_vectorizer": 269709312
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "75a6c78117a6d75e25ffaeee3a22c6ec67fd7bf6e6648d5e2c39de6dfe8d68d6",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 43924349.24591951,
+        "comparisons_per_second_total": 6859463.354947455,
+        "computed_scores_per_second_similarity": 43924349.24591951
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 499500,
+      "completed": true,
+      "computed_score_count": 1000000,
+      "cpu": {
+        "system_seconds": 0.020154000000000005,
+        "total_seconds": 0.44864000000000037,
+        "user_seconds": 0.42848600000000037,
+        "utilization_percent_of_one_core": 99.99554094644438
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 11.137123745819398,
+        "n": 3.3333333333333335,
+        "peak_rss": 1.0663675711998735,
+        "wall_time_total": 1.3998479724302733
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 6452,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "internal_all_pairs",
+          "--n",
+          "1000",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.24,
+          "one_minute": 0.43
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.24,
+          "one_minute": 0.43
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27769909248,
+        "parent_wall_seconds": 1.9065688269911334,
+        "peak_rss_observed_by_parent_bytes": 219660288,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 1000,
+      "peak_rss_bytes": 220999680,
+      "phases_seconds": {
+        "argmax_reduction": 0.0005436359788291156,
+        "input_load_and_sample": 0.2714447159669362,
+        "similarity": 0.02918674802640453,
+        "total_child": 0.44866000598995015,
+        "vectorizer_fit_transform": 0.1443278370425105
+      },
+      "process": {
+        "pid": 102,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 8000000,
+        "method": "one-point expected-order extrapolation (exponent=2); RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 766059477,
+        "rss_log_fit": null,
+        "wall_log_fit": null,
+        "wall_time_seconds": 4.095357472542673
+      },
+      "reference_rows": null,
+      "representation": {
+        "nearest_index_checksum": 506301,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 8000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 8000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          1000,
+          1000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 75248,
+        "tfidf_shape": [
+          1000,
+          7265
+        ],
+        "tfidf_storage_bytes": {
+          "data": 601984,
+          "indices": 300992,
+          "indptr": 4004,
+          "total": 906980
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 202051584,
+        "after_reduction": 220999680,
+        "after_similarity": 220999680,
+        "after_vectorizer": 212676608
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "75a6c78117a6d75e25ffaeee3a22c6ec67fd7bf6e6648d5e2c39de6dfe8d68d6",
+        "seed": 42
+      },
+      "shape": "internal_all_pairs",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 17113931.279638097,
+        "comparisons_per_second_total": 1113315.1904143393,
+        "computed_scores_per_second_similarity": 34262124.683960155
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 30000000,
+      "completed": true,
+      "computed_score_count": 30000000,
+      "cpu": {
+        "system_seconds": 0.08399899999999999,
+        "total_seconds": 2.266207,
+        "user_seconds": 2.182208,
+        "utilization_percent_of_one_core": 99.99262297554809
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 2.5,
+        "n": 2.5,
+        "peak_rss": 1.4039709275246153,
+        "wall_time_total": 1.295509225967827
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 29710,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "2500",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.25,
+          "one_minute": 0.48
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.24,
+          "one_minute": 0.43
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27438895104,
+        "parent_wall_seconds": 3.7126920710434206,
+        "peak_rss_observed_by_parent_bytes": 519782400,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 2500,
+      "peak_rss_bytes": 530907136,
+      "phases_seconds": {
+        "argmax_reduction": 0.014657192979939282,
+        "input_load_and_sample": 0.3882274660281837,
+        "similarity": 0.6482720529893413,
+        "total_child": 2.26637419097824,
+        "vectorizer_fit_transform": 1.2119707509991713
+      },
+      "process": {
+        "pid": 126,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 240000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 610172439,
+        "rss_log_fit": {
+          "intercept": 18.54861159856569,
+          "r_squared": 1.0,
+          "slope": 0.17403359458662565
+        },
+        "wall_log_fit": {
+          "intercept": -0.4021931940345735,
+          "r_squared": 1.0,
+          "slope": 0.13918713018278847
+        },
+        "wall_time_seconds": 2.2854781512274838
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 14760987,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 20000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 240000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          2500,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 1007445,
+        "tfidf_shape": [
+          14500,
+          53197
+        ],
+        "tfidf_storage_bytes": {
+          "data": 8059560,
+          "indices": 4029780,
+          "indptr": 58004,
+          "total": 12147344
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 206807040,
+        "after_reduction": 530907136,
+        "after_similarity": 530907136,
+        "after_vectorizer": 277532672
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "826e4ee8203e1fea9566954202451efcb059406e020c1d9e3df2a9620d0c5a00",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 46276867.654039145,
+        "comparisons_per_second_total": 13237002.132931558,
+        "computed_scores_per_second_similarity": 46276867.654039145
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 3123750,
+      "completed": true,
+      "computed_score_count": 6250000,
+      "cpu": {
+        "system_seconds": 0.03988299999999999,
+        "total_seconds": 0.7320030000000001,
+        "user_seconds": 0.6921200000000001,
+        "utilization_percent_of_one_core": 99.98856282847845
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 6.253753753753754,
+        "n": 2.5,
+        "peak_rss": 1.2338059494022797,
+        "wall_time_total": 1.6317182727256438
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 11694,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "internal_all_pairs",
+          "--n",
+          "2500",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.25,
+          "one_minute": 0.48
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.25,
+          "one_minute": 0.48
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27717795840,
+        "parent_wall_seconds": 2.2073587760096416,
+        "peak_rss_observed_by_parent_bytes": 247799808,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 2500,
+      "peak_rss_bytes": 272670720,
+      "phases_seconds": {
+        "argmax_reduction": 0.0031435349956154823,
+        "input_load_and_sample": 0.2673711269744672,
+        "similarity": 0.16813558799913153,
+        "total_child": 0.7320867300149985,
+        "vectorizer_fit_transform": 0.2902773709502071
+      },
+      "process": {
+        "pid": 150,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 50000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 640749120,
+        "rss_log_fit": {
+          "intercept": 18.84499314329359,
+          "r_squared": 1.0,
+          "slope": 0.053371703734981804
+        },
+        "wall_log_fit": {
+          "intercept": -2.731365477295453,
+          "r_squared": 1.0,
+          "slope": 0.2793781042187701
+        },
+        "wall_time_seconds": 0.6664858345438491
+      },
+      "reference_rows": null,
+      "representation": {
+        "nearest_index_checksum": 2955088,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 20000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 50000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          2500,
+          2500
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 200822,
+        "tfidf_shape": [
+          2500,
+          15790
+        ],
+        "tfidf_storage_bytes": {
+          "data": 1606576,
+          "indices": 803288,
+          "indptr": 10004,
+          "total": 2419868
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 201818112,
+        "after_reduction": 272670720,
+        "after_similarity": 272670720,
+        "after_vectorizer": 221958144
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "826e4ee8203e1fea9566954202451efcb059406e020c1d9e3df2a9620d0c5a00",
+        "seed": 42
+      },
+      "shape": "internal_all_pairs",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 18578755.61725894,
+        "comparisons_per_second_total": 4266912.47352073,
+        "computed_scores_per_second_similarity": 37172380.18659252
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 60000000,
+      "completed": true,
+      "computed_score_count": 60000000,
+      "cpu": {
+        "system_seconds": 0.080036,
+        "total_seconds": 3.2904649999999993,
+        "user_seconds": 3.2104289999999995,
+        "utilization_percent_of_one_core": 99.99436582410756
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 2.0,
+        "n": 2.0,
+        "peak_rss": 1.4765229601283791,
+        "wall_time_total": 1.4519448792395786
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 32871,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "5000",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.16,
+          "five_minutes": 0.27,
+          "one_minute": 0.52
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.15,
+          "five_minutes": 0.25,
+          "one_minute": 0.48
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27183796224,
+        "parent_wall_seconds": 4.816605283005629,
+        "peak_rss_observed_by_parent_bytes": 769015808,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 5000,
+      "peak_rss_bytes": 783896576,
+      "phases_seconds": {
+        "argmax_reduction": 0.02974231104599312,
+        "input_load_and_sample": 0.3944199589896016,
+        "similarity": 1.3382170440163463,
+        "total_child": 3.2906504010315984,
+        "vectorizer_fit_transform": 1.525068498973269
+      },
+      "process": {
+        "pid": 174,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 480000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 903169892,
+        "rss_log_fit": {
+          "intercept": 18.060276756264308,
+          "r_squared": 0.9549598853655036,
+          "slope": 0.25452279296741404
+        },
+        "wall_log_fit": {
+          "intercept": -0.7589093287678277,
+          "r_squared": 0.9600675221736863,
+          "slope": 0.1979824346481876
+        },
+        "wall_time_seconds": 2.906958245419749
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 29563488,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 40000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 480000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          5000,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 1232209,
+        "tfidf_shape": [
+          17000,
+          62989
+        ],
+        "tfidf_storage_bytes": {
+          "data": 9857672,
+          "indices": 4928836,
+          "indptr": 68004,
+          "total": 14854512
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 206114816,
+        "after_reduction": 783896576,
+        "after_similarity": 783896576,
+        "after_vectorizer": 289112064
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "e735bf52775f8d791d6bdd277ebf7b00d05ded7d76f46b74e85b12eda883390d",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 44835776.280299045,
+        "comparisons_per_second_total": 18233477.485542182,
+        "computed_scores_per_second_similarity": 44835776.280299045
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 12497500,
+      "completed": true,
+      "computed_score_count": 25000000,
+      "cpu": {
+        "system_seconds": 0.024030999999999997,
+        "total_seconds": 1.5099129999999996,
+        "user_seconds": 1.4858819999999997,
+        "utilization_percent_of_one_core": 99.99233246339458
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 4.000800320128051,
+        "n": 2.0,
+        "peak_rss": 1.60136698212408,
+        "wall_time_total": 2.0626364610907184
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 18108,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "internal_all_pairs",
+          "--n",
+          "5000",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.16,
+          "five_minutes": 0.28,
+          "one_minute": 0.56
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.16,
+          "five_minutes": 0.27,
+          "one_minute": 0.52
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 27555577856,
+        "parent_wall_seconds": 3.01109309802996,
+        "peak_rss_observed_by_parent_bytes": 411996160,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 5000,
+      "peak_rss_bytes": 436645888,
+      "phases_seconds": {
+        "argmax_reduction": 0.012294337968342006,
+        "input_load_and_sample": 0.26820065098581836,
+        "similarity": 0.6583125689649023,
+        "total_child": 1.5100287820096128,
+        "vectorizer_fit_transform": 0.5680418459814973
+      },
+      "process": {
+        "pid": 198,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 200000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 709875584,
+        "rss_log_fit": {
+          "intercept": 18.407272117529658,
+          "r_squared": 0.8651898044736474,
+          "slope": 0.12551854116341074
+        },
+        "wall_log_fit": {
+          "intercept": -3.3657963130932,
+          "r_squared": 0.9661994181389709,
+          "slope": 0.3839473976174542
+        },
+        "wall_time_seconds": 1.0451075409598445
+      },
+      "reference_rows": null,
+      "representation": {
+        "nearest_index_checksum": 11767629,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 40000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 200000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          5000,
+          5000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 419259,
+        "tfidf_shape": [
+          5000,
+          27578
+        ],
+        "tfidf_storage_bytes": {
+          "data": 3354072,
+          "indices": 1677036,
+          "indptr": 20004,
+          "total": 5051112
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 202362880,
+        "after_reduction": 436645888,
+        "after_similarity": 436645888,
+        "after_vectorizer": 236900352
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "e735bf52775f8d791d6bdd277ebf7b00d05ded7d76f46b74e85b12eda883390d",
+        "seed": 42
+      },
+      "shape": "internal_all_pairs",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 18984143.07910062,
+        "comparisons_per_second_total": 8276332.311605198,
+        "computed_scores_per_second_similarity": 37975881.334468134
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 120000000,
+      "completed": true,
+      "computed_score_count": 120000000,
+      "cpu": {
+        "system_seconds": 1.357497,
+        "total_seconds": 6.230867,
+        "user_seconds": 4.8733699999999995,
+        "utilization_percent_of_one_core": 99.66071126105042
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 2.0,
+        "n": 2.0,
+        "peak_rss": 1.6430889168726257,
+        "wall_time_total": 1.899952544360196
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 132585,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "10000",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.17,
+          "five_minutes": 0.29,
+          "one_minute": 0.6
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.16,
+          "five_minutes": 0.28,
+          "one_minute": 0.56
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 26800824320,
+        "parent_wall_seconds": 7.726178010983858,
+        "peak_rss_observed_by_parent_bytes": 1288011776,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 10000,
+      "peak_rss_bytes": 1288011776,
+      "phases_seconds": {
+        "argmax_reduction": 0.06010097300168127,
+        "input_load_and_sample": 0.39522228500572965,
+        "similarity": 3.8085845439927652,
+        "total_child": 6.252079602039885,
+        "vectorizer_fit_transform": 1.9850203819805756
+      },
+      "process": {
+        "pid": 222,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 960000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 1488605714,
+        "rss_log_fit": {
+          "intercept": 17.598725221177624,
+          "r_squared": 0.9385574639424689,
+          "slope": 0.3269820682624957
+        },
+        "wall_log_fit": {
+          "intercept": -1.2425560170535452,
+          "r_squared": 0.9168127102672208,
+          "slope": 0.2739104423959431
+        },
+        "wall_time_seconds": 4.137179730687675
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 60470363,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 80000,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 960000000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          10000,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 1682784,
+        "tfidf_shape": [
+          22000,
+          81288
+        ],
+        "tfidf_storage_bytes": {
+          "data": 13462272,
+          "indices": 6731136,
+          "indptr": 88004,
+          "total": 20281412
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 207343616,
+        "after_reduction": 1288011776,
+        "after_similarity": 1288011776,
+        "after_vectorizer": 312762368
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "6de33f6fd9f24a2f1b6d4fac914447a386ff1d54534dde05780b5aca202131bd",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 31507768.467231367,
+        "comparisons_per_second_total": 19193613.5875249,
+        "computed_scores_per_second_similarity": 31507768.467231367
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 49995000,
+      "completed": false,
+      "computed_score_count": 100000000,
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 4.000400080016004,
+        "n": 2.0,
+        "peak_rss": null,
+        "wall_time_total": null
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "n": 10000,
+      "projection": {
+        "dense_output_bytes": 800000000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 1400620953,
+        "rss_log_fit": {
+          "intercept": 17.640201492355214,
+          "r_squared": 0.7878674529399752,
+          "slope": 0.2459414568619729
+        },
+        "wall_log_fit": {
+          "intercept": -4.296947337948408,
+          "r_squared": 0.918963897644591,
+          "slope": 0.5301294018406898
+        },
+        "wall_time_seconds": 2.065736531297067
+      },
+      "reference_rows": null,
+      "shape": "internal_all_pairs",
+      "status": "stopped_preflight",
+      "stop_reason": "quadratic similarity trend is already established across 4 points (slope=1.870, R^2=0.9995); the next step adds no decision-relevant information",
+      "trend_at_decision": {
+        "accepted_slope_range": [
+          1.6,
+          2.4
+        ],
+        "established": true,
+        "fit": {
+          "intercept": -16.392779259972905,
+          "r_squared": 0.9994859320547551,
+          "slope": 1.87037133134024
+        },
+        "minimum_r_squared": 0.95,
+        "phase": "similarity",
+        "points": 4
+      }
+    },
+    {
+      "comparison_count": 299700000,
+      "completed": true,
+      "computed_score_count": 299700000,
+      "cpu": {
+        "system_seconds": 4.652242,
+        "total_seconds": 15.121433,
+        "user_seconds": 10.469190999999999,
+        "utilization_percent_of_one_core": 99.72490822680341
+      },
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 2.4975,
+        "n": 2.4975,
+        "peak_rss": 2.1833642862594447,
+        "wall_time_total": 2.4252963063782156
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "major_page_faults": 0,
+      "minor_page_faults": 459094,
+      "monitor": {
+        "command": [
+          "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+          "-m",
+          "security_llm.bench.near_duplicate_scaling",
+          "--child",
+          "--shape",
+          "query_vs_reference",
+          "--n",
+          "24975",
+          "--train",
+          "data/sft/train.jsonl",
+          "--test",
+          "data/sft/test.jsonl"
+        ],
+        "exit_code": 0,
+        "load_average_after": {
+          "fifteen_minutes": 0.18,
+          "five_minutes": 0.34,
+          "one_minute": 0.71
+        },
+        "load_average_before": {
+          "fifteen_minutes": 0.17,
+          "five_minutes": 0.29,
+          "one_minute": 0.6
+        },
+        "maximum_swap_used_bytes": 563994624,
+        "minimum_mem_available_bytes": 25283551232,
+        "parent_wall_seconds": 16.755462369008455,
+        "peak_rss_observed_by_parent_bytes": 2812198912,
+        "peak_thread_count": 24,
+        "stderr": "",
+        "swap_increase_during_run_bytes": 0,
+        "swap_used_after_bytes": 563994624,
+        "swap_used_before_bytes": 563994624
+      },
+      "n": 24975,
+      "peak_rss_bytes": 2812198912,
+      "phases_seconds": {
+        "argmax_reduction": 0.17503424297319725,
+        "input_load_and_sample": 0.41140267497394234,
+        "similarity": 11.018463305023033,
+        "total_child": 15.163145566009916,
+        "vectorizer_fit_transform": 3.55503194098128
+      },
+      "process": {
+        "pid": 246,
+        "threads_at_finish": 24
+      },
+      "projection": {
+        "dense_output_bytes": 2397600000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 3243771770,
+        "rss_log_fit": {
+          "intercept": 17.088449111954834,
+          "r_squared": 0.928884245475867,
+          "slope": 0.4034277307875025
+        },
+        "wall_log_fit": {
+          "intercept": -2.0130243579954072,
+          "r_squared": 0.868124532948251,
+          "slope": 0.3893361143278586
+        },
+        "wall_time_seconds": 7.916991390131936
+      },
+      "reference_rows": 12000,
+      "representation": {
+        "nearest_index_checksum": 148643740,
+        "notable_temporary_allocations": "sklearn sparse matrix multiplication materializes the complete dense float64 similarity matrix; internal_all_pairs changes its diagonal in place before argmax, avoiding a second dense mask",
+        "reduction_bytes": 199800,
+        "reduction_dtype": "int64",
+        "similarity_bytes": 2397600000,
+        "similarity_dtype": "float64",
+        "similarity_format": "dense_numpy_ndarray",
+        "similarity_shape": [
+          24975,
+          12000
+        ],
+        "tfidf_dtype": "float64",
+        "tfidf_format": "csr",
+        "tfidf_nnz": 3076688,
+        "tfidf_shape": [
+          36975,
+          131300
+        ],
+        "tfidf_storage_bytes": {
+          "data": 24613504,
+          "indices": 12306752,
+          "indptr": 147904,
+          "total": 37068160
+        }
+      },
+      "rss_checkpoints_bytes": {
+        "after_load": 207613952,
+        "after_reduction": 2812198912,
+        "after_similarity": 2812198912,
+        "after_vectorizer": 383844352
+      },
+      "sampling": {
+        "method": "random.Random(42).sample(range(population_rows), N), preserving the sampled index order",
+        "population": "data/sft/test.jsonl",
+        "population_rows": 24975,
+        "sample_index_sha256": "ab85132c9dd068bce564a57198be39f688df820da4d753b94d0401d2f907f5c8",
+        "seed": 42
+      },
+      "shape": "query_vs_reference",
+      "status": "completed",
+      "stop_reason": null,
+      "throughput": {
+        "comparisons_per_second_similarity": 27199800.163002267,
+        "comparisons_per_second_total": 19765028.218934663,
+        "computed_scores_per_second_similarity": 27199800.163002267
+      },
+      "vectorizer": {
+        "min_df": 2,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "stop_words": null,
+        "sublinear_tf": true
+      }
+    },
+    {
+      "comparison_count": 311862825,
+      "completed": false,
+      "computed_score_count": 623750625,
+      "execution_environment_ref": "execution_environment",
+      "growth_vs_previous_step": {
+        "comparison_count": 6.237880288028803,
+        "n": 2.4975,
+        "peak_rss": null,
+        "wall_time_total": null
+      },
+      "implementation_commit": "73a8948c2680ced114f239657e340784b11a1f34",
+      "n": 24975,
+      "projection": {
+        "dense_output_bytes": 4990005000,
+        "method": "log-log regression over completed points; RSS regression/dense floor with 10% guard",
+        "peak_rss_bytes": 6789256331,
+        "rss_log_fit": {
+          "intercept": 17.640201492355214,
+          "r_squared": 0.7878674529399752,
+          "slope": 0.2459414568619729
+        },
+        "wall_log_fit": {
+          "intercept": -4.296947337948408,
+          "r_squared": 0.918963897644591,
+          "slope": 0.5301294018406898
+        },
+        "wall_time_seconds": 3.355863450238705
+      },
+      "reference_rows": null,
+      "shape": "internal_all_pairs",
+      "status": "stopped_preflight",
+      "stop_reason": "quadratic similarity trend is already established across 4 points (slope=1.870, R^2=0.9995); the next step adds no decision-relevant information",
+      "trend_at_decision": {
+        "accepted_slope_range": [
+          1.6,
+          2.4
+        ],
+        "established": true,
+        "fit": {
+          "intercept": -16.392779259972905,
+          "r_squared": 0.9994859320547551,
+          "slope": 1.87037133134024
+        },
+        "minimum_r_squared": 0.95,
+        "phase": "similarity",
+        "points": 4
+      }
+    }
+  ],
+  "schema_version": 1
+}
