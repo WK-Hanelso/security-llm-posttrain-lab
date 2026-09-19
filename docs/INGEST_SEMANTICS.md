@@ -378,3 +378,48 @@ supported.
 About 1,240 records per day, against the ~8,000 per day a naive extrapolation from the earlier
 two-hour probe would have given — that window was busier than average and overestimated by
 roughly 6.5×. Volume is small against 257,913 records, so the theoretical saving remains large.
+
+---
+
+## 17. T-016C: measured drift over the one available gap, and closure
+
+Full results in `reports/incremental/t016c_drift_and_closure.md`.
+
+Historical replay was impossible — one full snapshot exists and no archived deltas — so the
+planned 1/3/7-day comparison was not run and no synthetic history was made. **One gap was
+measurable and only it is reported**: 64.7 hours, 31,175 records published 2026-07-08…09-17.
+
+Both completeness gates passed. The overlay produced 959 INSERT, 1,900 UPDATE, 49
+NO_CONTENT_CHANGE and 14 CONFLICT_REVIEW, was idempotent, and had **ID symmetric difference 0
+in both directions** — every new CVE was caught.
+
+| Layer | Count | Rate |
+|---|---:|---:|
+| D0 source drift | 356 | 1.14% |
+| D1 dataset-relevant | 356 | 1.14% |
+| **D2 composition impact** | **0** | 0.00% |
+
+All 356 carry an identical `lastModified` on both sides, and all 356 are `vulnStatus`-only.
+D2 was computed by running `normalize_record` over both versions and comparing `is_rejected`,
+`label_status`, `cwe_id`, `published`, `description_norm_hash` and `cwe_all`. None differed —
+consistent by construction, since `vulnStatus` reaches the dataset only via `is_rejected` and
+none crossed the `Rejected` boundary.
+
+**An interval cannot be fixed from one gap.** Nothing here shows how risk accumulates with
+interval length. By the rule of three, 0 Rejected transitions in 356 silent changes gives a 95%
+upper bound near 0.84% — up to about three missed transitions per 2.7 days. That is a bound
+from zero observations, not a measurement, and it is what any interval policy would have to
+accept.
+
+### 17.1 Fixed by measurement
+
+- **`lastModified` is a query hint** — not a content version, change log, or equivalence key.
+- **Full reconciliation is part of correctness.** Its interval is **undetermined**.
+- **Immutable base plus overlay.** The delta touched 13 published partitions with 95.4% in the
+  newest; rewriting twelve frozen partitions for 172 rows is not worth it.
+- **Completeness is `sum(page rows) == totalResults`** with equal first and last `totalResults`.
+- **`[start, end)`**; reuse the previous last record's exact timestamp, never add a millisecond.
+- **`MISSING` is not `DELETE`.**
+
+The T-016 track is closed. Incremental ingest is a freshness mechanism, not a replacement for a
+full fetch.

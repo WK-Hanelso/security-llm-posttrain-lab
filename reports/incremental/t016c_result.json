@@ -1,0 +1,227 @@
+{
+ "population": "published 2026-07-08..2026-09-17",
+ "baseline_rows": 30216,
+ "T0": "2026-09-17T00:00:00.000",
+ "gap_note": "단일 측정 gap. historical full snapshot이 1개뿐이라 1d/3d/7d 비교 불가 (SPEC §39 Case C).",
+ "T1": "2026-09-19T16:41:53.000",
+ "gap_hours": 64.7,
+ "delta_started": "2026-09-19T16:41:53.425120+00:00",
+ "delta_ended": "2026-09-19T16:42:10.685518+00:00",
+ "delta_gate": {
+  "pages": 2,
+  "first_total": 3712,
+  "last_total": 3712,
+  "totals_equal": true,
+  "fetched_rows": 3712,
+  "rows_match_total": true,
+  "duplicate_ids": 0,
+  "complete": true
+ },
+ "truth_started": "2026-09-19T16:42:10.685537+00:00",
+ "truth_ended": "2026-09-19T16:44:28.900900+00:00",
+ "truth_gate": {
+  "pages": 16,
+  "first_total": 31175,
+  "last_total": 31175,
+  "totals_equal": true,
+  "fetched_rows": 31175,
+  "rows_match_total": true,
+  "duplicate_ids": 0,
+  "complete": true
+ },
+ "overlay": {
+  "delta_rows": 3712,
+  "delta_in_population": 2922,
+  "stats": {
+   "UPDATE": 1900,
+   "NO_CONTENT_CHANGE": 49,
+   "CONFLICT_REVIEW": 14,
+   "INSERT": 959
+  },
+  "conflicts": [
+   "CVE-2026-0194",
+   "CVE-2026-55304",
+   "CVE-2026-55359",
+   "CVE-2026-55366",
+   "CVE-2026-56881",
+   "CVE-2026-56889",
+   "CVE-2026-56907",
+   "CVE-2026-56914",
+   "CVE-2026-56932",
+   "CVE-2026-56941"
+  ],
+  "idempotent": true
+ },
+ "drift": {
+  "population": 31175,
+  "id_only_in_incremental": 0,
+  "id_only_in_truth": 0,
+  "only_in_truth_sample": [],
+  "D0_count": 356,
+  "D0_rate_pct": 1.1419,
+  "D1_count": 356,
+  "D1_rate_pct": 1.1419,
+  "D2_count": 0,
+  "D2_rate_pct": 0.0,
+  "classification": {
+   "vulnStatus": 356
+  },
+  "lastModified_identical_among_D0": 356,
+  "D2_detail": [],
+  "D0_sample": [
+   "CVE-2026-69404",
+   "CVE-2026-69617",
+   "CVE-2026-87205",
+   "CVE-2026-69381",
+   "CVE-2026-16481",
+   "CVE-2026-69618",
+   "CVE-2026-69757",
+   "CVE-2026-55304",
+   "CVE-2026-28671",
+   "CVE-2026-0186"
+  ]
+ },
+ "reconciliation_corrections": {
+  "rows_a_full_fetch_would_replace": 356,
+  "dataset_relevant_corrections": 356,
+  "composition_corrections": 0,
+  "new_ids_recovered": 0
+ },
+ "cost": {
+  "delta_requests": 2,
+  "truth_requests": 16,
+  "delta_rows": 3712,
+  "truth_rows": 31175,
+  "delta_wall_s": 17.3,
+  "truth_wall_s": 138.2,
+  "note": "truth = 이 published window 1개만. 전체 full ingest(2~2.5h)가 아님"
+ },
+ "_log": [
+  {
+   "label": "delta_p0",
+   "status": 200,
+   "total": 3712,
+   "returned": 2000,
+   "seconds": 2.09
+  },
+  {
+   "label": "delta_p2000",
+   "status": 200,
+   "total": 3712,
+   "returned": 1712,
+   "seconds": 0.94
+  },
+  {
+   "label": "truth_p0",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.89
+  },
+  {
+   "label": "truth_p2000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.62
+  },
+  {
+   "label": "truth_p4000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.38
+  },
+  {
+   "label": "truth_p6000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.07
+  },
+  {
+   "label": "truth_p8000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.51
+  },
+  {
+   "label": "truth_p10000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.51
+  },
+  {
+   "label": "truth_p12000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.61
+  },
+  {
+   "label": "truth_p14000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.06
+  },
+  {
+   "label": "truth_p16000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.49
+  },
+  {
+   "label": "truth_p18000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.47
+  },
+  {
+   "label": "truth_p20000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 2.95
+  },
+  {
+   "label": "truth_p22000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.42
+  },
+  {
+   "label": "truth_p24000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.43
+  },
+  {
+   "label": "truth_p26000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.44
+  },
+  {
+   "label": "truth_p28000",
+   "status": 200,
+   "total": 31175,
+   "returned": 2000,
+   "seconds": 1.13
+  },
+  {
+   "label": "truth_p30000",
+   "status": 200,
+   "total": 31175,
+   "returned": 1175,
+   "seconds": 1.29
+  }
+ ]
+}
