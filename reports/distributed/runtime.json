@@ -1,0 +1,46 @@
+{
+  "measurement_scope": "single node only; no cluster scaling is claimed or extrapolated",
+  "single_process": {
+    "source": "logs/prepare_data_20260917T083019Z.log",
+    "full_prepare_data_seconds": 11796.52,
+    "full_prepare_data_includes_ingestion": true,
+    "post_ingest_pipeline_seconds": 56.182,
+    "post_ingest_interval_includes": [
+      "normalize",
+      "dataset statistics",
+      "split",
+      "SFT construction",
+      "contamination"
+    ],
+    "method": "full: UTC timestamp in filename to log mtime; post-ingest: final ingest timestamp immediately before normalize marker to log mtime; untimestamped stage markers prevent a narrower reference measurement",
+    "timestamped_log_events": 168
+  },
+  "spark_runs": {
+    "local[1]": {
+      "master": "local[1]",
+      "spark.sql.shuffle.partitions": 64,
+      "stages_seconds": {
+        "normalize": 37.507,
+        "split": 6.171,
+        "dedup": 3.537,
+        "overlap": 34.849,
+        "manifest": 3.734
+      },
+      "track_a_total_seconds": 85.798,
+      "single_node": true
+    },
+    "local[8]": {
+      "master": "local[8]",
+      "spark.sql.shuffle.partitions": 64,
+      "stages_seconds": {
+        "normalize": 25.765,
+        "split": 2.734,
+        "dedup": 1.657,
+        "overlap": 13.692,
+        "manifest": 1.515
+      },
+      "track_a_total_seconds": 45.363,
+      "single_node": true
+    }
+  }
+}

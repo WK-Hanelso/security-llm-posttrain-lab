@@ -1,0 +1,267 @@
+{
+  "comparison": "row-level by cve_id",
+  "all_passed": true,
+  "checks": [
+    {
+      "id": "E1",
+      "check": "normalized row count",
+      "expected": 257913,
+      "actual": 257913,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E2",
+      "check": "normalized cve_id symmetric difference",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E3",
+      "check": "normalized per-row field mismatches",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E4",
+      "check": "selected labels (ordered)",
+      "expected": [
+        "CWE-79",
+        "CWE-89",
+        "CWE-787",
+        "CWE-352",
+        "CWE-125",
+        "CWE-862",
+        "CWE-416",
+        "CWE-22",
+        "CWE-20",
+        "CWE-78",
+        "CWE-476",
+        "CWE-120",
+        "CWE-434",
+        "CWE-200",
+        "CWE-284"
+      ],
+      "actual": [
+        "CWE-79",
+        "CWE-89",
+        "CWE-787",
+        "CWE-352",
+        "CWE-125",
+        "CWE-862",
+        "CWE-416",
+        "CWE-22",
+        "CWE-20",
+        "CWE-78",
+        "CWE-476",
+        "CWE-120",
+        "CWE-434",
+        "CWE-200",
+        "CWE-284"
+      ],
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E5",
+      "check": "split populations",
+      "expected": {
+        "train": 65272,
+        "val": 21151,
+        "test": 24975
+      },
+      "actual": {
+        "val": 21151,
+        "test": 24975,
+        "train": 65272
+      },
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E6",
+      "check": "split assignment disagreements",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E7",
+      "check": "class distribution per split",
+      "expected": {
+        "train": {
+          "CWE-787": 6304,
+          "CWE-416": 3215,
+          "CWE-284": 1456,
+          "CWE-20": 2707,
+          "CWE-200": 1921,
+          "CWE-120": 2149,
+          "CWE-352": 4010,
+          "CWE-78": 2554,
+          "CWE-862": 3354,
+          "CWE-89": 7294,
+          "CWE-79": 19261,
+          "CWE-476": 2191,
+          "CWE-125": 3811,
+          "CWE-22": 2984,
+          "CWE-434": 2061
+        },
+        "val": {
+          "CWE-416": 1016,
+          "CWE-352": 1812,
+          "CWE-200": 627,
+          "CWE-476": 1135,
+          "CWE-284": 710,
+          "CWE-79": 7362,
+          "CWE-120": 361,
+          "CWE-20": 444,
+          "CWE-787": 722,
+          "CWE-125": 849,
+          "CWE-78": 690,
+          "CWE-89": 1685,
+          "CWE-434": 558,
+          "CWE-862": 2199,
+          "CWE-22": 981
+        },
+        "test": {
+          "CWE-476": 802,
+          "CWE-284": 2605,
+          "CWE-434": 488,
+          "CWE-78": 1184,
+          "CWE-120": 444,
+          "CWE-89": 2151,
+          "CWE-22": 1894,
+          "CWE-79": 5244,
+          "CWE-352": 775,
+          "CWE-862": 2971,
+          "CWE-200": 1056,
+          "CWE-787": 1065,
+          "CWE-20": 1087,
+          "CWE-125": 1277,
+          "CWE-416": 1932
+        }
+      },
+      "actual": {
+        "train": {
+          "CWE-787": 6304,
+          "CWE-416": 3215,
+          "CWE-284": 1456,
+          "CWE-20": 2707,
+          "CWE-200": 1921,
+          "CWE-120": 2149,
+          "CWE-352": 4010,
+          "CWE-78": 2554,
+          "CWE-862": 3354,
+          "CWE-89": 7294,
+          "CWE-79": 19261,
+          "CWE-476": 2191,
+          "CWE-125": 3811,
+          "CWE-22": 2984,
+          "CWE-434": 2061
+        },
+        "val": {
+          "CWE-416": 1016,
+          "CWE-352": 1812,
+          "CWE-200": 627,
+          "CWE-476": 1135,
+          "CWE-284": 710,
+          "CWE-79": 7362,
+          "CWE-120": 361,
+          "CWE-20": 444,
+          "CWE-787": 722,
+          "CWE-125": 849,
+          "CWE-89": 1685,
+          "CWE-78": 690,
+          "CWE-434": 558,
+          "CWE-22": 981,
+          "CWE-862": 2199
+        },
+        "test": {
+          "CWE-476": 802,
+          "CWE-284": 2605,
+          "CWE-434": 488,
+          "CWE-78": 1184,
+          "CWE-120": 444,
+          "CWE-352": 775,
+          "CWE-79": 5244,
+          "CWE-89": 2151,
+          "CWE-22": 1894,
+          "CWE-862": 2971,
+          "CWE-200": 1056,
+          "CWE-787": 1065,
+          "CWE-20": 1087,
+          "CWE-125": 1277,
+          "CWE-416": 1932
+        }
+      },
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E8",
+      "check": "train exact duplicates dropped",
+      "expected": 3427,
+      "actual": 3427,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E9",
+      "check": "post-train-dedup cve_id symmetric difference",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E10",
+      "check": "train↔eval overlap dropped",
+      "expected": 36,
+      "actual": 36,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E11",
+      "check": "val↔eval overlap dropped",
+      "expected": 233,
+      "actual": 233,
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    },
+    {
+      "id": "E12",
+      "check": "post-drop pairwise overlaps",
+      "expected": [
+        0,
+        0,
+        0
+      ],
+      "actual": [
+        0,
+        0,
+        0
+      ],
+      "pass": true,
+      "delta": null,
+      "cause": ""
+    }
+  ],
+  "e3_field_mismatches": {}
+}

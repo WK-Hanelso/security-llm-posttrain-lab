@@ -1,0 +1,19 @@
+{
+  "train_overlap_with_eval_dropped": 36,
+  "val_overlap_with_eval_dropped": 233,
+  "pairwise_post_drop": {
+    "train_val": {
+      "description_norm_hash": 0,
+      "cve_id": 0
+    },
+    "train_test": {
+      "description_norm_hash": 0,
+      "cve_id": 0
+    },
+    "val_test": {
+      "description_norm_hash": 0,
+      "cve_id": 0
+    }
+  },
+  "ok": true
+}

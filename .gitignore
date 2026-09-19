@@ -1,4 +1,5 @@
 .venv/
+.venv-dist/
 .uv-cache/
 __pycache__/
 *.egg-info/
@@ -7,6 +8,7 @@ __pycache__/
 logs/
 data/*
 !data/README.md
+data/spark/
 experiments/*/adapter/
 experiments/*/trainer/
 *.gguf
