@@ -91,6 +91,8 @@ def _blockwise_exact(
     top_indices = np.empty((query_count, 0), dtype=np.int32)
     threshold_80_keys: list[int] = []
     threshold_90_keys: list[int] = []
+    threshold_80_scores: list[float] = []
+    threshold_90_scores: list[float] = []
     threshold_80_counts = np.zeros(query_count, dtype=np.int32)
     threshold_90_counts = np.zeros(query_count, dtype=np.int32)
 
@@ -111,8 +113,10 @@ def _blockwise_exact(
         threshold_80_keys.extend(int(value) for value in hit_keys)
         np.add.at(threshold_80_counts, hit_queries, 1)
         hit_scores = scores[hit_queries, hit_local_references]
+        threshold_80_scores.extend(float(value) for value in hit_scores)
         at_90 = hit_scores >= THRESHOLDS[1]
         threshold_90_keys.extend(int(value) for value in hit_keys[at_90])
+        threshold_90_scores.extend(float(value) for value in hit_scores[at_90])
         np.add.at(threshold_90_counts, hit_queries[at_90], 1)
 
         top_scores, top_indices = _merge_top_k(
@@ -124,15 +128,21 @@ def _blockwise_exact(
         )
     wall_seconds = time.perf_counter() - started
 
+    threshold_80_keys_array = np.asarray(threshold_80_keys, dtype=np.int64)
+    threshold_90_keys_array = np.asarray(threshold_90_keys, dtype=np.int64)
+    threshold_80_order = np.argsort(threshold_80_keys_array)
+    threshold_90_order = np.argsort(threshold_90_keys_array)
     return {
         "top_scores": top_scores,
         "top_indices": top_indices,
-        "threshold_80_keys": np.sort(
-            np.asarray(threshold_80_keys, dtype=np.int64)
-        ),
-        "threshold_90_keys": np.sort(
-            np.asarray(threshold_90_keys, dtype=np.int64)
-        ),
+        "threshold_80_keys": threshold_80_keys_array[threshold_80_order],
+        "threshold_80_scores": np.asarray(
+            threshold_80_scores, dtype=np.float64
+        )[threshold_80_order],
+        "threshold_90_keys": threshold_90_keys_array[threshold_90_order],
+        "threshold_90_scores": np.asarray(
+            threshold_90_scores, dtype=np.float64
+        )[threshold_90_order],
         "threshold_80_counts": threshold_80_counts,
         "threshold_90_counts": threshold_90_counts,
         "wall_seconds": wall_seconds,

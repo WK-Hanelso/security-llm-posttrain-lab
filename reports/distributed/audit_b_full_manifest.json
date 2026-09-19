@@ -1,0 +1,751 @@
+{
+  "all_passed": true,
+  "analysis": {
+    "per_cwe_class": {
+      "CWE-120": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 114,
+            "pair_count": 124,
+            "same_label_pairs": 10
+          },
+          "0.90": {
+            "cross_label_pairs": 10,
+            "pair_count": 10,
+            "same_label_pairs": 0
+          }
+        },
+        "query_count": 444,
+        "query_share_ge_0_80": 0.05630630630630631,
+        "query_share_ge_0_90": 0.01126126126126126,
+        "rank1_p50": 0.30997401568247374,
+        "rank1_p90": 0.7257680648143744
+      },
+      "CWE-125": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 40,
+            "pair_count": 681,
+            "same_label_pairs": 641
+          },
+          "0.90": {
+            "cross_label_pairs": 1,
+            "pair_count": 22,
+            "same_label_pairs": 21
+          }
+        },
+        "query_count": 1277,
+        "query_share_ge_0_80": 0.014095536413469069,
+        "query_share_ge_0_90": 0.004698512137823023,
+        "rank1_p50": 0.2879554751386464,
+        "rank1_p90": 0.6566709607383889
+      },
+      "CWE-20": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 5,
+            "pair_count": 14,
+            "same_label_pairs": 9
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 0,
+            "same_label_pairs": 0
+          }
+        },
+        "query_count": 1087,
+        "query_share_ge_0_80": 0.00919963201471941,
+        "query_share_ge_0_90": 0.0,
+        "rank1_p50": 0.4648281300436687,
+        "rank1_p90": 0.6759248177255258
+      },
+      "CWE-200": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 112,
+            "pair_count": 130,
+            "same_label_pairs": 18
+          },
+          "0.90": {
+            "cross_label_pairs": 9,
+            "pair_count": 11,
+            "same_label_pairs": 2
+          }
+        },
+        "query_count": 1056,
+        "query_share_ge_0_80": 0.029356060606060608,
+        "query_share_ge_0_90": 0.010416666666666666,
+        "rank1_p50": 0.2920109129133619,
+        "rank1_p90": 0.6887220752482955
+      },
+      "CWE-22": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 0,
+            "pair_count": 117,
+            "same_label_pairs": 117
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 7,
+            "same_label_pairs": 7
+          }
+        },
+        "query_count": 1894,
+        "query_share_ge_0_80": 0.013727560718057022,
+        "query_share_ge_0_90": 0.003695881731784583,
+        "rank1_p50": 0.24071701484525782,
+        "rank1_p90": 0.5727818529811874
+      },
+      "CWE-284": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 546,
+            "pair_count": 804,
+            "same_label_pairs": 258
+          },
+          "0.90": {
+            "cross_label_pairs": 51,
+            "pair_count": 73,
+            "same_label_pairs": 22
+          }
+        },
+        "query_count": 2605,
+        "query_share_ge_0_80": 0.14088291746641074,
+        "query_share_ge_0_90": 0.018426103646833013,
+        "rank1_p50": 0.6601722015411474,
+        "rank1_p90": 0.8249901042153988
+      },
+      "CWE-352": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 21,
+            "pair_count": 348,
+            "same_label_pairs": 327
+          },
+          "0.90": {
+            "cross_label_pairs": 5,
+            "pair_count": 36,
+            "same_label_pairs": 31
+          }
+        },
+        "query_count": 775,
+        "query_share_ge_0_80": 0.07483870967741936,
+        "query_share_ge_0_90": 0.02064516129032258,
+        "rank1_p50": 0.3874446843905581,
+        "rank1_p90": 0.7713519150466794
+      },
+      "CWE-416": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 24,
+            "pair_count": 290,
+            "same_label_pairs": 266
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 31,
+            "same_label_pairs": 31
+          }
+        },
+        "query_count": 1932,
+        "query_share_ge_0_80": 0.027432712215320912,
+        "query_share_ge_0_90": 0.003105590062111801,
+        "rank1_p50": 0.5106348376016666,
+        "rank1_p90": 0.7286332684172974
+      },
+      "CWE-434": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 1,
+            "pair_count": 212,
+            "same_label_pairs": 211
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 76,
+            "same_label_pairs": 76
+          }
+        },
+        "query_count": 488,
+        "query_share_ge_0_80": 0.0430327868852459,
+        "query_share_ge_0_90": 0.02459016393442623,
+        "rank1_p50": 0.2994206607210155,
+        "rank1_p90": 0.6716625165070185
+      },
+      "CWE-476": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 0,
+            "pair_count": 32,
+            "same_label_pairs": 32
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 7,
+            "same_label_pairs": 7
+          }
+        },
+        "query_count": 802,
+        "query_share_ge_0_80": 0.00997506234413965,
+        "query_share_ge_0_90": 0.004987531172069825,
+        "rank1_p50": 0.2554246182044151,
+        "rank1_p90": 0.5127577135471806
+      },
+      "CWE-78": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 27,
+            "pair_count": 39,
+            "same_label_pairs": 12
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 0,
+            "same_label_pairs": 0
+          }
+        },
+        "query_count": 1184,
+        "query_share_ge_0_80": 0.005067567567567568,
+        "query_share_ge_0_90": 0.0,
+        "rank1_p50": 0.23235980235654421,
+        "rank1_p90": 0.553874651028526
+      },
+      "CWE-787": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 208,
+            "pair_count": 2620,
+            "same_label_pairs": 2412
+          },
+          "0.90": {
+            "cross_label_pairs": 3,
+            "pair_count": 231,
+            "same_label_pairs": 228
+          }
+        },
+        "query_count": 1065,
+        "query_share_ge_0_80": 0.13615023474178403,
+        "query_share_ge_0_90": 0.05352112676056338,
+        "rank1_p50": 0.30912116173025994,
+        "rank1_p90": 0.8272121402235889
+      },
+      "CWE-79": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 53,
+            "pair_count": 46670,
+            "same_label_pairs": 46617
+          },
+          "0.90": {
+            "cross_label_pairs": 7,
+            "pair_count": 7229,
+            "same_label_pairs": 7222
+          }
+        },
+        "query_count": 5244,
+        "query_share_ge_0_80": 0.13977879481311975,
+        "query_share_ge_0_90": 0.057398932112890926,
+        "rank1_p50": 0.413800211840334,
+        "rank1_p90": 0.8463551382085698
+      },
+      "CWE-862": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 49,
+            "pair_count": 1119,
+            "same_label_pairs": 1070
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 319,
+            "same_label_pairs": 319
+          }
+        },
+        "query_count": 2971,
+        "query_share_ge_0_80": 0.0834735779198923,
+        "query_share_ge_0_90": 0.04308313699091215,
+        "rank1_p50": 0.3760991687633444,
+        "rank1_p90": 0.7710258855678758
+      },
+      "CWE-89": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 34,
+            "pair_count": 1240,
+            "same_label_pairs": 1206
+          },
+          "0.90": {
+            "cross_label_pairs": 0,
+            "pair_count": 46,
+            "same_label_pairs": 46
+          }
+        },
+        "query_count": 2151,
+        "query_share_ge_0_80": 0.07159460715946071,
+        "query_share_ge_0_90": 0.01208740120874012,
+        "rank1_p50": 0.3128795514346739,
+        "rank1_p90": 0.7621261636247516
+      }
+    },
+    "per_description_length_bucket": {
+      "250-500": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 296,
+            "pair_count": 43992,
+            "same_label_pairs": 43696
+          },
+          "0.90": {
+            "cross_label_pairs": 17,
+            "pair_count": 6275,
+            "same_label_pairs": 6258
+          }
+        },
+        "query_count": 9460,
+        "query_share_ge_0_80": 0.07980972515856237,
+        "query_share_ge_0_90": 0.024947145877378434,
+        "rank1_p50": 0.26463777190550036,
+        "rank1_p90": 0.7559693678412327
+      },
+      "500-1000": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 784,
+            "pair_count": 4432,
+            "same_label_pairs": 3648
+          },
+          "0.90": {
+            "cross_label_pairs": 63,
+            "pair_count": 452,
+            "same_label_pairs": 389
+          }
+        },
+        "query_count": 6412,
+        "query_share_ge_0_80": 0.08094198378041173,
+        "query_share_ge_0_90": 0.017779164067373673,
+        "rank1_p50": 0.31544237671535247,
+        "rank1_p90": 0.7802660252048187
+      },
+      "<250": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 131,
+            "pair_count": 5956,
+            "same_label_pairs": 5825
+          },
+          "0.90": {
+            "cross_label_pairs": 5,
+            "pair_count": 1369,
+            "same_label_pairs": 1364
+          }
+        },
+        "query_count": 8014,
+        "query_share_ge_0_80": 0.07636635887197404,
+        "query_share_ge_0_90": 0.03443973047167457,
+        "rank1_p50": 0.4996511913846706,
+        "rank1_p90": 0.7638423072264627
+      },
+      ">=1000": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 23,
+            "pair_count": 60,
+            "same_label_pairs": 37
+          },
+          "0.90": {
+            "cross_label_pairs": 1,
+            "pair_count": 2,
+            "same_label_pairs": 1
+          }
+        },
+        "query_count": 1089,
+        "query_share_ge_0_80": 0.015610651974288337,
+        "query_share_ge_0_90": 0.0009182736455463728,
+        "rank1_p50": 0.18521144606571496,
+        "rank1_p90": 0.4094530186129981
+      }
+    },
+    "rank1_similarity": {
+      "max": 1.0000000000000007,
+      "mean": 0.4188193203474028,
+      "p50": 0.3585054831660369,
+      "p90": 0.7638984692317163,
+      "p95": 0.8463059882905382,
+      "p99": 0.9619550681714847,
+      "query_count": 24975
+    },
+    "rare_class_groups": {
+      "other_ten": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 461,
+            "pair_count": 53138,
+            "same_label_pairs": 52677
+          },
+          "0.90": {
+            "cross_label_pairs": 16,
+            "pair_count": 7921,
+            "same_label_pairs": 7905
+          }
+        },
+        "query_count": 19580,
+        "query_share_ge_0_80": 0.07410623084780388,
+        "query_share_ge_0_90": 0.02793667007150153,
+        "rank1_p50": 0.3450014469572913,
+        "rank1_p90": 0.7529493404815863
+      },
+      "rare_five": {
+        "high_similarity_pair_split": {
+          "0.80": {
+            "cross_label_pairs": 773,
+            "pair_count": 1302,
+            "same_label_pairs": 529
+          },
+          "0.90": {
+            "cross_label_pairs": 70,
+            "pair_count": 177,
+            "same_label_pairs": 107
+          }
+        },
+        "query_count": 5395,
+        "query_share_ge_0_80": 0.08378127896200185,
+        "query_share_ge_0_90": 0.014828544949026877,
+        "rank1_p50": 0.4351281572286171,
+        "rank1_p90": 0.7836825018620424
+      }
+    },
+    "rare_classes_fixed_before_run": [
+      "CWE-476",
+      "CWE-120",
+      "CWE-434",
+      "CWE-200",
+      "CWE-284"
+    ],
+    "totals": {
+      "0.80": {
+        "cross_label_pairs": 1234,
+        "pair_count": 54440,
+        "query_count": 1903,
+        "same_label_pairs": 53206
+      },
+      "0.90": {
+        "cross_label_pairs": 86,
+        "pair_count": 8098,
+        "query_count": 627,
+        "same_label_pairs": 8012
+      },
+      "1.0": {
+        "cross_label_pairs": 0,
+        "pair_count": 314,
+        "query_count": 92,
+        "same_label_pairs": 314
+      }
+    }
+  },
+  "artifact": {
+    "bytes": 14402792,
+    "path": "reports/distributed/audit_b_full.parquet",
+    "sha256": "aa563fb43022a14b0c16644163fbc2371ac8500c7e6de0670b4f8d0857879d17"
+  },
+  "audit": "B",
+  "correctness": {
+    "all_passed": true,
+    "known_float64_limitation_only": true,
+    "membership_differences": [],
+    "method": "random fixed-seed query subset; full result compared with one independent direct dense cosine matrix and full-row lexsort",
+    "near_tie_ordering_differences": [],
+    "ordered_query_ids_sha256": "16c9b2597215f62d3559327549b4f43b808c653aca0df01437c2cdc59c2ba9be",
+    "per_query_threshold_counts_identical": true,
+    "query_count": 100,
+    "query_ids": [
+      "CVE-2026-32475",
+      "CVE-2025-68022",
+      "CVE-2026-11673",
+      "CVE-2026-3919",
+      "CVE-2026-64204",
+      "CVE-2026-56827",
+      "CVE-2026-11012",
+      "CVE-2026-9179",
+      "CVE-2026-86085",
+      "CVE-2026-48075",
+      "CVE-2026-42741",
+      "CVE-2025-13348",
+      "CVE-2026-25024",
+      "CVE-2026-14425",
+      "CVE-2026-24375",
+      "CVE-2026-17892",
+      "CVE-2026-0961",
+      "CVE-2026-46113",
+      "CVE-2026-28187",
+      "CVE-2026-18672",
+      "CVE-2025-13062",
+      "CVE-2026-46868",
+      "CVE-2025-20799",
+      "CVE-2025-69053",
+      "CVE-2026-79706",
+      "CVE-2026-79066",
+      "CVE-2026-60960",
+      "CVE-2026-70813",
+      "CVE-2026-40490",
+      "CVE-2026-17663",
+      "CVE-2025-13859",
+      "CVE-2026-39816",
+      "CVE-2026-14848",
+      "CVE-2026-17830",
+      "CVE-2019-25627",
+      "CVE-2026-0860",
+      "CVE-2018-25174",
+      "CVE-2026-10072",
+      "CVE-2026-15804",
+      "CVE-2025-68847",
+      "CVE-2026-24953",
+      "CVE-2019-25376",
+      "CVE-2025-63082",
+      "CVE-2025-53470",
+      "CVE-2026-39641",
+      "CVE-2026-5247",
+      "CVE-2026-31996",
+      "CVE-2026-0550",
+      "CVE-2026-86547",
+      "CVE-2026-60491",
+      "CVE-2026-53901",
+      "CVE-2026-43042",
+      "CVE-2025-13908",
+      "CVE-2026-15609",
+      "CVE-2026-14067",
+      "CVE-2026-75980",
+      "CVE-2026-73867",
+      "CVE-2026-52868",
+      "CVE-2026-71984",
+      "CVE-2026-25424",
+      "CVE-2026-3853",
+      "CVE-2026-20059",
+      "CVE-2026-26723",
+      "CVE-2026-24135",
+      "CVE-2026-70761",
+      "CVE-2026-23195",
+      "CVE-2026-27908",
+      "CVE-2026-30562",
+      "CVE-2026-1189",
+      "CVE-2026-55631",
+      "CVE-2026-58691",
+      "CVE-2025-68649",
+      "CVE-2026-19471",
+      "CVE-2026-21861",
+      "CVE-2026-7869",
+      "CVE-2026-72908",
+      "CVE-2026-42806",
+      "CVE-2026-38158",
+      "CVE-2026-57332",
+      "CVE-2026-33981",
+      "CVE-2026-16293",
+      "CVE-2026-88619",
+      "CVE-2025-33220",
+      "CVE-2026-17947",
+      "CVE-2026-61357",
+      "CVE-2026-45902",
+      "CVE-2026-29871",
+      "CVE-2026-2480",
+      "CVE-2026-10657",
+      "CVE-2025-56590",
+      "CVE-2026-39255",
+      "CVE-2026-81988",
+      "CVE-2019-25668",
+      "CVE-2026-1651",
+      "CVE-2026-1983",
+      "CVE-2026-79119",
+      "CVE-2026-72567",
+      "CVE-2026-61001",
+      "CVE-2026-8464",
+      "CVE-2026-63240"
+    ],
+    "reference_count": 65272,
+    "score_absolute_tolerance": 2e-15,
+    "scores_rounded_for_comparison": false,
+    "seed": 20260919,
+    "threshold_80_pair_set_identical": true,
+    "threshold_90_pair_set_identical": true,
+    "top20_membership_identical": true,
+    "top20_ordering_identical": true,
+    "top20_score_max_absolute_delta_aligned_by_reference": 0.0,
+    "top20_scores_within_tolerance": true
+  },
+  "created_utc": "2026-09-19T14:00:01Z",
+  "execution": {
+    "branch": "feat/distributed-pipeline",
+    "commit": "be0f6e690e71e15bd49ee49a5d3acff79feb0a43",
+    "hostname": "hanelso-GL73-8SE",
+    "logical_cpu_count": 12,
+    "memory_available_bytes": 26955202560,
+    "memory_total_bytes": 33482199040,
+    "numpy": "2.4.6",
+    "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+    "python": "3.11.15",
+    "python_executable": "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+    "scikit_learn": "1.9.1",
+    "swap_total_bytes": 2147479552,
+    "swap_used_bytes": 570548224,
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null
+    }
+  },
+  "fingerprints": {
+    "threshold_80_pair_set_sha256": "a6776831e27a7c29cb7776db96e6e3cf5312ab01b5aebff823b1baf768d2f04b",
+    "threshold_80_scores_sha256": "75436962c2d468c36cbdb26542d4747c7294881985f79f7bc7d0cad06d79a52d",
+    "threshold_90_pair_set_sha256": "dc9d4c9c9cc8ee4e739b5b8e197cc466911342ce7ed43ccc0d914aebd6636ddc",
+    "threshold_90_scores_sha256": "2f30c4adccecbb3d5ae5ae66e4725885c2ff3da8900912baf8689d4d46619a0a",
+    "top20_reference_indices_sha256": "b9d2a3163371598e4e03ee4f36727445b6a7116df3dab926c2d1e83966a42ecb",
+    "top20_scores_sha256": "4167838f033037598b0fc3e6204075c081e23dd5b80c45c41552d49efe510ce2"
+  },
+  "measurement": {
+    "blockwise_exact_seconds": 88.02642806601943,
+    "correctness_seconds": 1.4329220919753425,
+    "cpu_system_seconds": 1.320026,
+    "cpu_user_seconds": 101.06938099999999,
+    "end_to_end_pairs_per_second": 16868617.83048912,
+    "major_page_faults": 0,
+    "matrix_storage_bytes": {
+      "query": {
+        "data": 16722984,
+        "indices": 8361492,
+        "indptr": 99904,
+        "total": 25184380
+      },
+      "reference": {
+        "data": 37143904,
+        "indices": 18571952,
+        "indptr": 261092,
+        "total": 55976948
+      }
+    },
+    "measured_full_run_wall_seconds": 96.6391091659898,
+    "monitor": {
+      "command": [
+        "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
+        "-m",
+        "security_llm.bench.audit_b_full",
+        "--child",
+        "--train",
+        "data/processed/train.jsonl",
+        "--test",
+        "data/processed/test.jsonl",
+        "--block-size",
+        "2048",
+        "--staging-parquet",
+        "reports/distributed/.audit-b-full-s08x9vsa/audit_b_full.parquet"
+      ],
+      "exit_code": 0,
+      "load_average_after": {
+        "fifteen_minutes": 0.29,
+        "five_minutes": 0.39,
+        "one_minute": 0.86
+      },
+      "load_average_before": {
+        "fifteen_minutes": 0.2,
+        "five_minutes": 0.13,
+        "one_minute": 0.15
+      },
+      "maximum_swap_used_bytes": 570548224,
+      "minimum_mem_available_bytes": 26429206528,
+      "parent_wall_seconds": 104.02352288702969,
+      "peak_rss_observed_by_parent_bytes": 1514602496,
+      "peak_thread_count": 24,
+      "stderr": "",
+      "swap_increase_during_run_bytes": 0,
+      "swap_used_after_bytes": 570548224,
+      "swap_used_before_bytes": 570548224
+    },
+    "pairs_per_second": 18519077.006934565,
+    "parquet_write_seconds": 4.250026845023967,
+    "peak_rss_bytes": 1514606592,
+    "processed_pair_count": 1630168200,
+    "queries_per_second": 283.721611210543,
+    "swap_delta_bytes": 0,
+    "total_child_wall_seconds": 102.40515109000262,
+    "vectorizer_fit_and_transform_seconds": 7.1690489840111695
+  },
+  "parquet": {
+    "row_count": 538761,
+    "schema": "query_cve_id: string\nreference_cve_id: string\nquery_label: string\nreference_label: string\nexact_similarity: double\nrank: int32\nthreshold_80: bool\nthreshold_90: bool\nquery_text_hash: string\nreference_text_hash: string",
+    "top_k_rows": 499500
+  },
+  "population": {
+    "potential_pair_count": 1630168200,
+    "query_rows": 24975,
+    "query_source": "data/processed/test.jsonl",
+    "query_source_sha256": "f1160c6f5e2c5503b320d525a488121645f5405f1b2318a5b1ba4c3e21c9079b",
+    "reference_rows": 65272,
+    "reference_source": "data/processed/train.jsonl",
+    "reference_source_sha256": "99eeef47cc042bf9eaceaf68b50b67c8e547f35935accb3beb1388e33ea6d423"
+  },
+  "projection_check": {
+    "explanation": "Absolute wall time is load-sensitive: the same probe point measured 10.113 s in the probe and 7.88 s in an independent rerun, so a wall-time miss alone is not a performance regression. Peak RSS reproduced exactly between those runs, making the memory comparison the more meaningful test. The full child also built the required Parquet string/hash columns and ran the direct correctness matrix after the exact kernel, while the probe children only fingerprinted retained arrays. That broader retained-output scope likely explains part of the primary memory projection miss; measured RSS still remained below the conservative projection with no swap growth or major faults.",
+    "peak_rss_conservative_gib": {
+      "absolute_error": 0.08841268920898449,
+      "absolute_relative_error": 0.058981113548355224,
+      "measured": 1.4105873107910156,
+      "projected": 1.499,
+      "relative_error": -0.058981113548355224,
+      "signed_error": -0.08841268920898449
+    },
+    "peak_rss_gib": {
+      "absolute_error": 0.2665873107910157,
+      "absolute_relative_error": 0.23303086607606271,
+      "measured": 1.4105873107910156,
+      "projected": 1.144,
+      "relative_error": 0.23303086607606271,
+      "signed_error": 0.2665873107910157
+    },
+    "wall_seconds": {
+      "absolute_error": 1.4108908340102033,
+      "absolute_relative_error": 0.01438950366150131,
+      "measured": 96.6391091659898,
+      "projected": 98.05,
+      "relative_error": -0.01438950366150131,
+      "signed_error": -1.4108908340102033
+    }
+  },
+  "schema_version": 1,
+  "settings": {
+    "block_size": 2048,
+    "expected_vocabulary_size": 169215,
+    "fitting_scope": "all 65,272 Audit B references; queries transformed",
+    "length_buckets": [
+      "<250",
+      "250-500",
+      "500-1000",
+      ">=1000"
+    ],
+    "ordering_key": "(-raw float64 exact_similarity, reference_cve_id ascending as a string)",
+    "rare_classes": [
+      "CWE-476",
+      "CWE-120",
+      "CWE-434",
+      "CWE-200",
+      "CWE-284"
+    ],
+    "text_field": "description_en",
+    "text_preprocessing": "untruncated",
+    "thresholds": [
+      0.8,
+      0.9
+    ],
+    "top_k": 20,
+    "vectorizer": {
+      "min_df": 2,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "stop_words": null,
+      "sublinear_tf": true
+    },
+    "vocabulary_size": 169215
+  },
+  "status": "success",
+  "success": true,
+  "task": "T-014G full Audit B exact run"
+}
