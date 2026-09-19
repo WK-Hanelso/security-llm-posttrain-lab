@@ -328,3 +328,53 @@ for source completeness, and any possibility of silent omission stops the optimi
 
 No production fetcher, scheduler, Kafka, Airflow, Spark Streaming, Delta Lake, Iceberg, Hudi,
 Ray, database migration, deployment or cron orchestration. Semantics first.
+
+---
+
+## 16. T-016B-2 result: `lastModified` does not track every content change
+
+Measured 2026-09-19 against live NVD — see `reports/incremental/t016b2_merge_vs_truth.md`.
+
+A controlled slice (1,859 CVEs published 2026-09-01…09-05, taken read-only from the frozen
+cache) was merged with a verified-complete modified window `[2026-09-17T00:00, 2026-09-19T16:27)`
+and compared against a full fetch of the same slice taken seconds later.
+
+Everything under our control held. Both completeness gates passed on live data. The merge
+applied 33 updates, produced no conflicts, and was idempotent down to canonical hashes. ID
+symmetric difference, `lastModified` mismatch, rejected mismatch and KEV mismatch were all zero.
+
+**Two records still differed.** `CVE-2026-84658` and `CVE-2026-84659` changed `vulnStatus` from
+`Awaiting Analysis` to `Undergoing Analysis` while `lastModified` stayed at
+`2026-09-03T17:13:16.490` on both sides. They therefore never appeared in the modified window,
+and no lastMod-based ingest could have seen them.
+
+Of 35 real changes in the slice, 33 were visible through `lastModified` and **2 were not —
+5.7%**.
+
+Neither status is `Rejected`, so dataset composition was unaffected *in this instance*. The
+mechanism is what matters: the same silent path could carry a transition into `Rejected`, which
+does change eligibility (`docs/CHANGE_MODEL.md` §1). Nothing observed says such a transition
+bumps `lastModified`.
+
+### 16.1 Consequences
+
+- **S0 equivalence cannot be guaranteed by incremental ingest alone.** §2.2 required periodic
+  full reconciliation on the strength of NVD's published advisory; this is the same class of
+  failure observed directly in our own data, with a rate attached.
+- The remaining question is the reconciliation **interval** — how long a stale `vulnStatus` can
+  be carried before the risk outweighs the saving. That is measured, not assumed.
+- The merge design, the completeness gate and the idempotency rule are all **validated** and
+  carry forward unchanged.
+
+### 16.2 Partition impact, measured
+
+The 3,712-row delta touched 13 published-date partitions spanning 2012 to 2026, but 3,540
+(95.4%) fell in the newest one; the tail is 172 rows across 12 frozen partitions. A physical
+repartition would rewrite those twelve for 172 rows. The logical-overlay assumption in §3 is
+supported.
+
+### 16.3 Change volume
+
+About 1,240 records per day, against the ~8,000 per day a naive extrapolation from the earlier
+two-hour probe would have given — that window was busier than average and overestimated by
+roughly 6.5×. Volume is small against 257,913 records, so the theoretical saving remains large.

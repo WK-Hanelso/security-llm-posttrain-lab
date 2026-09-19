@@ -1,0 +1,144 @@
+{
+ "rule": {
+  "slice_published_start": "2026-09-01",
+  "slice_published_end": "2026-09-05",
+  "why": [
+   "캐시 스냅샷 커버리지(마지막 window 2026-07-08..2026-09-17) 안에 있음",
+   "최근 발행분이라 NVD 분석이 진행 중 -> UPDATE 발생 가능성이 높음",
+   "5일치 발행량이면 full truth 재fetch가 1~2요청으로 끝남",
+   "결과를 본 뒤 고르지 않았음 - 이 규칙은 fetch 전에 기록됨"
+  ],
+  "T0_manifest_fetched_at": "2026-09-17T11:45:59.339493+00:00",
+  "T0_used_for_delta": "2026-09-17T00:00:00.000",
+  "T0_rationale": "manifest fetched_at은 2~2.5시간 ingest 런이 끝난 시각이라, 런 도중 발생한 수정은 그보다 이른 window fetch 시각 이후에 일어났을 수 있음. 보수적으로 당일 00:00부터 잡아 중복 fetch를 감수하고 누락 가능성을 없앤다. (duplicate 허용, silent omission 불허)",
+  "boundary_semantics": "[start, end) - T-016B probe 실측"
+ },
+ "T0": "2026-09-17T00:00:00.000",
+ "T1": "2026-09-19T16:27:30.000",
+ "delta_fetch_started": "2026-09-19T16:27:30.870289+00:00",
+ "delta_fetch_ended": "2026-09-19T16:27:48.747572+00:00",
+ "delta_gate": {
+  "pages": 2,
+  "first_total": 3712,
+  "last_total": 3712,
+  "totals_equal": true,
+  "fetched_rows": 3712,
+  "rows_match_total": true,
+  "duplicate_ids": 0,
+  "complete": true,
+  "page_detail": [
+   {
+    "startIndex": 0,
+    "returned": 2000,
+    "totalResults": 3712
+   },
+   {
+    "startIndex": 2000,
+    "returned": 1712,
+    "totalResults": 3712
+   }
+  ]
+ },
+ "partition_impact": {
+  "delta_rows": 3712,
+  "affected_partitions": 13,
+  "rows_per_partition": {
+   "2020-12-23_2021-04-20": 1,
+   "2022-12-07_2023-04-04": 3,
+   "2023-08-02_2023-11-28": 10,
+   "2023-11-29_2024-03-26": 2,
+   "2024-03-27_2024-07-23": 2,
+   "2024-07-24_2024-11-19": 5,
+   "2024-11-20_2025-03-18": 1,
+   "2025-03-19_2025-07-15": 5,
+   "2025-07-16_2025-11-11": 16,
+   "2025-11-12_2026-03-10": 13,
+   "2026-03-11_2026-07-07": 111,
+   "2026-07-08_2026-11-03": 3540,
+   "before-2020": 3
+  },
+  "oldest_published_in_delta": "2012-11-04T22:55:04.997",
+  "newest_published_in_delta": "2026-09-19T16:16:32.140"
+ },
+ "truth_fetch_started": "2026-09-19T16:27:49.573793+00:00",
+ "truth_fetch_ended": "2026-09-19T16:27:57.817417+00:00",
+ "truth_gate": {
+  "pages": 1,
+  "first_total": 1859,
+  "last_total": 1859,
+  "totals_equal": true,
+  "fetched_rows": 1859,
+  "rows_match_total": true,
+  "duplicate_ids": 0,
+  "complete": true,
+  "page_detail": [
+   {
+    "startIndex": 0,
+    "returned": 1859,
+    "totalResults": 1859
+   }
+  ]
+ },
+ "merge": {
+  "delta_in_slice": 33,
+  "stats": {
+   "UPDATE": 33
+  },
+  "conflicts": [],
+  "idempotent_id_set": true,
+  "idempotent_canonical": true,
+  "second_pass_stats": {
+   "NO_CONTENT_CHANGE": 33
+  }
+ },
+ "S0": {
+  "merged_n": 1859,
+  "truth_n": 1859,
+  "id_symmetric_difference": 0,
+  "only_in_merged": [],
+  "only_in_truth": [],
+  "canonical_mismatch": 2,
+  "canonical_mismatch_sample": [
+   "CVE-2026-84658",
+   "CVE-2026-84659"
+  ],
+  "dataset_relevant_field_mismatch": 2,
+  "dataset_relevant_sample": [
+   "CVE-2026-84658",
+   "CVE-2026-84659"
+  ],
+  "lastModified_mismatch": 0,
+  "rejected_mismatch": 0,
+  "kev_mismatch": 0,
+  "mismatch_explained_by_drift_after_delta": 0,
+  "drift_sample": [],
+  "verdict": "FAIL"
+ },
+ "_log": [
+  {
+   "label": "delta_p0",
+   "status": 200,
+   "total": 3712,
+   "returned": 2000,
+   "seconds": 2.37,
+   "at": "2026-09-19T16:27:40.407591+00:00"
+  },
+  {
+   "label": "delta_p2000",
+   "status": 200,
+   "total": 3712,
+   "returned": 1712,
+   "seconds": 1.24,
+   "at": "2026-09-19T16:27:48.745884+00:00"
+  },
+  {
+   "label": "truth_p0",
+   "status": 200,
+   "total": 1859,
+   "returned": 1859,
+   "seconds": 1.12,
+   "at": "2026-09-19T16:27:57.816499+00:00"
+  }
+ ],
+ "_requests": 3
+}
