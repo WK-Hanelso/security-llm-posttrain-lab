@@ -63,6 +63,8 @@ def _render_markdown(report: dict[str, Any]) -> str:
         "# Spark Track A equivalence report",
         "",
         "Comparison is row-level by `cve_id`; Parquet byte identity and row order are not compared.",
+        "The E5 populations are measured after temporal assignment and before cross-split overlap removal; "
+        "the final validation population is 20,918 because E11 removes 233 rows from the 21,151 assigned rows.",
         "",
         "| Check | Expected | Actual | Pass |",
         "|---|---|---|:---:|",
@@ -147,7 +149,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
         split_counts = {str(row["split"]): int(row["count"]) for row in splits.groupBy("split").count().collect()}
         expected_counts = {"train": 65_272, "val": 21_151, "test": 24_975}
-        checks.append(_check("E5", "split populations", expected_counts, split_counts,
+        checks.append(_check("E5", "split populations after temporal assignment, before cross-split overlap removal",
+                             expected_counts, split_counts,
                              split_counts == expected_counts, "Eligibility, temporal assignment, or selected labels differ."))
 
         spark_assignments = {(row["cve_id"], row["split"]) for row in splits.select("cve_id", "split").collect()}

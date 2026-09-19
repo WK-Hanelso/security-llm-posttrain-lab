@@ -191,3 +191,13 @@ See [claim boundaries](docs/claim-boundaries.md) for the fixed wording and compl
 | `tests/` | Schema, split, verifier, deduplication, metric, and completion-mask checks |
 
 License: MIT. Vulnerability records are sourced from the [NIST National Vulnerability Database](https://nvd.nist.gov/); CWE identifiers and names are from [MITRE CWE](https://cwe.mitre.org/).
+
+## Distributed data pipeline experiment
+
+The v0.1.0 dataset-construction result is the baseline. On this branch, a Spark implementation
+of the same processing is being built alongside it. The E1–E12 equivalence checks compare more
+than row counts: they cover CVE-ID sets, per-row field contents, split assignment, class
+distribution, and the IDs surviving deduplication.
+
+Running the same Spark workload in local mode, `local[8]` was 1.89x faster than `local[1]`.
+The design and verification criteria are in [the distributed pipeline specification](docs/SPEC_distributed.md).

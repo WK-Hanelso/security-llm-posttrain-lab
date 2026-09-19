@@ -217,7 +217,7 @@ encoding and row ordering differ by design.
 | E2 | normalized `cve_id` set == `data/processed/normalized.jsonl` `cve_id` set | symmetric difference 0 |
 | E3 | per-row field equality on the normalized set (all schema fields) | 0 mismatched rows |
 | E4 | selected labels, ordered | identical to manifest `labels` |
-| E5 | split populations train / val / test | 65,272 / 21,151 / 24,975 |
+| E5 | split populations train / val / test (after temporal assignment, before cross-split overlap removal) | 65,272 / 21,151 / 24,975 |
 | E6 | split assignment per `cve_id` | 0 disagreements |
 | E7 | class distribution per split | identical |
 | E8 | train exact duplicates dropped | 3,427 |
@@ -225,6 +225,9 @@ encoding and row ordering differ by design.
 | E10 | train↔eval overlap dropped | 36 |
 | E11 | val↔eval overlap dropped | 233 |
 | E12 | post-drop pairwise overlaps (train↔test, train↔val, val↔test) | 0 / 0 / 0 |
+
+The final validation population is 20,918 because E11 removes 233 cross-split overlaps from
+the 21,151 rows assigned to validation (21,151 − 233 = 20,918).
 
 E9 is the check that a naive `dropDuplicates` fails. It is the reason §3.3 is specified the way
 it is.
