@@ -116,6 +116,50 @@ Output `reports/distributed/audit_a_exact_truth.parquet` (or JSONL if simpler), 
 | `threshold_80`, `threshold_90` | booleans |
 | `query_text_hash`, `reference_text_hash` | normalized-text SHA-256 |
 
+### 3.1 Deterministic ordering (T-014B.1)
+
+Ties are common: 426 pairs sit at cosine 1.0, and **4,798 of the 18,000 queries have at least
+one tied score inside their top-20**, in groups of 2 to 12. Vendor boilerplate produces
+identical TF-IDF vectors, so this is a property of the data, not an artifact.
+
+The ordering key is:
+
+```
+(-exact_similarity, reference_cve_id)
+```
+
+float64 similarity descending, then `reference_cve_id` ascending as a string. Sort on the raw
+float64 value — never on a rounded or stringified score. Threshold decisions use the raw
+float64 score and are independent of ordering.
+
+**The key applies to selection, not only to display.** Selecting the top-20 by score and then
+re-sorting the result is not sufficient, because ties straddle the rank-20 boundary.
+
+**Measured consequence.** The first truth set (commit `5df8a56`) tie-broke on the reference's
+row index in `train.jsonl`, which is deterministic for a fixed reference order but depends on
+that order — so a blockwise implementation tie-breaking within blocks would disagree with it.
+Moving to the `reference_cve_id` key changes:
+
+| Effect | Count |
+|---|---:|
+| Queries whose top-20 ordering changes | 4,033 of 18,000 |
+| Individual top-20 positions that move | 14,649 |
+| Queries with a tie spanning rank 20/21 (1,500-query sample) | 59 → ~708 projected |
+| Queries whose top-20 **membership** changes (same sample) | 49 → ~588 projected |
+
+The last row is the reason this step exists. It is **not** true that only the ordering of
+equal-score pairs changes: where a tie spans the rank-20 boundary, which references are in the
+top-20 changes too. Any check written as "ordering-only change" will fail, correctly.
+
+Invariant under the change, because thresholds do not depend on rank:
+
+- pairs ≥ 0.80: **10,888**
+- pairs ≥ 0.90: **1,735**
+
+If either moves, the change is not a tie-break change and the run must stop.
+
+Re-running the generator on identical input must produce byte-identical top-20 ID ordering.
+
 Plus `reports/distributed/audit_a_exact_truth_manifest.json`: population hashes, vectorizer
 settings and fitting scope, vocabulary size, k, thresholds, row counts, result hash, wall time,
 peak RSS, host, commit.
@@ -167,6 +211,49 @@ Verified against §3 by top-k ID set, top-k scores, threshold crossings and orde
 equal scores must order deterministically; state the rule. Any floating-point tolerance is
 stated numerically in the report. **If results differ from the exact baseline, the track stops
 there.** Record block-size sensitivity for peak memory and wall time.
+
+### 6.1 Equivalence checks for blockwise
+
+Against the §3 truth set, for every block size:
+
+- top-20 reference ID ordering identical
+- top-20 scores identical, or a stated numeric tolerance with the measured maximum delta
+- pairs ≥ 0.80 identical as a set; pairs ≥ 0.90 identical as a set
+- per-query threshold pair counts identical
+- tie ordering identical under the §3.1 key
+- results invariant across block sizes
+
+Block sizes to measure: 256, 512, 1024, 2048. Record wall time, peak RSS, processed pair
+count, throughput, and each equality result per block size. This is not a tuning exercise; the
+point is the memory/time trade-off at identical results.
+
+**If any equality fails, the track stops there.** A blockwise result that differs from the
+exact truth is not an optimisation.
+
+## 6.2 Strategy revision — candidate reduction is no longer assumed
+
+Audit A's 216,000,000 exact pairs completed in 12.136 s at 2.168 GiB. Audit B is
+1,630,169,200 pairs, about 7.5× more work. A naive scaling of the measured Audit A rate
+suggests order-of-minutes, not hours — **this is a projection, not a measurement**.
+
+The original plan assumed approximate candidate reduction would be needed at Audit B's scale.
+That assumption now has to be re-measured rather than inherited. The order is:
+
+```
+blockwise exact (T-014C)
+  → Audit B cost probe (T-014F)
+    → measured decision on whether candidate reduction is needed at all
+```
+
+Cost probe: blockwise exact at Q = 300, 1,000, 2,500 and, if warranted, 5,000, each against
+all 65,272 references. Record wall time, peak RSS, pairs/sec, whether scaling is linear in Q,
+and the projected full-24,975 cost, labelled as a projection.
+
+**If full Audit B completes in minutes at acceptable memory, candidate reduction is not
+needed and is not built.** The conclusion "at this scale blockwise exact is sufficient and
+approximate retrieval has no practical justification" is a valid and useful engineering
+result, not a failure to deliver a technique. Sections 7 and 8 apply only if the probe shows a
+real bottleneck.
 
 ## 7. T-014D / T-014E — candidate generation and quality audit
 
