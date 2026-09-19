@@ -140,16 +140,47 @@ row index in `train.jsonl`, which is deterministic for a fixed reference order b
 that order — so a blockwise implementation tie-breaking within blocks would disagree with it.
 Moving to the `reference_cve_id` key changes:
 
-| Effect | Count |
+| Effect | Measured over all 18,000 |
 |---|---:|
-| Queries whose top-20 ordering changes | 4,033 of 18,000 |
-| Individual top-20 positions that move | 14,649 |
-| Queries with a tie spanning rank 20/21 (1,500-query sample) | 59 → ~708 projected |
-| Queries whose top-20 **membership** changes (same sample) | 49 → ~588 projected |
+| Queries whose top-20 ordering changes | **4,125** |
+| Individual top-20 positions that move | **14,871** |
+| Queries whose top-20 **membership** changes | **533** |
+| Membership changes involving *unequal* scores | **0** |
 
-The last row is the reason this step exists. It is **not** true that only the ordering of
+The membership row is the reason this step exists. It is **not** true that only the ordering of
 equal-score pairs changes: where a tie spans the rank-20 boundary, which references are in the
 top-20 changes too. Any check written as "ordering-only change" will fail, correctly.
+
+Two earlier figures, 4,033 and 14,649, were computed before the run by re-sorting the
+superseded artifact's *existing* 20 members under the new key. That is the fixed-membership
+calculation this section forbids, and it is a lower bound: it cannot see references that enter
+or leave the top-20 at the boundary. Applying the key during selection gives 4,125 and 14,871.
+The implementation was **not** adjusted to reproduce the earlier numbers; the earlier numbers
+are retained here, labelled, because the difference between them is the point.
+
+### 3.2 Determinism holds per code path, not across code paths
+
+The key orders by `reference_cve_id` only when two scores are **bit-identical**. Scores that
+differ by one ULP are ordered by that difference, and the ULP depends on how the dot product
+was accumulated — dense matmul, sparse dot, BLAS blocking and thread count can each produce a
+different last bit.
+
+Measured: re-deriving the truth set with a dense `cosine_similarity` matmul instead of the
+generator's path disagreed on top-20 ordering for **2 of 250 sampled queries**, and on
+membership for 1 of those. Both disagreements were near-ties differing by about 1.1e-16 and
+1.7e-16 — close enough that no tie-break engaged, far enough that the scores were not equal.
+
+Consequences:
+
+- Repeating the **same** implementation is exactly reproducible. Two generator runs produced
+  identical Parquet SHA-256 `929ccdda…` and identical top-20 ordered-ID SHA-256 `cf4366b8…`.
+- Blocking along the reference axis is also bit-safe, because it does not change any individual
+  dot product. All four block sizes measured a maximum score delta of exactly 0.0.
+- Comparing **different** implementations is not bit-safe. Cross-implementation checks state a
+  numeric tolerance (currently `2e-15`) and report near-tie ordering disagreements as a known
+  limitation rather than as a defect.
+
+This limitation is a property of float64 similarity, not something a tie-break rule can remove.
 
 Invariant under the change, because thresholds do not depend on rank:
 

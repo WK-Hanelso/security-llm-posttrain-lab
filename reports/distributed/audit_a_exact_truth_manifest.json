@@ -1,7 +1,7 @@
 {
   "audit": "Audit A exact truth",
   "branch": "feat/distributed-pipeline",
-  "commit": "d974db7031b26224015e9af350dc62853fc00402",
+  "commit": "1d420588cf1c696d38121eb3aac4b7d2d017340c",
   "continuity_check": {
     "max_absolute_score_delta": 0.31103686424728283,
     "mean_absolute_score_delta": 0.034069134827614145,
@@ -25,11 +25,11 @@
   },
   "measurement": {
     "cpu": {
-      "system_seconds": 0.259883,
-      "user_seconds": 11.872974
+      "system_seconds": 0.200069,
+      "user_seconds": 12.210149000000001
     },
     "major_page_faults": 0,
-    "minor_page_faults": 69063,
+    "minor_page_faults": 70839,
     "monitor": {
       "command": [
         "/home/hanelso/hanelso/security-llm-posttrain-lab/.venv/bin/python",
@@ -47,41 +47,41 @@
         "--output-dir",
         "reports/distributed",
         "--staging-dir",
-        "reports/distributed/.audit-a-exact-_nkmnq67"
+        "reports/distributed/.audit-a-exact-4m7twavo"
       ],
       "exit_code": 0,
       "load_average_after": {
-        "fifteen_minutes": 0.29,
-        "five_minutes": 0.31,
-        "one_minute": 0.52
+        "fifteen_minutes": 0.33,
+        "five_minutes": 0.29,
+        "one_minute": 0.45
       },
       "load_average_before": {
-        "fifteen_minutes": 0.28,
-        "five_minutes": 0.28,
-        "one_minute": 0.38
+        "fifteen_minutes": 0.32,
+        "five_minutes": 0.24,
+        "one_minute": 0.2
       },
       "maximum_swap_used_bytes": 570548224,
-      "minimum_mem_available_bytes": 25673134080,
-      "parent_wall_seconds": 14.245202924008481,
-      "peak_rss_observed_by_parent_bytes": 2328363008,
+      "minimum_mem_available_bytes": 25603530752,
+      "parent_wall_seconds": 14.54656548902858,
+      "peak_rss_observed_by_parent_bytes": 2332319744,
       "peak_thread_count": 24,
       "stderr": "",
       "swap_increase_during_run_bytes": 0,
       "swap_used_after_bytes": 570548224,
       "swap_used_before_bytes": 570548224
     },
-    "peak_rss_bytes": 2328363008,
+    "peak_rss_bytes": 2333855744,
     "phases_seconds": {
-      "continuity_check": 0.43693945300765336,
-      "full_exact_similarity": 4.552358657005243,
-      "input_load_and_validation": 1.276608964020852,
-      "query_transform": 1.4488157880259678,
-      "reduction_and_parquet_write": 3.4682696540257894,
-      "reference_vectorizer_fit_transform": 0.9493208109633997,
-      "total_child": 12.136107270955108
+      "continuity_check": 0.4315351700061001,
+      "full_exact_similarity": 4.582914049969986,
+      "input_load_and_validation": 1.2760144750354812,
+      "query_transform": 1.4709343599970452,
+      "reduction_and_parquet_write": 3.7019161200150847,
+      "reference_vectorizer_fit_transform": 0.9473190209828317,
+      "total_child": 12.414637529000174
     },
     "rss_checkpoints": "child ru_maxrss plus parent /proc sampling",
-    "wall_time_seconds": 12.136107270955108
+    "wall_time_seconds": 12.414637529000174
   },
   "populations": {
     "cve_id_overlap": 0,
@@ -149,7 +149,7 @@
       "query_text_hash",
       "reference_text_hash"
     ],
-    "sha256": "c6552a72c60b5643d73121c18991e7bb2f8dd41fb2f58f89c98f86d1641df0d3"
+    "sha256": "929ccdda1432851e7809ce6f4fb8a8513233dc9914ae4039bd25ab536753e657"
   },
   "schema_version": 1,
   "similarity": {
@@ -166,7 +166,7 @@
       0.8,
       0.9
     ],
-    "tie_break": "descending exact similarity, then reference source order"
+    "tie_break": "descending raw float64 exact similarity, then reference_cve_id ascending as a string; applied during top-k selection"
   },
   "summary": {
     "result_rows": 362631,
@@ -196,7 +196,7 @@
     },
     "top_k_rows": 360000
   },
-  "timestamp_utc": "2026-09-19T12:52:41Z",
+  "timestamp_utc": "2026-09-19T13:10:27Z",
   "vectorizer": {
     "class": "sklearn.feature_extraction.text.TfidfVectorizer",
     "fitting_scope": "12,000 reference rows only; queries transformed",

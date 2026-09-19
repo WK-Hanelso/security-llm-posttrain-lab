@@ -31,7 +31,7 @@ from security_llm.bench.near_duplicate_scaling import (
 from security_llm.data.dedup import text_hash
 
 EXPECTED_BRANCH = "feat/distributed-pipeline"
-EXPECTED_COMMIT = "d974db7031b26224015e9af350dc62853fc00402"
+EXPECTED_COMMIT = "1d420588cf1c696d38121eb3aac4b7d2d017340c"
 EXPECTED_QUERY_ROWS = 18_000
 EXPECTED_REFERENCE_ROWS = 12_000
 EXPECTED_VOCABULARY_SIZE = 42_488
@@ -204,14 +204,34 @@ def _continuity_check(
     return result
 
 
-def _top_k_indices(scores: np.ndarray, k: int) -> np.ndarray:
-    """Return exact top-k indices ordered by score desc, then reference order."""
+def _order_indices(
+    scores: np.ndarray, indices: np.ndarray, reference_ids: np.ndarray
+) -> np.ndarray:
+    """Order indices by raw float64 score desc, then reference CVE ID asc."""
+
+    return indices[np.lexsort((reference_ids[indices], -scores[indices]))]
+
+
+def _top_k_indices(
+    scores: np.ndarray, k: int, reference_ids: np.ndarray
+) -> np.ndarray:
+    """Return exact top-k indices under the frozen deterministic ordering key."""
+
+    if scores.dtype != np.float64:
+        raise TypeError(f"expected float64 scores, found {scores.dtype}")
+    if scores.ndim != 1 or reference_ids.ndim != 1:
+        raise ValueError("scores and reference_ids must be one-dimensional")
+    if len(scores) != len(reference_ids):
+        raise ValueError("scores and reference_ids must have equal lengths")
+    if not 0 < k <= len(scores):
+        raise ValueError(f"k must be in [1, {len(scores)}], found {k}")
 
     cutoff = np.partition(scores, len(scores) - k)[len(scores) - k]
     above = np.flatnonzero(scores > cutoff)
-    tied = np.flatnonzero(scores == cutoff)[: k - len(above)]
+    tied = np.flatnonzero(scores == cutoff)
+    tied = tied[np.argsort(reference_ids[tied], kind="stable")[: k - len(above)]]
     selected = np.concatenate((above, tied))
-    return selected[np.lexsort((selected, -scores[selected]))]
+    return _order_indices(scores, selected, reference_ids)
 
 
 def _population_manifest(
@@ -259,13 +279,16 @@ def _write_truth_parquet(
         "0.80": {"same_label": 0, "cross_label": 0},
         "0.90": {"same_label": 0, "cross_label": 0},
     }
+    reference_ids = np.asarray(
+        [str(reference["cve_id"]) for reference in references], dtype=str
+    )
 
     for query_index, query in enumerate(queries):
         scores = similarities[query_index]
-        top_indices = _top_k_indices(scores, TOP_K)
+        top_indices = _top_k_indices(scores, TOP_K, reference_ids)
         threshold_indices = np.flatnonzero(scores >= THRESHOLDS[0])
         selected = np.union1d(top_indices, threshold_indices)
-        selected = selected[np.lexsort((selected, -scores[selected]))]
+        selected = _order_indices(scores, selected, reference_ids)
         top1_scores[query_index] = scores[selected[0]]
         query_label = str(query["cwe_id"])
         for rank, reference_index in enumerate(selected, start=1):
@@ -447,7 +470,10 @@ def _child_run(args: argparse.Namespace) -> dict[str, Any]:
             "exact": True,
             "k": TOP_K,
             "thresholds": list(THRESHOLDS),
-            "tie_break": "descending exact similarity, then reference source order",
+            "tie_break": (
+                "descending raw float64 exact similarity, then reference_cve_id "
+                "ascending as a string; applied during top-k selection"
+            ),
         },
         "summary": summary,
         "continuity_check": continuity,

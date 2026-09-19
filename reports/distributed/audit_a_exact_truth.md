@@ -33,6 +33,6 @@ The published sampled-audit p50 0.2694, p90 0.7036, p95 0.7438, ≥0.80 count 8,
 
 ## Measured execution
 
-Measured on `hanelso-GL73-8SE` at commit `d974db7031b26224015e9af350dc62853fc00402`: 12.136 s child wall time and 2.168 GiB peak RSS. Parent-observed peak RSS was 2.168 GiB; swap growth was 0 bytes.
+Measured on `hanelso-GL73-8SE` at commit `1d420588cf1c696d38121eb3aac4b7d2d017340c`: 12.415 s child wall time and 2.174 GiB peak RSS. Parent-observed peak RSS was 2.172 GiB; swap growth was 0 bytes.
 
-The Parquet truth set contains 362,631 rows: exact top-20 rows for every query plus every exact pair at or above 0.80. Its SHA-256 is `c6552a72c60b5643d73121c18991e7bb2f8dd41fb2f58f89c98f86d1641df0d3`.
+The Parquet truth set contains 362,631 rows: exact top-20 rows for every query plus every exact pair at or above 0.80. Its SHA-256 is `929ccdda1432851e7809ce6f4fb8a8513233dc9914ae4039bd25ab536753e657`.
