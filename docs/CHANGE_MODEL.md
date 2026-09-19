@@ -211,3 +211,100 @@ Unchanged by this track: `main`; all v0.1.0 results, model metrics and documents
 and SFT dataset baselines; the fixed evaluation IDs; the Audit A truth; the Gate 1 artifacts;
 and every T-014 artifact. A checksum baseline is taken before each run and re-verified after.
 Existing results are never adjusted to fit this track.
+
+---
+
+# T-015B — Fixture specification
+
+Everything in this section is fixed **before** Snapshot B is built or run, and is not revised
+after seeing results.
+
+## 11. Why a plain random sample will not do
+
+The fixture has to exercise structures that a random 1,000-row draw would probably miss.
+Measured over the 194,794 eligible records: 3,879 duplicate hash groups covering 13,631 rows
+(largest 222), of which only **242 groups span two splits** — the cross-split overlap case.
+KEV is rare at 923 eligible rows. A uniform 1,000-row sample would contain roughly five
+duplicate-group rows and no complete group, so survivorship could not be tested at all.
+
+Selection is therefore **stratified, with whole duplicate groups**, under this rule, fixed here:
+
+| Stratum | Target rows | Purpose |
+|---|---:|---|
+| train-period eligible, top-15 label | 500 | main population |
+| train-period eligible, non-top-15 label | 150 | label-selection boundary |
+| val-period eligible | 150 | split coverage |
+| test-period eligible | 200 | split coverage |
+| within-split duplicate groups, taken whole | ~80 | dedup survivorship |
+| cross-split duplicate groups, taken whole | ~40 | cross-split overlap drop |
+| `is_rejected` | 30 | eligibility exclusion |
+| `is_kev` eligible | 40 | byte-vs-composition |
+| ineligible (`multi` / `placeholder_only` / no description) | 30 | filter coverage |
+
+Seed `20260919`. Duplicate groups are taken **entire** — a partial group makes survivorship
+untestable. Strata are filled in the order listed and a record already selected is not counted
+twice, so the total is approximate; the exact ID list is what counts and is frozen in the
+manifest with its hash.
+
+## 12. Config overrides, and why each is needed
+
+The fixture runs the unmodified reference pipeline with an overridden config. Production
+config values are not edited.
+
+| Key | Production | Fixture | Reason |
+|---|---|---|---|
+| `nvd.raw_dir` | `data/raw/nvd` | `data/fixture/<snapshot>/raw` | isolation; the real raw tree is read-only input |
+| `paths.processed_dir`, `paths.sft_dir`, `paths.manifest`, `paths.stats`, `paths.contamination`, `paths.labels_file` | `data/…`, `manifests/…`, `reports/…` | under `data/fixture/<snapshot>/` | **never write to the protected baselines** |
+| `labels.min_train_samples_per_class` | 200 | 5 | at fixture scale no class reaches 200, and `create_splits` raises if fewer than two labels survive |
+| `sft.train_max_samples` | 12,000 | **300** | **critical** — `sample_records` returns the whole list when `maximum >= len(rows)`, so with the production value the fixture would never sample and hypothesis H5 would be invisible. It must sit below the fixture's train population |
+| `sft.val_max_samples` | 1,000 | 80 | same reason, validation side |
+| `sft.test_max_samples` | null | null | unchanged; the real pipeline keeps the whole test split, and H5 is exercised on the train side |
+| `split.*`, `labels.top_k`, `seed`, `dedup.*`, `sft.max_description_chars`, `sft.sampling` | — | **unchanged** | these are the behaviour under test |
+
+The `train_max_samples` override is the one that decides whether this fixture can answer its
+own question. Record the resulting fixture train population next to it, and confirm
+`train_max_samples < population` before the run.
+
+## 13. Change-detector categories
+
+Classified on the §1 dataset-relevant fields, never on `lastModified` alone:
+
+`INSERT`, `UPDATE_DATASET_RELEVANT`, `UPDATE_DATASET_IRRELEVANT`, `UNCHANGED`, `MISSING_REVIEW`.
+
+Each `UPDATE` records `changed_fields`, `before_hash`, `after_hash`,
+`dataset_relevant_change`, and `expected_downstream_scope`.
+
+## 14. Stage-level propagation table
+
+For every case, each stage is labelled with one of `UNCHANGED`, `LOCAL_RECOMPUTE`,
+`GROUP_RECOMPUTE`, `GLOBAL_RECOMPUTE`, `REVIEW_REQUIRED`, across: raw, normalization,
+eligibility, label extraction, label selection, temporal split, dedup, cross-split overlap,
+SFT sampling, SFT row serialization, manifest.
+
+## 15. Hypotheses under test
+
+| | Hypothesis |
+|---|---|
+| H1 | A CVSS-only change does not alter dataset composition |
+| H2 | A dataset-relevant `UPDATE` changes downstream output from the stage the model predicts |
+| H3 | Dedup effects are explained within the duplicate group, not globally |
+| H4 | Top-label selection is global but bounded by the count margin at this snapshot |
+| H5 | SFT sampling requires global recomputation when the population size changes |
+| H6 | An `is_kev` change can break byte equivalence while composition is unchanged |
+| H7 | `MISSING` cannot be safely auto-deleted |
+
+H4's margin of 131 is an observation about this snapshot, not a rule. If the fixture cannot
+flip the boundary with a realistic change, that is the expected outcome and is recorded as
+such; a synthetic count setup may be used to show the mechanism, and is then explicitly
+labelled synthetic rather than described as a real top-15 change.
+
+## 16. Truth, and what happens when a prediction fails
+
+Snapshot B is **fully rebuilt** with the reference pipeline. That rebuild is the truth. The
+fixture's expected effects and any incremental prediction are the things being judged, never
+the standard.
+
+When expectation and result disagree, the expected value in this document is **not** edited to
+match. The run reports `prediction failed`, and identifies whether the cause was the fixture,
+the dependency model, a misreading of the pipeline, or an implementation bug. A failed
+prediction that is understood is a result of this task, not a defect in it.
