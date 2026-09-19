@@ -352,3 +352,113 @@ what an incremental implementation would have to promise.
 
 The original §1 and §8 text is left in place above, marked, rather than rewritten, so the
 failed prediction stays visible.
+
+---
+
+# T-015C — Minimal incremental prototype versus full deterministic rebuild
+
+## 18. Three equivalence layers
+
+T-015B's H1 failure showed two layers are not enough. Every comparison in T-015C reports
+three, each with its own PASS/FAIL, never merged into one verdict:
+
+| Layer | Question | Artifacts |
+|---|---|---|
+| **A. Composition** | is the dataset logically the same? | selected CVE IDs, labels and their order, split assignment, dedup survivor set, cross-split overlap, SFT membership |
+| **B. Final byte** | is the training artifact serialized identically? | `sft/*.jsonl` row content, field values, row ordering, file hashes, manifest values |
+| **C. Intermediate byte** | are the intermediate rows identical? | `normalized.jsonl`, `processed/{train,val,test}.jsonl`, their serialized fields and hashes |
+
+Expected per case, carried forward from T-015B's measured truth and **not** re-derived:
+
+| Case | A | B | C |
+|---|---|---|---|
+| CVSS-only | SAME | SAME | **DIFFERENT — expected** |
+| KEV (`cisaExploitAdd`) | SAME | **DIFFERENT** | DIFFERENT |
+| UNCHANGED | SAME | SAME | SAME |
+
+Making layer C match on the CVSS case by ignoring the CVSS change is a failure, not a fix.
+
+## 19. Measured cost structure — what incrementality could actually win
+
+Measured before the prototype was written, so the target is known rather than discovered
+afterwards.
+
+**Production downstream**, 257,913 normalized rows, plain Python:
+
+| Stage | Wall | Dependency class |
+|---|---:|---|
+| `normalize` | **38.60 s** (peak 1.88 GiB) | **LOCAL** |
+| `split` + `build_sft` + `contamination` | ≈ 17.6 s | mostly **GLOBAL** |
+| recorded post-ingest total | 56.18 s | |
+
+So roughly **69% of downstream cost sits in the one stage that is fully local**, and the
+remainder is dominated by stages that §13 and §14 require to be recomputed globally for
+correctness. That bounds the achievable saving before any code is written.
+
+**Fixture downstream**, 1,216 normalized rows: normalize 0.19 s, split 0.11 s, build_sft
+0.13 s, contamination 0.07 s — **0.50 s total**, most of it interpreter startup.
+
+### 19.1 Consequence for the experiment design
+
+**A runtime comparison at fixture scale cannot decide anything.** At half a second dominated
+by process startup, any incremental/full difference is noise. Do not report a fixture-scale
+speedup as evidence either way.
+
+The experiment therefore splits:
+
+- **Correctness at fixture scale** — all nine cases, three layers. This is where the decision
+  about *what can be reused* is made, and it is scale-independent.
+- **Work accounting at fixture scale** — reused rows, locally recomputed rows,
+  group-recomputed rows, globally recomputed stages. Ratios, not seconds. Also
+  scale-independent.
+- **Runtime at production scale for the full rebuild only** — the 38.60 s and 56.18 s above are
+  the real denominator. Any statement about what incremental *would* save at production scale
+  is a **projection** from the work accounting and is labelled as one.
+
+### 19.2 The cost that is easy to forget
+
+Verifying that an incremental result is correct requires a full rebuild to compare against.
+If equivalence is checked on every run, the check costs more than the saving. Any conclusion
+that incremental is worthwhile must say how often correctness would actually be verified, and
+count that cost honestly.
+
+## 20. Scope limits
+
+Implement LOCAL and GROUP recomputation. **Do not force GLOBAL stages to be incremental** —
+where full recomputation is simpler and correct, run it and record it as `GLOBAL_RECOMPUTE`.
+
+Specifically, and not negotiable for this task:
+
+- **SFT sampling** is recomputed globally whenever the population size changes. The sampling
+  algorithm is **not** replaced — no consistent hashing, no reservoir sampling, no stable-hash
+  sampling. Those are a different design change and would invalidate every baseline.
+- **Label selection** is recomputed globally. The rank-15/16 margin of 131 is an observation
+  about this snapshot, not a licence to skip the recomputation. Bounded optimisation is a
+  separate later decision.
+- **Dedup** invalidates **both** the old and the new hash group of an updated row, since an
+  update can leave one group and join another.
+- **MISSING** keeps `apply_status = REVIEW_REQUIRED` and the run does not reach a completed
+  state. Quietly dropping a missing row to make equivalence pass is a failure.
+
+No dataset rule changes: split ranges, top-15 policy, dedup rules and sampling strategy stay
+exactly as they are.
+
+## 21. Order of work
+
+Correctness first, and completely, before any timing is taken. A speed comparison on a
+prototype that does not yet reproduce the full rebuild measures nothing.
+
+## 22. The decision, and both valid answers
+
+Judged on wall-time reduction, recomputed-row reduction, peak memory, the share of work that
+is global, implementation complexity, how hard equivalence is to keep, the number of failure
+modes, and auditability — not on a single speedup number.
+
+**Case A** — downstream incremental rebuild holds all three equivalence layers and saves
+enough to justify its complexity, so it is worth extending.
+
+**Case B** — incremental source ingestion is worth pursuing, but downstream is better served
+by a deterministic full rebuild at this scale: it is simpler, safer, and already cheap.
+
+Both are legitimate results. Neither the baselines nor the measurements are adjusted to reach
+either one.
