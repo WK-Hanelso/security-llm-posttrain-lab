@@ -1,5 +1,9 @@
 # Security-domain LLM Post-training & Evaluation
 
+![Project concept banner](assets/project-banner-20261009.jpg)
+
+<sub>Conceptual project illustration; not a measured output or an implementation diagram.</sub>
+
 *CVE-to-CWE domain SFT with reproducible evaluation*
 
 The repository cleans public vulnerability data (NVD) into a CWE classification dataset and compares an open-weight LLM's base and LoRA-SFT performance on the same temporal held-out set.
